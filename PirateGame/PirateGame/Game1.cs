@@ -12,6 +12,8 @@ namespace PirateGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        PlayerShip Player;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -26,7 +28,7 @@ namespace PirateGame
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            Player = new PlayerShip(50, 50, 0); //defaults exist in constructor
 
             base.Initialize();
         }
@@ -62,7 +64,6 @@ namespace PirateGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
 
             base.Update(gameTime);
         }
@@ -75,7 +76,6 @@ namespace PirateGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }
