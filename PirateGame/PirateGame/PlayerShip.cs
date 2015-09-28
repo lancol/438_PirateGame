@@ -1,10 +1,12 @@
 ﻿using System;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace PirateGame
 {
     class PlayerShip
     {
-        private String Ship_img;
+        private Texture2D image;
+
 
         private float x;
         private float y;
@@ -102,9 +104,14 @@ namespace PirateGame
             crew = people;
         }
 
-        public void setImage()
+        public void setImage(Texture2D Pic)
         {
-            Ship_img = "idk";
+            image = Pic;
+        }
+
+        public Texture2D getImage()
+        {
+            return image;
         }
 
         public float getX()
@@ -115,6 +122,11 @@ namespace PirateGame
         public float getY()
         {
             return y;
+        }
+
+        public float getRotate()
+        {
+            return rot;
         }
 
         public float getRotateSpeed()

@@ -12,6 +12,12 @@ namespace PirateGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        PlayerShip player;
+
+        int tempx;
+        int tempy;
+
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -26,7 +32,7 @@ namespace PirateGame
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            player = new PlayerShip(150, 250, 0);
 
             base.Initialize();
         }
@@ -39,8 +45,8 @@ namespace PirateGame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
+            
+            player.setImage(Content.Load<Texture2D>("Ship1_Design"));
         }
 
         /// <summary>
@@ -75,7 +81,12 @@ namespace PirateGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+
+            spriteBatch.Draw(player.getImage(), new Vector2(player.getX(), player.getY()), null, Color.White,
+            MathHelper.ToRadians(player.getRotate()), new Vector2(33, 37), .1f, SpriteEffects.None, 1);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
