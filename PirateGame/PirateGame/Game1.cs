@@ -11,11 +11,16 @@ namespace PirateGame
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+            Texture2D OceanTile;
 
         PlayerShip player;
+        bool facingRight;
 
-        Texture2D OceanTile;
+        float DT;
 
+
+        int screen_W;
+        int screen_H;
         int gameState;
         //GameStates:
         //0 = main menu
@@ -24,9 +29,6 @@ namespace PirateGame
         //3 = In battle
         //4 =
         //5 =
-
-        int screen_W;
-        int screen_H;
 
         public Game1()
         {
@@ -43,6 +45,8 @@ namespace PirateGame
         protected override void Initialize()
         {
             gameState = 2;
+
+            facingRight = true;
 
             screen_H = GraphicsDevice.Viewport.Height;
             screen_W = GraphicsDevice.Viewport.Width;
@@ -87,6 +91,13 @@ namespace PirateGame
             bool updown;
             bool leftdown;
             bool downdown;
+            int xStep;
+            int yStep;
+
+            xStep = 0;
+            yStep = 0;
+
+            DT = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
@@ -97,14 +108,28 @@ namespace PirateGame
             downdown = false;
 
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            {
                 updown = true;
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
-                downdown = true;
-            if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                leftdown = true;
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                rightdown = true;
+                yStep = -60;
+            }
 
+            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+            {
+                downdown = true;
+                yStep = 60;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.Left))
+            {
+                leftdown = true;
+                xStep = -60;
+                facingRight = false;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+            {
+                rightdown = true;
+                xStep = 60;
+                facingRight = true;
+            }
             switch (gameState)
             {
                 case 0: //Main Menu
@@ -128,12 +153,10 @@ namespace PirateGame
 
                     //else
                     //  Update player Position
-                    player.setPos(player.getX(), player.getY());
+                    player.setPos(player.getX() + (xStep * DT), player.getY() + (yStep * DT));
 
                     //Adjust player sprite
-
-
-
+                    //  draw wake, use sin function to update wake. step 5 degrees*dt, then every ~3 seconds it'll be 15 degrees, then reverse
 
                     break;
                 case 3: //In battle
@@ -185,7 +208,7 @@ namespace PirateGame
                     //Draw player
 
                     spriteBatch.Draw(player.getImage(), new Vector2(player.getX(), player.getY()), null, Color.White,
-                    MathHelper.ToRadians(player.getRotate()), new Vector2(33, 37), .1f, SpriteEffects.None, 1);
+                    MathHelper.ToRadians(player.getRotate()), new Vector2(33, 37), .1f, (facingRight) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 1);
 
                     //Draw clouds/wind/weather/anything else
 
