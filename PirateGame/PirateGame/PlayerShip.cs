@@ -59,6 +59,11 @@ namespace PirateGame
             y = Y;
         }
 
+        public void setRotate(float rotate)
+        {
+            rot = rotate;
+        }
+
         public void setRotateSpeed(float Speed)
         {
             rot_speed = Speed;

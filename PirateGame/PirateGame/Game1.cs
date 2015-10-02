@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Diagnostics;
 
 namespace PirateGame
 {
@@ -13,11 +14,16 @@ namespace PirateGame
         SpriteBatch spriteBatch;
             Texture2D OceanTile;
 
+            Texture2D SailSprayEffect;
+
         PlayerShip player;
         bool facingRight;
 
-        float DT;
+        bool moving;
 
+        float DT;
+        float t;
+        int step;
 
         int screen_W;
         int screen_H;
@@ -34,6 +40,7 @@ namespace PirateGame
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            //graphics.IsFullScreen = true;
         }
 
         /// <summary>
@@ -53,6 +60,9 @@ namespace PirateGame
 
             player = new PlayerShip(150, 250, 0);
 
+            t = 0; //ever incrementing T
+            step = 0;
+            moving = false;
             base.Initialize();
         }
 
@@ -68,7 +78,9 @@ namespace PirateGame
 
             OceanTile = Content.Load<Texture2D>("Ocean_Tile32");
 
-            player.setImage(Content.Load<Texture2D>("Ship1_Design"));
+            SailSprayEffect = Content.Load<Texture2D>("WaterEffectSheet");
+
+            player.setImage(Content.Load<Texture2D>("Ship1v2"));
         }
 
         /// <summary>
@@ -94,11 +106,23 @@ namespace PirateGame
             int xStep;
             int yStep;
 
+            moving = false;
+
             xStep = 0;
             yStep = 0;
 
             DT = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+            t += 1 * DT;
+
+            if (t > 9999999) //this can be refined
+                t = 0;
+
+
+            step = (int) ((10*t)%5);
+
+            //every x steps increment
+            
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -111,24 +135,28 @@ namespace PirateGame
             {
                 updown = true;
                 yStep = -60;
+                moving = true;
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
             {
                 downdown = true;
                 yStep = 60;
+                moving = true;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
                 leftdown = true;
                 xStep = -60;
                 facingRight = false;
+                moving = true;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
                 rightdown = true;
                 xStep = 60;
                 facingRight = true;
+                moving = true;
             }
             switch (gameState)
             {
@@ -157,6 +185,7 @@ namespace PirateGame
 
                     //Adjust player sprite
                     //  draw wake, use sin function to update wake. step 5 degrees*dt, then every ~3 seconds it'll be 15 degrees, then reverse
+                    player.setRotate((float)(5*System.Math.Sin(t)));
 
                     break;
                 case 3: //In battle
@@ -167,7 +196,7 @@ namespace PirateGame
                     break;
             }
 
-
+            Debug.WriteLine(step);
             base.Update(gameTime);
         }
 
@@ -208,7 +237,14 @@ namespace PirateGame
                     //Draw player
 
                     spriteBatch.Draw(player.getImage(), new Vector2(player.getX(), player.getY()), null, Color.White,
-                    MathHelper.ToRadians(player.getRotate()), new Vector2(33, 37), .1f, (facingRight) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 1);
+                    MathHelper.ToRadians(player.getRotate()), new Vector2(36, 50), 1f, (facingRight) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 1);
+
+                    //Sailing effect
+                    if (moving)
+                        spriteBatch.Draw(SailSprayEffect, 
+                            (facingRight) ? new Rectangle((int)player.getX() - 15, (int)player.getY() - 10, 34, 13) : new Rectangle((int)player.getX() - 20, (int)player.getY() - 10, 34, 13), //this code sucks. Sorry.
+                            new Rectangle(step*34,0,34,13), Color.White, 0,new Vector2(0,0),                                                                                    //basically, the offset for the animation is different
+                            (facingRight) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 1);                                                                            //if it's going left or right.
 
                     //Draw clouds/wind/weather/anything else
 
