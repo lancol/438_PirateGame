@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Diagnostics;
 
 namespace PirateGame
@@ -13,20 +14,27 @@ namespace PirateGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
             Texture2D OceanTile;
-
             Texture2D SailSprayEffect;
+        Texture2D[] island;
 
         PlayerShip player;
         bool facingRight;
-
         bool moving;
 
         float DT;
         float t;
         int step;
 
+        int[] isl_x;
+        int[] isl_y;
+
+
         int screen_W;
         int screen_H;
+
+        int world_W;
+        int world_H;
+
         int gameState;
         //GameStates:
         //0 = main menu
@@ -58,11 +66,28 @@ namespace PirateGame
             screen_H = GraphicsDevice.Viewport.Height;
             screen_W = GraphicsDevice.Viewport.Width;
 
+            world_H = 10000;
+            world_W = 10000;
+
             player = new PlayerShip(150, 250, 0);
+            island = new Texture2D[3];
+            isl_x = new int[3];
+            isl_y = new int[3];
+
+            Random rand = new Random();
+
+            for (int i = 0; i < 3; i++)
+            {
+                isl_x[i] = rand.Next(0, screen_H);
+                isl_y[i] = rand.Next(0, screen_W);
+            }
 
             t = 0; //ever incrementing T
-            step = 0;
+            step = 0; //used in animating. Hopefully will merge with t at somepoint
             moving = false;
+
+
+
             base.Initialize();
         }
 
@@ -79,6 +104,10 @@ namespace PirateGame
             OceanTile = Content.Load<Texture2D>("Ocean_Tile32");
 
             SailSprayEffect = Content.Load<Texture2D>("WaterEffectSheet");
+
+            island[0] = Content.Load<Texture2D>("Island1");
+            island[1] = Content.Load<Texture2D>("Island2");
+            island[2] = Content.Load<Texture2D>("Island3");
 
             player.setImage(Content.Load<Texture2D>("Ship1v2"));
         }
@@ -196,7 +225,7 @@ namespace PirateGame
                     break;
             }
 
-            Debug.WriteLine(step);
+            //Debug.WriteLine(step);
             base.Update(gameTime);
         }
 
@@ -205,7 +234,7 @@ namespace PirateGame
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
-        {
+        {//http://www.dylanwilson.net/implementing-a-2d-camera-in-monogame <-- look into this
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
@@ -229,7 +258,8 @@ namespace PirateGame
                     //draw any ocean effects
 
                     //draw islands
-
+                    for (int i = 0; i < island.Length; i++)
+                        spriteBatch.Draw(island[i], new Vector2(isl_x[i], isl_y[i]), Color.White);
                     //draw island extras (towns etc)
 
                     //Draw enemy ships
