@@ -48,7 +48,7 @@ namespace PirateGame
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            //graphics.IsFullScreen = true;
+            graphics.IsFullScreen = true;
         }
 
         /// <summary>
@@ -271,10 +271,10 @@ namespace PirateGame
 
                     //Sailing effect
                     if (moving)
-                        spriteBatch.Draw(SailSprayEffect, 
-                            (facingRight) ? new Rectangle((int)player.getX() - 15, (int)player.getY() - 10, 34, 13) : new Rectangle((int)player.getX() - 20, (int)player.getY() - 10, 34, 13), //this code sucks. Sorry.
-                            new Rectangle(step*34,0,34,13), Color.White, 0,new Vector2(0,0),                                                                                    //basically, the offset for the animation is different
-                            (facingRight) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 1);                                                                            //if it's going left or right.
+                        spriteBatch.Draw(SailSprayEffect,
+                        (facingRight) ? new Rectangle((int)player.getX() - 14, (int)player.getY() - 11, 34, 13) : new Rectangle((int)player.getX() - 20, (int)player.getY() - 11, 34, 13), //this code sucks. Sorry.
+                        new Rectangle(step * 34, 0, 34, 13), Color.White, 0, new Vector2(0, 0),                                                                                    //basically, the offset for the animation is different
+                        (facingRight) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 1);                                                                            //if it's going left or right.
 
                     //Draw clouds/wind/weather/anything else
 

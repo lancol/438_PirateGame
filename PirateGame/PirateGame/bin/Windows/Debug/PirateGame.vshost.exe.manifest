@@ -55,14 +55,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="158144">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="158656">
       <assemblyIdentity name="PirateGame" version="3.4.0.456" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>qc3hW/yRIbvw0Cb89YITSNCo9HQ=</dsig:DigestValue>
+        <dsig:DigestValue>u7NO4cNhnBDnNLM9b5RZnSpJ5hs=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -244,6 +244,15 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>+rRCDx2+MZ3DZK7FTmwHRe/pRTg=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\WaterEffectSheetv2.png" size="637">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>LrM+ve/ZTOomWeNHCNvkJ31AtnQ=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Icon.ico" size="147541">
