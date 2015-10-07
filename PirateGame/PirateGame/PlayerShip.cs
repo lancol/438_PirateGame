@@ -41,6 +41,5 @@ namespace PirateGame
             setY(Y);
         }
 
-
     }
 }
