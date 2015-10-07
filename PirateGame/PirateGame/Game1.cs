@@ -12,6 +12,8 @@ namespace PirateGame
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
+        Camera camera;
+
         SpriteBatch spriteBatch;
             Texture2D OceanTile;
             Texture2D SailSprayEffect;
@@ -48,6 +50,8 @@ namespace PirateGame
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            graphics.PreferredBackBufferWidth = 1024;
+            graphics.PreferredBackBufferHeight = 768;
             graphics.IsFullScreen = true;
         }
 
@@ -66,10 +70,10 @@ namespace PirateGame
             screen_H = GraphicsDevice.Viewport.Height;
             screen_W = GraphicsDevice.Viewport.Width;
 
-            world_H = 10000;
-            world_W = 10000;
+            world_H = 5000;
+            world_W = 5000;
 
-            player = new PlayerShip(150, 250, 0);
+            player = new PlayerShip(2500, 4500, 0);
             island = new Texture2D[3];
             isl_x = new int[3];
             isl_y = new int[3];
@@ -78,16 +82,15 @@ namespace PirateGame
 
             for (int i = 0; i < 3; i++)
             {
-                isl_x[i] = rand.Next(0, screen_H);
-                isl_y[i] = rand.Next(0, screen_W);
+                isl_x[i] = rand.Next(0, world_W);
+                isl_y[i] = rand.Next(3000, world_H);
             }
 
             t = 0; //ever incrementing T
             step = 0; //used in animating. Hopefully will merge with t at somepoint
             moving = false;
 
-
-
+            camera = new Camera(GraphicsDevice.Viewport);
             base.Initialize();
         }
 
@@ -216,6 +219,8 @@ namespace PirateGame
                     //  draw wake, use sin function to update wake. step 5 degrees*dt, then every ~3 seconds it'll be 15 degrees, then reverse
                     player.setRotate((float)(5*System.Math.Sin(t)));
 
+                    //update camera
+                    camera.position = new Vector2(player.getX() - (screen_W/2), player.getY() - (screen_H/2));
                     break;
                 case 3: //In battle
                     break;
@@ -237,7 +242,8 @@ namespace PirateGame
         {//http://www.dylanwilson.net/implementing-a-2d-camera-in-monogame <-- look into this
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin();
+            var viewMatrix = camera.GetViewMatrix();
+            spriteBatch.Begin(transformMatrix: viewMatrix);
 
             switch (gameState)
             {
@@ -248,9 +254,9 @@ namespace PirateGame
                 case 2: //overworld
 
                     //draw ocean
-                    for (int h = 0; h < screen_H; h += OceanTile.Height)
+                    for (int h = 0; h < world_H; h += OceanTile.Height)
                     {
-                        for (int w = 0; w < screen_W; w += OceanTile.Width)
+                        for (int w = 0; w < world_W; w += OceanTile.Width)
                         {
                             spriteBatch.Draw(OceanTile, new Vector2(w, h), Color.White);
                         }
