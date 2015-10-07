@@ -39,12 +39,12 @@ namespace PirateGame
 
         int gameState;
         //GameStates:
-        //0 = main menu
+        //0 = Main Menu
         //1 = In town
         //2 = Overworld
         //3 = In battle
-        //4 =
-        //5 =
+        //4 = Pub
+        //5 = Merchant
 
         public Game1()
         {
@@ -74,17 +74,32 @@ namespace PirateGame
             world_W = 5000;
 
             player = new PlayerShip(2500, 4500, 0);
-            island = new Texture2D[3];
-            isl_x = new int[3];
-            isl_y = new int[3];
+            island = new Texture2D[5];
+            isl_x = new int[5];
+            isl_y = new int[5];
 
             Random rand = new Random();
 
-            for (int i = 0; i < 3; i++)
+            /* for (int i = 0; i < 5; i++)
             {
                 isl_x[i] = rand.Next(0, world_W);
-                isl_y[i] = rand.Next(3000, world_H);
-            }
+                isl_y[i] = rand.Next(0, world_H);
+            } */
+
+            isl_x[0] = rand.Next(0, world_W);  // First island randomized location within range 
+            isl_y[0] = rand.Next(0, 999);
+
+            isl_x[1] = rand.Next(0, world_W); // Second island
+            isl_y[1] = rand.Next(1000, 1999);
+
+            isl_x[2] = rand.Next(0, world_W); // Third island
+            isl_y[2] = rand.Next(2000, 2999);
+
+            isl_x[3] = rand.Next(0, world_W); // Fourth island
+            isl_y[3] = rand.Next(3000, 3999);
+
+            isl_x[4] = rand.Next(0, world_W); // Fifth island 
+            isl_y[4] = rand.Next(4000, 4999);
 
             t = 0; //ever incrementing T
             step = 0; //used in animating. Hopefully will merge with t at somepoint
@@ -111,6 +126,9 @@ namespace PirateGame
             island[0] = Content.Load<Texture2D>("Island1");
             island[1] = Content.Load<Texture2D>("Island2");
             island[2] = Content.Load<Texture2D>("Island3");
+            island[3] = Content.Load<Texture2D>("Island2");
+            island[4] = Content.Load<Texture2D>("Island3");
+
 
             player.setImage(Content.Load<Texture2D>("Ship1v2"));
         }
