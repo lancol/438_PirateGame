@@ -1,9 +1,7 @@
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\obj\x86\Debug\PirateGame.exe
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\obj\x86\Debug\PirateGame.pdb
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Ocean_Tile32.png
-D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Ocean_Tiles.png
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Ship1v2.png
-D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Ship1_Design.png
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\WaterEffectSheet.png
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\PirateGame.exe.manifest
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\PirateGame.application
@@ -35,4 +33,4 @@ D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\Pi
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Island1.png
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Island2.png
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Island3.png
-D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\WaterEffectSheetv2.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Ocean_web32t127.png
