@@ -11,40 +11,42 @@ namespace PirateGame
     /// </summary>
     public class Game1 : Game
     {
+        #region Class Variables
+        #region System/Game Control
         GraphicsDeviceManager graphics;
         Camera camera;
-
         SpriteBatch spriteBatch;
-            Texture2D OceanTile;
-            Texture2D SailSprayEffect;
-        Texture2D[] island;
-
-        PlayerShip player;
-        bool facingRight;
-        bool moving;
-
         float DT;
-        float t;
-        int step;
-
-        int[] isl_x;
-        int[] isl_y;
-
-
+        int gameState;
         int screen_W;
         int screen_H;
-
         int world_W;
         int world_H;
+        #endregion
 
-        int gameState;
-        //GameStates:
-        //0 = main menu
-        //1 = In town
-        //2 = Overworld
-        //3 = In battle
-        //4 =
-        //5 =
+        #region Environment
+        Texture2D OceanTile;
+        Texture2D OceanWeb;
+        Texture2D SailSprayEffect;
+        Texture2D[] island;
+        int[] isl_x;
+        int[] isl_y;
+        #endregion
+
+        #region Player Related
+        PlayerShip player;
+        Rectangle ow_Player_CollBox; //overworld Player collisionbox
+        bool facingRight;
+        bool moving;
+        #endregion
+
+        #region Animation related
+        float t;
+        float effectT;
+        int step;   //I need to do something about merging all these step variables.
+        int stepRadius;
+        #endregion
+        #endregion
 
         public Game1()
         {
@@ -63,34 +65,41 @@ namespace PirateGame
         /// </summary>
         protected override void Initialize()
         {
-            gameState = 2;
-
-            facingRight = true;
-
-            screen_H = GraphicsDevice.Viewport.Height;
-            screen_W = GraphicsDevice.Viewport.Width;
-
+            #region System/Game Control
             world_H = 5000;
             world_W = 5000;
+            screen_H = GraphicsDevice.Viewport.Height;
+            screen_W = GraphicsDevice.Viewport.Width;
+            Random rand = new Random();
+            camera = new Camera(GraphicsDevice.Viewport);
+            gameState = 2;
+            #endregion
 
-            player = new PlayerShip(2500, 4500, 0);
+            #region Enviornment
             island = new Texture2D[3];
             isl_x = new int[3];
             isl_y = new int[3];
-
-            Random rand = new Random();
 
             for (int i = 0; i < 3; i++)
             {
                 isl_x[i] = rand.Next(0, world_W);
                 isl_y[i] = rand.Next(3000, world_H);
             }
+            #endregion
 
+            #region Player Related
+            player = new PlayerShip(2500, 4500, 0);
+            facingRight = true;
+            moving = false;
+            #endregion
+
+            #region Animation related
             t = 0; //ever incrementing T
             step = 0; //used in animating. Hopefully will merge with t at somepoint
-            moving = false;
+            stepRadius = 3; //used only in the ocean shifting effect
+            effectT = 0; //also only used in ocean shifting effect
+            #endregion
 
-            camera = new Camera(GraphicsDevice.Viewport);
             base.Initialize();
         }
 
@@ -100,12 +109,10 @@ namespace PirateGame
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-
             OceanTile = Content.Load<Texture2D>("Ocean_Tile32");
-
+            OceanWeb = Content.Load<Texture2D>("Ocean_web32t127");
             SailSprayEffect = Content.Load<Texture2D>("WaterEffectSheet");
 
             island[0] = Content.Load<Texture2D>("Island1");
@@ -113,6 +120,7 @@ namespace PirateGame
             island[2] = Content.Load<Texture2D>("Island3");
 
             player.setImage(Content.Load<Texture2D>("Ship1v2"));
+            ow_Player_CollBox = new Rectangle((int)player.getX(), (int)player.getY(), player.getImage().Width, player.getImage().Height);
         }
 
         /// <summary>
@@ -131,37 +139,50 @@ namespace PirateGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            #region Variables
             bool rightdown;
             bool updown;
             bool leftdown;
             bool downdown;
+
+            bool Collision;
+
             int xStep;
             int yStep;
+
+            int nextPosX;
+            int nextPosY;
 
             moving = false;
 
             xStep = 0;
             yStep = 0;
 
+            nextPosX = (int)player.getX();
+            nextPosY = (int)player.getY();
+
+            Collision = false;
+
             DT = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            t += DT;//gameTime.TotalGameTime.Seconds;
 
-            t += 1 * DT;
+            effectT += (float)(Math.PI / 2) * DT;
 
-            if (t > 9999999) //this can be refined
-                t = 0;
+            if (effectT > 9999999)
+                effectT = 0;
 
-
-            step = (int) ((10*t)%5);
-
-            //every x steps increment
-            
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            step = (int)(10 * t) % 5;
 
             rightdown = false;
             updown = false;
             leftdown = false;
             downdown = false;
+
+            #endregion
+
+            #region Input
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                Exit();
 
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {
@@ -190,14 +211,22 @@ namespace PirateGame
                 facingRight = true;
                 moving = true;
             }
+            #endregion
+
             switch (gameState)
             {
                 case 0: //Main Menu
+                    #region Main Menu
+
+                    #endregion
                     break;
                 case 1: //In town
+                    #region In Town
+
+                    #endregion
                     break;
                 case 2: //overworld
-
+                    #region Overworld
                     //Update enemy positions
 
                     //update ocean effects (if applicable)
@@ -205,32 +234,63 @@ namespace PirateGame
                     //update weather effects (if applicable)
 
                     //Check for collisions
-                    //  if next step is a town, stop
-
+                    if (updown)
+                    {
+                        nextPosY = (int)(player.getY() + (yStep * DT) + 1);
+                    }
+                    if (rightdown)
+                    {
+                        nextPosX = (int)(player.getX() + (xStep * DT) + 1);
+                    }
+                    if (downdown)
+                    {
+                        nextPosY = (int)(player.getY() + (yStep * DT) + 1);
+                    }
+                    if (leftdown)
+                    {
+                        nextPosX = (int)(player.getX() + (xStep * DT) + 1);
+                    }
+                    //  if next step is an island, stop
+                    for (int i = 0; i < island.Length; i++) //must improve collision box on final islands.
+                    {
+                        if (nextPosX < (isl_x[i] + island[i].Width) && nextPosX > isl_x[i])
+                        {
+                            if (nextPosY < (isl_y[i] + island[i].Height) && nextPosY > isl_y[i])
+                            {
+                                Collision = true;
+                            }
+                        }
+                    }
                     //  if next step is a collision with other ship, go into battle with them
 
                     //  if next step is a collision with a town, go into town or open town menu
 
-                    //else
-                    //  Update player Position
-                    player.setPos(player.getX() + (xStep * DT), player.getY() + (yStep * DT));
+                    if (Collision == false)
+                    {
+                        player.setPos(player.getX() + (xStep * DT), player.getY() + (yStep * DT));
+                        ow_Player_CollBox.X = (int)player.getX();
+                        ow_Player_CollBox.Y = (int)player.getY();
+                    }
 
                     //Adjust player sprite
                     //  draw wake, use sin function to update wake. step 5 degrees*dt, then every ~3 seconds it'll be 15 degrees, then reverse
-                    player.setRotate((float)(5*System.Math.Sin(t)));
+                    player.setRotate((float)(5 * Math.Sin(t)));
 
                     //update camera
-                    camera.position = new Vector2(player.getX() - (screen_W/2), player.getY() - (screen_H/2));
+                    camera.position = new Vector2(player.getX() - (screen_W / 2), player.getY() - (screen_H / 2));
+
+                    #endregion
                     break;
                 case 3: //In battle
-                    break;
-                case 4:
+                    #region In Battle
+
+                    #endregion
                     break;
                 default:
+                    Exit();
                     break;
             }
-
-            //Debug.WriteLine(step);
+            //Debug.WriteLine(1/(float)gameTime.ElapsedGameTime.TotalSeconds);
             base.Update(gameTime);
         }
 
@@ -239,29 +299,37 @@ namespace PirateGame
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
-        {//http://www.dylanwilson.net/implementing-a-2d-camera-in-monogame <-- look into this
+        {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            var viewMatrix = camera.GetViewMatrix();
+            var viewMatrix = camera.GetViewMatrix();//Camera stuff
             spriteBatch.Begin(transformMatrix: viewMatrix);
 
             switch (gameState)
             {
                 case 0: //Main menu
+                    #region Main Menu
+
+                    #endregion
                     break;
                 case 1: //In Town
+                    #region In Town
+
+                    #endregion
                     break;
                 case 2: //overworld
+                    #region Overworld
+                    //draw ocean and ocean effects
+                    int h = ((int)camera.position.Y / OceanTile.Height) * OceanTile.Height;
+                    int w = ((int)camera.position.X / OceanTile.Width) * OceanTile.Width;
 
-                    //draw ocean
-                    for (int h = 0; h < world_H; h += OceanTile.Height)
+                    for (int y = h; y < (h + screen_H + OceanTile.Height); y += OceanTile.Height)
                     {
-                        for (int w = 0; w < world_W; w += OceanTile.Width)
+                        for (int x = w; x < (w + screen_W + OceanTile.Width); x += OceanTile.Width)
                         {
-                            spriteBatch.Draw(OceanTile, new Vector2(w, h), Color.White);
+                            spriteBatch.Draw(OceanTile, new Vector2(x, y), Color.White);
+                            spriteBatch.Draw(OceanWeb, new Vector2(x + (float)(stepRadius * Math.Sin(effectT)), y), Color.White);
                         }
                     }
-                    //draw any ocean effects
 
                     //draw islands
                     for (int i = 0; i < island.Length; i++)
@@ -275,6 +343,8 @@ namespace PirateGame
                     spriteBatch.Draw(player.getImage(), new Vector2(player.getX(), player.getY()), null, Color.White,
                     MathHelper.ToRadians(player.getRotate()), new Vector2(36, 50), 1f, (facingRight) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 1);
 
+
+
                     //Sailing effect
                     if (moving)
                         spriteBatch.Draw(SailSprayEffect,
@@ -283,16 +353,19 @@ namespace PirateGame
                         (facingRight) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 1);                                                                            //if it's going left or right.
 
                     //Draw clouds/wind/weather/anything else
-
+                    #endregion
                     break;
                 case 3: //in battle
+                    #region In Battle
+
+                    #endregion
                     break;
                 case 4:
                     break;
                 default:
+                    Exit();
                     break;
             }
-
             spriteBatch.End();
 
             base.Draw(gameTime);
