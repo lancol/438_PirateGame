@@ -55,14 +55,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="160704">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="162752">
       <assemblyIdentity name="PirateGame" version="3.4.0.456" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>5tfnhtR8DkTBdxiqYnqyqbBfKjs=</dsig:DigestValue>
+        <dsig:DigestValue>ivI9BDjuLI+Qh7dbKCK6Nf6gXWk=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -217,6 +217,15 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>a3n8vZqJqh/QDAktG0rwWrSSEyU=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Ship_TopDown136_68.png" size="1717">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>paFKm+JXMOqobTmb0cPCa9ATbN8=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\Ship1v2.png" size="781">

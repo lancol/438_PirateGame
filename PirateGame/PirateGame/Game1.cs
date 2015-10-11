@@ -89,6 +89,9 @@ namespace PirateGame
 
             #region Player Related
             player = new PlayerShip(2500, 4500, 0);
+            player.set_bSpeed(0);
+            player.set_bAcceleration(0.5f);
+            player.set_maxSpeed(30);
             facingRight = true;
             moving = false;
             #endregion
@@ -120,6 +123,7 @@ namespace PirateGame
             island[2] = Content.Load<Texture2D>("Island3");
 
             player.setImage(Content.Load<Texture2D>("Ship1v2"));
+            player.setBattleImage(Content.Load<Texture2D>("Ship_TopDown136_68"));
             ow_Player_CollBox = new Rectangle((int)player.getX(), (int)player.getY(), player.getImage().Width, player.getImage().Height);
         }
 
@@ -211,6 +215,12 @@ namespace PirateGame
                 facingRight = true;
                 moving = true;
             }
+            if (Keyboard.GetState().IsKeyDown(Keys.B)) //Temporary until overworld enemy ship collisions
+            {
+                gameState = 3;
+                battle_init();
+            }
+
             #endregion
 
             switch (gameState)
@@ -284,6 +294,28 @@ namespace PirateGame
                 case 3: //In battle
                     #region In Battle
 
+                    if (updown)
+                    {
+                        player.raise_Sails(DT);
+                    }
+                    if (downdown)
+                    {
+                        player.lower_Sails(DT);
+                    }
+                    if (rightdown)
+                    {
+                        player.rotate_Cwise(DT);
+                    }
+                    if (leftdown)
+                    {
+                        player.rotate_CCwise(DT);
+                    }
+
+                    player.setX(player.getX() + (player.get_bSpeed() * DT) * (float)Math.Cos(MathHelper.ToRadians(player.getRotate()))); //update positions
+                    player.setY(player.getY() + (player.get_bSpeed() * DT) * (float)Math.Sin(MathHelper.ToRadians(player.getRotate())));
+
+                    //camera.position = new Vector2(player.getX() - (screen_W / 2), player.getY() - (screen_H / 2)); //update Camera... Temporary, will change later to lock in place
+
                     #endregion
                     break;
                 default:
@@ -343,8 +375,6 @@ namespace PirateGame
                     spriteBatch.Draw(player.getImage(), new Vector2(player.getX(), player.getY()), null, Color.White,
                     MathHelper.ToRadians(player.getRotate()), new Vector2(36, 50), 1f, (facingRight) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 1);
 
-
-
                     //Sailing effect
                     if (moving)
                         spriteBatch.Draw(SailSprayEffect,
@@ -358,9 +388,27 @@ namespace PirateGame
                 case 3: //in battle
                     #region In Battle
 
+                    //draw Ocean
+                    int bh = ((int)camera.position.Y / OceanTile.Height) * OceanTile.Height;
+                    int bw = ((int)camera.position.X / OceanTile.Width) * OceanTile.Width;
+
+                    for (int y = bh; y < (bh + screen_H + OceanTile.Height); y += OceanTile.Height)
+                    {
+                        for (int x = bw; x < (bw + screen_W + OceanTile.Width); x += OceanTile.Width)
+                        {
+                            spriteBatch.Draw(OceanTile, new Vector2(x, y), Color.White);
+                            spriteBatch.Draw(OceanWeb, new Vector2(x + (float)(stepRadius * Math.Sin(effectT)), y), Color.White);
+                        }
+                    }
+
+                    //draw Enemy Ship
+
+
+                    //Draw your ship
+                    spriteBatch.Draw(player.getBattleImage(), new Vector2(player.getX(), player.getY()), null, Color.White,
+                                        MathHelper.ToRadians(player.getRotate()), new Vector2(55, 34), 1f, SpriteEffects.None, 1);
+
                     #endregion
-                    break;
-                case 4:
                     break;
                 default:
                     Exit();
@@ -370,5 +418,12 @@ namespace PirateGame
 
             base.Draw(gameTime);
         }
+
+        protected void battle_init()
+        {
+            player.setRotate(0);
+            camera.position = new Vector2(player.getX() - (screen_W / 2), player.getY() - (screen_H / 2));
+        }
+
     }
 }
