@@ -35,6 +35,17 @@ namespace PirateGame
         public void setRotate(float Rotate)
         {
             rotate = Rotate;
+
+            if (rotate > 360)
+            {
+                rotate %= 360;
+            }
+            else if (rotate < 0)
+            {
+                rotate %= 360;
+                rotate = 360+(rotate % 360);
+            }
         }
+
     }
 }
