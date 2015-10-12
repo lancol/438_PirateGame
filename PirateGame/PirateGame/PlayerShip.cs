@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
-
+﻿
 namespace PirateGame
 {
     class PlayerShip : Ship
@@ -107,12 +105,12 @@ namespace PirateGame
 
         public void rotate_Cwise(float DT)
         {
-            setRotate(getRotate() + (10 * DT));
+            setRotate(getRotate() + (15 * DT));
         }
 
         public void rotate_CCwise(float DT)
         {
-            setRotate(getRotate() - (10 * DT));
+            setRotate(getRotate() - (15 * DT));
         }
 
     }
