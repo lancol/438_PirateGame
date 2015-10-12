@@ -16,6 +16,7 @@ namespace PirateGame
         GraphicsDeviceManager graphics;
         Camera camera;
         SpriteBatch spriteBatch;
+        //ParticleEngine ow_ShipSprayEffect;
         float DT;
         int gameState;
         int screen_W;
@@ -40,12 +41,23 @@ namespace PirateGame
         bool moving;
         #endregion
 
+        #region Ships and NPCS
+        Texture2D[] shipImg;
+        Texture2D[] b_shipImg;
+        NPCShip[] OtherShip;
+        #endregion
+
         #region Animation related
         float t;
         float effectT;
         int step;   //I need to do something about merging all these step variables.
         int stepRadius;
+        ParticleEngine ow_sailSpray;
+        ParticleEngine b_SailStream;
+        ParticleEngine b_SailStream2;
+        Texture2D whiteblock;
         #endregion
+
         #endregion
 
         public Game1()
@@ -54,7 +66,7 @@ namespace PirateGame
             Content.RootDirectory = "Content";
             graphics.PreferredBackBufferWidth = 1024;
             graphics.PreferredBackBufferHeight = 768;
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
         }
 
         /// <summary>
@@ -90,7 +102,7 @@ namespace PirateGame
             #region Player Related
             player = new PlayerShip(2500, 4500, 0);
             player.set_bSpeed(0);
-            player.set_bAcceleration(0.5f);
+            player.set_bAcceleration(1f);
             player.set_maxSpeed(30);
             facingRight = true;
             moving = false;
@@ -101,6 +113,14 @@ namespace PirateGame
             step = 0; //used in animating. Hopefully will merge with t at somepoint
             stepRadius = 3; //used only in the ocean shifting effect
             effectT = 0; //also only used in ocean shifting effect
+            #endregion
+
+            #region
+            OtherShip = new NPCShip[20];
+            for (int i = 0; i < OtherShip.Length; i++)
+            {
+                OtherShip[i] = new NPCShip(rand.Next(0, 5000), rand.Next(0, 5000), 0, "neutral");
+            }
             #endregion
 
             base.Initialize();
@@ -114,16 +134,35 @@ namespace PirateGame
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            OceanTile = Content.Load<Texture2D>("Ocean_Tile32");
-            OceanWeb = Content.Load<Texture2D>("Ocean_web32t127");
-            SailSprayEffect = Content.Load<Texture2D>("WaterEffectSheet");
+            try{
+                OceanTile = Content.Load<Texture2D>("Ocean_Tile32");
+                OceanWeb = Content.Load<Texture2D>("Ocean_web32t127");
+                SailSprayEffect = Content.Load<Texture2D>("WaterEffectSheet");
+                whiteblock = Content.Load<Texture2D>("whiteblock");
 
-            island[0] = Content.Load<Texture2D>("Island1");
-            island[1] = Content.Load<Texture2D>("Island2");
-            island[2] = Content.Load<Texture2D>("Island3");
+                island[0] = Content.Load<Texture2D>("Island1");
+                island[1] = Content.Load<Texture2D>("Island2");
+                island[2] = Content.Load<Texture2D>("Island3");
 
-            player.setImage(Content.Load<Texture2D>("Ship1v2"));
-            player.setBattleImage(Content.Load<Texture2D>("Ship_TopDown136_68"));
+                shipImg = new Texture2D[1];
+                b_shipImg = new Texture2D[1];
+
+                shipImg[0] = Content.Load<Texture2D>("Ship1v2");
+                b_shipImg[0] = Content.Load<Texture2D>("Ship_TopDown136_68");
+                player.setImage(shipImg[0]);
+                player.setBattleImage(b_shipImg[0]);
+
+                for (int i = 0; i < OtherShip.Length; i++)
+                {
+                    OtherShip[i].setImage(shipImg[0]);
+                    OtherShip[i].setBattleImage(b_shipImg[0]);
+                }
+            }
+            catch
+            {
+                Debug.WriteLine("Failed to load an image");
+            }
+            overworld_init(); //depends on some player inits
             ow_Player_CollBox = new Rectangle((int)player.getX(), (int)player.getY(), player.getImage().Width, player.getImage().Height);
         }
 
@@ -156,6 +195,8 @@ namespace PirateGame
 
             int nextPosX;
             int nextPosY;
+
+            Random rand = new Random();
 
             moving = false;
 
@@ -244,6 +285,7 @@ namespace PirateGame
                     //update weather effects (if applicable)
 
                     //Check for collisions
+                    #region Get Next Position
                     if (updown)
                     {
                         nextPosY = (int)(player.getY() + (yStep * DT) + 1);
@@ -260,6 +302,7 @@ namespace PirateGame
                     {
                         nextPosX = (int)(player.getX() + (xStep * DT) + 1);
                     }
+                    #endregion
                     //  if next step is an island, stop
                     for (int i = 0; i < island.Length; i++) //must improve collision box on final islands.
                     {
@@ -286,6 +329,32 @@ namespace PirateGame
                     //  draw wake, use sin function to update wake. step 5 degrees*dt, then every ~3 seconds it'll be 15 degrees, then reverse
                     player.setRotate((float)(5 * Math.Sin(t)));
 
+                    //Particle Effects
+                    #region Particle Crap
+                    if (updown == false && downdown == false)
+                    {
+                        ow_sailSpray.setX((facingRight) ? player.getX() + 18 : player.getX() - 18);
+                        ow_sailSpray.setY(player.getY());
+                        ow_sailSpray.setXSpeed((facingRight) ? -.1f : .1f);
+                        ow_sailSpray.setXAccl((facingRight) ? -2 : 2);
+                        ow_sailSpray.setYSpeed(-.3f);
+                        ow_sailSpray.setYAccl(.1f * rand.Next(4, 8));// .5f);
+                        ow_sailSpray.setTimeLimit(rand.Next(10, 20));
+                    }
+                    else// if (updown == true)
+                    {
+                        ow_sailSpray.removeAll();
+                        //ow_sailSpray.setX((facingRight) ? player.getX() + 18 : player.getX() - 18);
+                        //ow_sailSpray.setY(player.getY());
+                        //ow_sailSpray.setXSpeed((facingRight) ? -.1f : .1f);
+                        //ow_sailSpray.setXAccl((facingRight) ? -2 : 2);
+                        //ow_sailSpray.setYSpeed(20 - .3f);
+                        //ow_sailSpray.setYAccl(.5f);
+                        //ow_sailSpray.setTimeLimit(rand.Next(10, 20));
+                    }
+                    ow_sailSpray.Update(DT);
+                    #endregion
+
                     //update camera
                     camera.position = new Vector2(player.getX() - (screen_W / 2), player.getY() - (screen_H / 2));
 
@@ -294,6 +363,7 @@ namespace PirateGame
                 case 3: //In battle
                     #region In Battle
 
+                    //Move Player
                     if (updown)
                     {
                         player.raise_Sails(DT);
@@ -313,8 +383,30 @@ namespace PirateGame
 
                     player.setX(player.getX() + (player.get_bSpeed() * DT) * (float)Math.Cos(MathHelper.ToRadians(player.getRotate()))); //update positions
                     player.setY(player.getY() + (player.get_bSpeed() * DT) * (float)Math.Sin(MathHelper.ToRadians(player.getRotate())));
+                    
+                    #region sailing particles
+                    //Update ParticleEnginePosition
+                    b_SailStream.setX(player.getX() + (-46.1f * (float)Math.Cos(MathHelper.ToRadians(player.getRotate())+.61f))); //PlayerX + ([angle length of Hypotenuse] * Cos([playerRotate] + [angle between desired position and origin])
+                    b_SailStream.setY(player.getY() + (-46.1f * (float)Math.Sin(MathHelper.ToRadians(player.getRotate())+.61f)));
+                    b_SailStream.setActive(true);
+                    b_SailStream.setTimeLimit(player.get_bSpeed() / 2);
+                    b_SailStream2.setX(player.getX() + (-46.1f * (float)Math.Cos(MathHelper.ToRadians(player.getRotate())-.61f)));
+                    b_SailStream2.setY(player.getY() + (-46.1f * (float)Math.Sin(MathHelper.ToRadians(player.getRotate())-.61f)));
+                    b_SailStream2.setActive(true);
+                    b_SailStream2.setTimeLimit(player.get_bSpeed() / 2);
+                    //b_SailStream2.setTimeLimit(rand.Next(0, ((int)player.get_bSpeed() * 2))); //Semi-good idea, maybe revisit this.
 
-                    //camera.position = new Vector2(player.getX() - (screen_W / 2), player.getY() - (screen_H / 2)); //update Camera... Temporary, will change later to lock in place
+                    //Set spawn position relative to ship rotation
+                    b_SailStream.setXSpeed(2*(float)Math.Cos(MathHelper.ToRadians(player.getRotate() + 180)));
+                    b_SailStream.setYSpeed(2*(float)Math.Sin(MathHelper.ToRadians(player.getRotate() + 180)));
+
+                    b_SailStream2.setXSpeed(2*(float)Math.Cos(MathHelper.ToRadians(player.getRotate() + 180)));
+                    b_SailStream2.setYSpeed(2*(float)Math.Sin(MathHelper.ToRadians(player.getRotate() + 180)));
+
+                    //Set x/y speeds relative to ship rotation
+                    b_SailStream.Update(DT);
+                    b_SailStream2.Update(DT);
+                    #endregion
 
                     #endregion
                     break;
@@ -369,19 +461,27 @@ namespace PirateGame
                     //draw island extras (towns etc)
 
                     //Draw enemy ships
+                    for (int n = 0; n < OtherShip.Length; n++)
+                    {
+                        spriteBatch.Draw(OtherShip[n].getImage(), new Vector2(OtherShip[n].getX(), OtherShip[n].getY()), null, Color.White,
+                                        MathHelper.ToRadians(player.getRotate()), new Vector2(55, 34), 1f, SpriteEffects.None, 1);
+                    }
 
                     //Draw player
-
                     spriteBatch.Draw(player.getImage(), new Vector2(player.getX(), player.getY()), null, Color.White,
                     MathHelper.ToRadians(player.getRotate()), new Vector2(36, 50), 1f, (facingRight) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 1);
 
                     //Sailing effect
+                    #region particle crap
                     if (moving)
-                        spriteBatch.Draw(SailSprayEffect,
-                        (facingRight) ? new Rectangle((int)player.getX() - 14, (int)player.getY() - 11, 34, 13) : new Rectangle((int)player.getX() - 20, (int)player.getY() - 11, 34, 13), //this code sucks. Sorry.
-                        new Rectangle(step * 34, 0, 34, 13), Color.White, 0, new Vector2(0, 0),                                                                                    //basically, the offset for the animation is different
-                        (facingRight) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 1);                                                                            //if it's going left or right.
-
+                    {
+                        ow_sailSpray.Draw(spriteBatch);
+                        //spriteBatch.Draw(SailSprayEffect,
+                        //(facingRight) ? new Rectangle((int)player.getX() - 14, (int)player.getY() - 11, 34, 13) : new Rectangle((int)player.getX() - 20, (int)player.getY() - 11, 34, 13), //this code sucks. Sorry.
+                        //new Rectangle(step * 34, 0, 34, 13), Color.White, 0, new Vector2(0, 0),                                                                                    //basically, the offset for the animation is different
+                        //(facingRight) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 1);                  
+                    }
+                    #endregion
                     //Draw clouds/wind/weather/anything else
                     #endregion
                     break;
@@ -403,6 +503,9 @@ namespace PirateGame
 
                     //draw Enemy Ship
 
+                    //draw particles
+                    b_SailStream.Draw(spriteBatch);
+                    b_SailStream2.Draw(spriteBatch);
 
                     //Draw your ship
                     spriteBatch.Draw(player.getBattleImage(), new Vector2(player.getX(), player.getY()), null, Color.White,
@@ -423,6 +526,32 @@ namespace PirateGame
         {
             player.setRotate(0);
             camera.position = new Vector2(player.getX() - (screen_W / 2), player.getY() - (screen_H / 2));
+
+            b_SailStream = new ParticleEngine(whiteblock, 20, -1, 0,0,0);
+            b_SailStream.setX(player.getX());
+            b_SailStream.setY(player.getY()-30);
+            b_SailStream.setActive(true);
+            b_SailStream2 = new ParticleEngine(whiteblock, 20, -1, 0,0,0);
+            b_SailStream2.setX(player.getX());
+            b_SailStream2.setY(player.getY()+50);
+            b_SailStream2.setActive(true);
+
+            ow_sailSpray.setActive(false);
+        }
+
+        protected void overworld_init()
+        {
+            player.setRotate(0);
+            camera.position = new Vector2(player.getX() - (screen_W / 2), player.getY() - (screen_H / 2));
+            ow_sailSpray = new ParticleEngine(whiteblock, 20, -1, 0, 0, 0);
+
+            ow_sailSpray.setX(player.getX());
+            ow_sailSpray.setY(player.getY());
+            ow_sailSpray.setActive(true);
+
+            //b_SailStream.setActive(false);
+            //b_SailStream2.setActive(false);
+
         }
 
     }

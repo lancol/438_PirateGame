@@ -55,14 +55,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="162752">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="167360">
       <assemblyIdentity name="PirateGame" version="3.4.0.456" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>ivI9BDjuLI+Qh7dbKCK6Nf6gXWk=</dsig:DigestValue>
+        <dsig:DigestValue>lOFrYF8voXd6fGCZzrygiWMMiAs=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -244,6 +244,15 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>+rRCDx2+MZ3DZK7FTmwHRe/pRTg=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\whiteblock.png" size="169">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>aNad2PAYYWzjpzxprEICwDWFnBE=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Icon.ico" size="147541">
