@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Diagnostics;
+using System.IO;
+using System.Text;
 
 namespace PirateGame
 {
@@ -15,9 +17,14 @@ namespace PirateGame
         Camera camera;
 
         SpriteBatch spriteBatch;
-            Texture2D OceanTile;
-            Texture2D SailSprayEffect;
+        Texture2D OceanTile;
+        Texture2D SailSprayEffect;
         Texture2D[] island;
+        Texture2D background;
+        Texture2D ContinueButton;
+        Texture2D NewGameButton;
+        Texture2D InstructionsButton;
+        Texture2D QuitButton;
 
         PlayerShip player;
         bool facingRight;
@@ -64,6 +71,10 @@ namespace PirateGame
         protected override void Initialize()
         {
             gameState = 2;
+            
+            //check for existing save file
+            // if nonexist, create 
+            //TitleContainer.OpenStream(filename);
 
             facingRight = true;
 
@@ -79,12 +90,6 @@ namespace PirateGame
             isl_y = new int[5];
 
             Random rand = new Random();
-
-            /* for (int i = 0; i < 5; i++)
-            {
-                isl_x[i] = rand.Next(0, world_W);
-                isl_y[i] = rand.Next(0, world_H);
-            } */
 
             isl_x[0] = rand.Next(0, world_W);  // First island randomized location within range 
             isl_y[0] = rand.Next(0, 999);
@@ -118,7 +123,6 @@ namespace PirateGame
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-
             OceanTile = Content.Load<Texture2D>("Ocean_Tile32");
 
             SailSprayEffect = Content.Load<Texture2D>("WaterEffectSheet");
@@ -126,8 +130,8 @@ namespace PirateGame
             island[0] = Content.Load<Texture2D>("Island1");
             island[1] = Content.Load<Texture2D>("Island2");
             island[2] = Content.Load<Texture2D>("Island3");
-            island[3] = Content.Load<Texture2D>("Island2");
-            island[4] = Content.Load<Texture2D>("Island3");
+            island[3] = Content.Load<Texture2D>("Island2"); // replace with Island4 image when Rose finishes it
+            island[4] = Content.Load<Texture2D>("Island3");  // replace with Island5 image when Rose finishes it
 
 
             player.setImage(Content.Load<Texture2D>("Ship1v2"));
@@ -211,10 +215,19 @@ namespace PirateGame
             switch (gameState)
             {
                 case 0: //Main Menu
+                        //load background image
+                        //load buttons
+                        //change gamestate to 2
+                        //continue shows if saved file in text file
+                        //new game if no saved file in text file
+                        //instructions
+                        //exit game
+                        //Game1.Exit();
+
                     break;
                 case 1: //In town
                     break;
-                case 2: //overworld
+                case 2: //Overworld
 
                     //Update enemy positions
 
