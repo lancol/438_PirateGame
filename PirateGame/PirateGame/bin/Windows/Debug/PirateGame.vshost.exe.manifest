@@ -55,14 +55,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="158656">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="167360">
       <assemblyIdentity name="PirateGame" version="3.4.0.456" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>u7NO4cNhnBDnNLM9b5RZnSpJ5hs=</dsig:DigestValue>
+        <dsig:DigestValue>lOFrYF8voXd6fGCZzrygiWMMiAs=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -174,31 +174,31 @@
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="Content\Island1.png" size="5893">
+  <file name="Content\Island1.png" size="6939">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>x4haaLUUbKLL1X3A0oFKtqbr96Q=</dsig:DigestValue>
+      <dsig:DigestValue>Z+12yp8hbG9aGOn+hHT3M6SD/fE=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="Content\Island2.png" size="5246">
+  <file name="Content\Island2.png" size="6818">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>mc78+VLCrIOa92LJk5fYweZeGmg=</dsig:DigestValue>
+      <dsig:DigestValue>KCdQmyU042uJUAx0+C3LWMbvbqc=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="Content\Island3.png" size="5616">
+  <file name="Content\Island3.png" size="6566">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>/qUccIcRIxN3DN1XidaIWf24RbI=</dsig:DigestValue>
+      <dsig:DigestValue>nx2GUjMUfv2Zcbz94xQx9Razq6Q=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\Ocean_Tile32.png" size="2273">
@@ -210,22 +210,22 @@
       <dsig:DigestValue>Mg4K479hoo5a8dsGlDJ0X6vwc6c=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="Content\Ocean_Tiles.png" size="1499">
+  <file name="Content\Ocean_web32t127.png" size="593">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>Tg2JMXtviZMaj98rNlEpiyBDfNA=</dsig:DigestValue>
+      <dsig:DigestValue>a3n8vZqJqh/QDAktG0rwWrSSEyU=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="Content\Ship1_Design.png" size="3889">
+  <file name="Content\Ship_TopDown136_68.png" size="1717">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>1wDy7YxIV+/TIhfrQg/gAwmQJd0=</dsig:DigestValue>
+      <dsig:DigestValue>paFKm+JXMOqobTmb0cPCa9ATbN8=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\Ship1v2.png" size="781">
@@ -246,13 +246,13 @@
       <dsig:DigestValue>+rRCDx2+MZ3DZK7FTmwHRe/pRTg=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="Content\WaterEffectSheetv2.png" size="637">
+  <file name="Content\whiteblock.png" size="169">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>LrM+ve/ZTOomWeNHCNvkJ31AtnQ=</dsig:DigestValue>
+      <dsig:DigestValue>aNad2PAYYWzjpzxprEICwDWFnBE=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Icon.ico" size="147541">
