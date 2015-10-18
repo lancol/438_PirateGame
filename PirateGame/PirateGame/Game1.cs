@@ -16,7 +16,7 @@ namespace PirateGame
         GraphicsDeviceManager graphics;
         Camera camera;
         SpriteBatch spriteBatch;
-        //ParticleEngine ow_ShipSprayEffect;
+        // ParticleEngine ow_ShipSprayEffect; // was commented out by Dylan???
         float DT;
         int gameState;
         int screen_W;
@@ -33,6 +33,26 @@ namespace PirateGame
         int[] isl_x;
         int[] isl_y;
         #endregion
+
+        #region Menu Related
+        // menu
+        Texture2D continueButton;
+        Texture2D startButton;
+        Texture2D exitButton;
+        Texture2D instructionsButton;
+        Texture2D menuBackground;
+        Texture2D logo;
+
+        Vector2 startButtonPosition;
+        Vector2 exitButtonPosition;
+        Vector2 continueButtonPosition;
+        Vector2 instructionsButtonPosition;
+        Vector2 logoPosition;
+
+        MouseState mouseState;
+        MouseState previousMouseState;
+        #endregion
+
 
         #region Player Related
         PlayerShip player;
@@ -66,7 +86,7 @@ namespace PirateGame
             Content.RootDirectory = "Content";
             graphics.PreferredBackBufferWidth = 1024;
             graphics.PreferredBackBufferHeight = 768;
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = false; // switch to full screen, bounding boxes for buttons fix
         }
 
         /// <summary>
@@ -84,23 +104,37 @@ namespace PirateGame
             screen_W = GraphicsDevice.Viewport.Width;
             Random rand = new Random();
             camera = new Camera(GraphicsDevice.Viewport);
-            gameState = 2;
+            
+            //set the gamestate to start menu
+            gameState = 0;          
+
+           // gameState = 2;
             #endregion
 
             #region Enviornment
-            island = new Texture2D[3];
-            isl_x = new int[3];
-            isl_y = new int[3];
+            island = new Texture2D[5];
+            isl_x = new int[5];
+            isl_y = new int[5];
 
-            for (int i = 0; i < 3; i++)
-            {
-                isl_x[i] = rand.Next(0, world_W);
-                isl_y[i] = rand.Next(3000, world_H);
-            }
+            isl_x[0] = 1000;  // First island hard-coded
+            isl_y[0] = 4500;
+
+            isl_x[1] = 3000; // Second island hard-coded
+            isl_y[1] = 3500;
+
+            isl_x[2] = 800; // Third island hard-coded
+            isl_y[2] = 1800;
+
+            isl_x[3] = 2000; // Fourth island hard-coded
+            isl_y[3] = 1000;
+
+            isl_x[4] = 4500; // Fifth island hard-coded
+            isl_y[4] = 500;
+
             #endregion
 
             #region Player Related
-            player = new PlayerShip(2500, 4500, 0);
+            player = new PlayerShip(1000, 4500, 0); // hardcoded ship starting point
             player.set_bSpeed(0);
             player.set_bAcceleration(1f);
             player.set_maxSpeed(30);
@@ -123,6 +157,21 @@ namespace PirateGame
             }
             #endregion
 
+            #region Main Menu
+
+            //set the position of the buttons
+            continueButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 40, 450); // middle of screen, width then height
+            startButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 48, 525);
+            instructionsButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 50, 600);
+            exitButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 17, 675);
+            logoPosition = new Vector2((GraphicsDevice.Viewport.Width/30) - 48, 5); 
+
+            //get the mouse state
+            mouseState = Mouse.GetState();
+            previousMouseState = mouseState;
+
+            #endregion
+
             base.Initialize();
         }
 
@@ -135,14 +184,26 @@ namespace PirateGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             try{
+                //load the buttonimages into the content pipeline
+                continueButton = Content.Load<Texture2D>("Continue");
+                startButton = Content.Load<Texture2D>("NewGame");
+                instructionsButton = Content.Load<Texture2D>("Instructions");
+                exitButton = Content.Load<Texture2D>("Quit");
+                menuBackground = Content.Load<Texture2D>("Menu");
+                logo = Content.Load<Texture2D>("Logo");
+
+                // loads ocean background and water effects
                 OceanTile = Content.Load<Texture2D>("Ocean_Tile32");
                 OceanWeb = Content.Load<Texture2D>("Ocean_web32t127");
                 SailSprayEffect = Content.Load<Texture2D>("WaterEffectSheet");
                 whiteblock = Content.Load<Texture2D>("whiteblock");
 
-                island[0] = Content.Load<Texture2D>("Island1");
-                island[1] = Content.Load<Texture2D>("Island2");
-                island[2] = Content.Load<Texture2D>("Island3");
+                //loads all islands
+                island[0] = Content.Load<Texture2D>("Island150p");
+                island[1] = Content.Load<Texture2D>("Island250p");
+                island[2] = Content.Load<Texture2D>("Island350p");
+                island[3] = Content.Load<Texture2D>("Island450p"); 
+                island[4] = Content.Load<Texture2D>("Island550p"); 
 
                 shipImg = new Texture2D[1];
                 b_shipImg = new Texture2D[1];
@@ -162,8 +223,8 @@ namespace PirateGame
             {
                 Debug.WriteLine("Failed to load an image");
             }
-            overworld_init(); //depends on some player inits
-            ow_Player_CollBox = new Rectangle((int)player.getX(), (int)player.getY(), player.getImage().Width, player.getImage().Height);
+
+           // ow_Player_CollBox = new Rectangle((int)player.getX(), (int)player.getY(), player.getImage().Width, player.getImage().Height);
         }
 
         /// <summary>
@@ -261,13 +322,26 @@ namespace PirateGame
                 gameState = 3;
                 battle_init();
             }
-
             #endregion
 
             switch (gameState)
             {
                 case 0: //Main Menu
                     #region Main Menu
+
+                    IsMouseVisible = true; //enables mouse pointer
+                 //   main_menu();
+
+                    //wait for mouseclick
+                    mouseState = Mouse.GetState();                  
+
+                    if (previousMouseState.LeftButton == ButtonState.Pressed &&
+                    mouseState.LeftButton == ButtonState.Released)
+                    {
+                    MouseClicked(mouseState.X, mouseState.Y);
+                    }
+                     
+                    previousMouseState = mouseState; 
 
                     #endregion
                     break;
@@ -410,6 +484,7 @@ namespace PirateGame
 
                     #endregion
                     break;
+
                 default:
                     Exit();
                     break;
@@ -433,10 +508,23 @@ namespace PirateGame
                 case 0: //Main menu
                     #region Main Menu
 
+                    //draw menu
+                    IsMouseVisible = true;
+
+                    //draw the start menu
+                    this.spriteBatch.Draw(menuBackground, new Rectangle(0, 0, menuBackground.Width, menuBackground.Height), Color.White);
+                    spriteBatch.Draw(continueButton, continueButtonPosition, Color.White);
+                    spriteBatch.Draw(startButton, startButtonPosition, Color.White);
+                    spriteBatch.Draw(instructionsButton, instructionsButtonPosition, Color.White);
+                    spriteBatch.Draw(exitButton, exitButtonPosition, Color.White);
+                    spriteBatch.Draw(logo, logoPosition, Color.White);
+
                     #endregion
                     break;
                 case 1: //In Town
                     #region In Town
+
+                    //draw menu
 
                     #endregion
                     break;
@@ -504,8 +592,8 @@ namespace PirateGame
                     //draw Enemy Ship
 
                     //draw particles
-                    b_SailStream.Draw(spriteBatch);
-                    b_SailStream2.Draw(spriteBatch);
+                    b_SailStream.Draw(spriteBatch); // comment out if issues
+                    b_SailStream2.Draw(spriteBatch); // comment out if issues
 
                     //Draw your ship
                     spriteBatch.Draw(player.getBattleImage(), new Vector2(player.getX(), player.getY()), null, Color.White,
@@ -513,6 +601,7 @@ namespace PirateGame
 
                     #endregion
                     break;
+
                 default:
                     Exit();
                     break;
@@ -539,6 +628,47 @@ namespace PirateGame
             ow_sailSpray.setActive(false);
         }
 
+        protected void MouseClicked(int x, int y)
+        {
+            //creates a rectangle of 10x10 around the place where the mouse was clicked
+            Rectangle mouseClickRect = new Rectangle(x, y, 10, 10);
+
+            //check the startmenu
+            if (gameState == 0)
+            { 
+                Rectangle continueButtonRect = new Rectangle((int)continueButtonPosition.X,
+                                      (int)continueButtonPosition.Y, 100, 20);
+                Rectangle startButtonRect = new Rectangle((int)startButtonPosition.X,
+                                      (int)startButtonPosition.Y, 100, 20);
+                Rectangle instructionsButtonRect = new Rectangle((int)instructionsButtonPosition.X,
+                                      (int)instructionsButtonPosition.Y, 100, 20);
+                Rectangle exitButtonRect = new Rectangle((int)exitButtonPosition.X,
+                                      (int)exitButtonPosition.Y, 100, 20); 
+
+                if (mouseClickRect.Intersects(startButtonRect)) //player clicked start button
+                {
+                    gameState = 2;
+                    overworld_init();
+                }
+                else if (mouseClickRect.Intersects(continueButtonRect))
+                {
+                    gameState = 2;
+                    overworld_init();
+                }
+
+                else if (mouseClickRect.Intersects(instructionsButtonRect))
+                {
+                    //gameState = 5;
+                    Exit();
+                }
+
+                else if (mouseClickRect.Intersects(exitButtonRect)) //player clicked exit button
+                {
+                    Exit();
+                }
+            }
+        }
+
         protected void overworld_init()
         {
             player.setRotate(0);
@@ -549,10 +679,11 @@ namespace PirateGame
             ow_sailSpray.setY(player.getY());
             ow_sailSpray.setActive(true);
 
-            //b_SailStream.setActive(false);
-            //b_SailStream2.setActive(false);
+            // b_SailStream.setActive(false); // Dylan commented out
+            //b_SailStream2.setActive(false); // Dylan commented out
 
         }
+  }
 
     }
-}
+
