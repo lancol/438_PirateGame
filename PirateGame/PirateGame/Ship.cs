@@ -14,7 +14,6 @@ namespace PirateGame
         private float defense;
         private float health;
         private float attack;
-        private Rectangle collisionBox;
 
         #region Getters
         public Texture2D getImage()
@@ -55,10 +54,6 @@ namespace PirateGame
         public float getAttack()
         {
             return attack;
-        }
-        public Rectangle getCollisionBox()
-        {
-            return collisionBox;
         }
         #endregion
 
@@ -106,11 +101,6 @@ namespace PirateGame
         public void setAttack(float Attack)
         {
             attack = Attack;
-        }
-
-        public void setCollisionBox(Rectangle Coll_Box)
-        {
-            collisionBox = Coll_Box;
         }
         #endregion
     }
