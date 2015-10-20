@@ -53,6 +53,39 @@ namespace PirateGame
         MouseState previousMouseState;
         #endregion
 
+        #region General Status Bar Elements
+        Texture2D statusBarBase;
+        SpriteFont VinerHand;
+        Texture2D AlignmentBar;
+        Texture2D HealthBar; // full bar
+        Texture2D MoraleBar; // full bar
+        Texture2D MenuSlider;
+
+        #endregion
+
+        #region Morale Bar Levels
+        Texture2D MoraleBarOne;
+        Texture2D MoraleBarTwo;
+        Texture2D MoraleBarThree;
+        Texture2D MoraleBarFour;
+        Texture2D MoraleBarFive;
+        Texture2D MoraleBarSix;
+        Texture2D MoraleBarSeven;
+        Texture2D MoraleBarEight;
+        Texture2D MoraleBarNine;
+        #endregion
+
+        #region Health Bar Levels
+        Texture2D HealthBarOne;
+        Texture2D HealthBarTwo;
+        Texture2D HealthBarThree;
+        Texture2D HealthBarFour;
+        Texture2D HealthBarFive;
+        Texture2D HealthBarSix;
+        Texture2D HealthBarSeven;
+        Texture2D HealthBarEight;
+        Texture2D HealthBarNine;
+        #endregion
 
         #region Player Related
         PlayerShip player;
@@ -160,11 +193,23 @@ namespace PirateGame
             #region Main Menu
 
             //set the position of the buttons
+            
+
+            // if not full screen
             continueButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 40, 450); // middle of screen, width then height
             startButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 48, 525);
             instructionsButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 50, 600);
             exitButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 17, 675);
-            logoPosition = new Vector2((GraphicsDevice.Viewport.Width/30) - 48, 5); 
+            logoPosition = new Vector2((GraphicsDevice.Viewport.Width/30) - 48, 5);
+
+            /*
+            // if full screen
+             continueButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2 - 50 ), GraphicsDevice.Viewport.Height / 2 + 70); // middle of screen, width then height
+             startButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2 - 57), GraphicsDevice.Viewport.Height / 2 + 150);
+             instructionsButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2 - 60), GraphicsDevice.Viewport.Height / 2 + 220);
+             exitButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2- 25 ), GraphicsDevice.Viewport.Height / 2 + 290);
+             logoPosition = new Vector2((GraphicsDevice.Viewport.Width / 80) - 30, GraphicsDevice.Viewport.Height / 40);
+             */
 
             //get the mouse state
             mouseState = Mouse.GetState();
@@ -197,6 +242,38 @@ namespace PirateGame
                 OceanWeb = Content.Load<Texture2D>("Ocean_web32t127");
                 SailSprayEffect = Content.Load<Texture2D>("WaterEffectSheet");
                 whiteblock = Content.Load<Texture2D>("whiteblock");
+
+                //loads general status bar
+                statusBarBase = Content.Load<Texture2D>("Top_Menu_Bar_Cropped");
+                MoraleBar = Content.Load<Texture2D>("Morale_Status_Bar_Resized");
+                AlignmentBar = Content.Load<Texture2D>("Alignment_Status_Bar_Resized");
+                HealthBar = Content.Load<Texture2D>("Health_Status_Bar_Resized");
+                MenuSlider = Content.Load<Texture2D>("Slider");
+
+                //loads morale
+                MoraleBarOne = Content.Load<Texture2D>("Morale_Status_Bar_One");
+                MoraleBarTwo = Content.Load<Texture2D>("Morale_Status_Bar_Two");
+                MoraleBarThree = Content.Load<Texture2D>("Morale_Status_Bar_Three");
+                MoraleBarFour = Content.Load<Texture2D>("Morale_Status_Bar_Four");
+                MoraleBarFive = Content.Load<Texture2D>("Morale_Status_Bar_Five");
+                MoraleBarSix = Content.Load<Texture2D>("Morale_Status_Bar_Six");
+                MoraleBarSeven = Content.Load<Texture2D>("Morale_Status_Bar_Seven");
+                MoraleBarEight = Content.Load<Texture2D>("Morale_Status_Bar_Eight");
+                MoraleBarNine = Content.Load<Texture2D>("Morale_Status_Bar_Nine");
+
+                //loads health
+                HealthBarOne = Content.Load<Texture2D>("Health_Status_Bar_One");
+                HealthBarTwo = Content.Load<Texture2D>("Health_Status_Bar_Two");
+                HealthBarThree = Content.Load<Texture2D>("Health_Status_Bar_Three");
+                HealthBarFour = Content.Load<Texture2D>("Health_Status_Bar_Four");
+                HealthBarFive = Content.Load<Texture2D>("Health_Status_Bar_Five");
+                HealthBarSix = Content.Load<Texture2D>("Health_Status_Bar_Six");
+                HealthBarSeven = Content.Load<Texture2D>("Health_Status_Bar_Seven");
+                HealthBarEight = Content.Load<Texture2D>("Health_Status_Bar_Eight");
+                HealthBarNine = Content.Load<Texture2D>("Health_Status_Bar_Nine");
+                
+                //add gold value
+                //use text sprite
 
                 //loads all islands
                 island[0] = Content.Load<Texture2D>("Island150p");
@@ -512,7 +589,7 @@ namespace PirateGame
                     IsMouseVisible = true;
 
                     //draw the start menu
-                    this.spriteBatch.Draw(menuBackground, new Rectangle(0, 0, menuBackground.Width, menuBackground.Height), Color.White);
+                    spriteBatch.Draw(menuBackground, new Rectangle(0, 0, menuBackground.Width, menuBackground.Height), Color.White);
                     spriteBatch.Draw(continueButton, continueButtonPosition, Color.White);
                     spriteBatch.Draw(startButton, startButtonPosition, Color.White);
                     spriteBatch.Draw(instructionsButton, instructionsButtonPosition, Color.White);
@@ -543,6 +620,7 @@ namespace PirateGame
                         }
                     }
 
+                
                     //draw islands
                     for (int i = 0; i < island.Length; i++)
                         spriteBatch.Draw(island[i], new Vector2(isl_x[i], isl_y[i]), Color.White);
@@ -556,7 +634,7 @@ namespace PirateGame
                     }
 
                     //Draw player
-                    spriteBatch.Draw(player.getImage(), new Vector2(player.getX(), player.getY()), null, Color.White,
+                    spriteBatch.Draw(player.getImage(), new Vector2(player.getX(), player.getY()), null, Color.White,   // null uses whole image 
                     MathHelper.ToRadians(player.getRotate()), new Vector2(36, 50), 1f, (facingRight) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 1);
 
                     //Sailing effect
@@ -569,6 +647,22 @@ namespace PirateGame
                         //new Rectangle(step * 34, 0, 34, 13), Color.White, 0, new Vector2(0, 0),                                                                                    //basically, the offset for the animation is different
                         //(facingRight) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 1);                  
                     }
+
+                    // draw status bar
+
+                    // player.getHealth();
+
+                    spriteBatch.Draw(statusBarBase, new Vector2(camera.position.X, camera.position.Y), Color.White);
+
+                    spriteBatch.Draw(MoraleBar, new Vector2(camera.position.X + 735, camera.position.Y + 10), Color.White);
+
+                    spriteBatch.Draw(HealthBar, new Vector2(camera.position.X + 180, camera.position.Y + 10), Color.White);
+
+                    spriteBatch.Draw(AlignmentBar, new Vector2(camera.position.X + 180, camera.position.Y + 40), Color.White); // always same
+
+                    spriteBatch.Draw(MenuSlider, new Vector2(camera.position.X + 285, camera.position.Y + 40), Color.White);
+
+
                     #endregion
                     //Draw clouds/wind/weather/anything else
                     #endregion
@@ -592,8 +686,8 @@ namespace PirateGame
                     //draw Enemy Ship
 
                     //draw particles
-                    b_SailStream.Draw(spriteBatch); // comment out if issues
-                    b_SailStream2.Draw(spriteBatch); // comment out if issues
+                    b_SailStream.Draw(spriteBatch);
+                    b_SailStream2.Draw(spriteBatch); 
 
                     //Draw your ship
                     spriteBatch.Draw(player.getBattleImage(), new Vector2(player.getX(), player.getY()), null, Color.White,
@@ -633,39 +727,42 @@ namespace PirateGame
             //creates a rectangle of 10x10 around the place where the mouse was clicked
             Rectangle mouseClickRect = new Rectangle(x, y, 10, 10);
 
+
             //check the startmenu
             if (gameState == 0)
-            { 
-                Rectangle continueButtonRect = new Rectangle((int)continueButtonPosition.X,
-                                      (int)continueButtonPosition.Y, 100, 20);
-                Rectangle startButtonRect = new Rectangle((int)startButtonPosition.X,
-                                      (int)startButtonPosition.Y, 100, 20);
-                Rectangle instructionsButtonRect = new Rectangle((int)instructionsButtonPosition.X,
-                                      (int)instructionsButtonPosition.Y, 100, 20);
-                Rectangle exitButtonRect = new Rectangle((int)exitButtonPosition.X,
-                                      (int)exitButtonPosition.Y, 100, 20); 
+            {
 
-                if (mouseClickRect.Intersects(startButtonRect)) //player clicked start button
-                {
-                    gameState = 2;
-                    overworld_init();
-                }
-                else if (mouseClickRect.Intersects(continueButtonRect))
-                {
-                    gameState = 2;
-                    overworld_init();
-                }
+                        Rectangle continueButtonRect = new Rectangle((int)continueButtonPosition.X,
+                                              (int)continueButtonPosition.Y, 100, 20);
+                        Rectangle startButtonRect = new Rectangle((int)startButtonPosition.X,
+                                              (int)startButtonPosition.Y, 100, 20);
+                        Rectangle instructionsButtonRect = new Rectangle((int)instructionsButtonPosition.X,
+                                              (int)instructionsButtonPosition.Y, 100, 20);
+                        Rectangle exitButtonRect = new Rectangle((int)exitButtonPosition.X,
+                                              (int)exitButtonPosition.Y, 100, 20);
 
-                else if (mouseClickRect.Intersects(instructionsButtonRect))
-                {
-                    //gameState = 5;
-                    Exit();
-                }
+                    if (mouseClickRect.Intersects(startButtonRect)) //player clicked start button
+                    {
+                        gameState = 2;
+                        overworld_init();
+                    }
+                    else if (mouseClickRect.Intersects(continueButtonRect))
+                    {
+                        gameState = 2;
+                        overworld_init();
+                    }
 
-                else if (mouseClickRect.Intersects(exitButtonRect)) //player clicked exit button
-                {
-                    Exit();
-                }
+                    else if (mouseClickRect.Intersects(instructionsButtonRect))
+                    {
+                        //gameState = 5;
+                        Exit();
+                    }
+
+                    else if (mouseClickRect.Intersects(exitButtonRect)) //player clicked exit button
+                    {
+                        Exit();
+                    }
+
             }
         }
 

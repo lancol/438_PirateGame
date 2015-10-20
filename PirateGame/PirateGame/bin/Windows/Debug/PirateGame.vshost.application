@@ -7,14 +7,14 @@
     <framework targetVersion="4.0" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="PirateGame.exe.manifest" size="16325">
+    <dependentAssembly dependencyType="install" codebase="PirateGame.exe.manifest" size="25371">
       <assemblyIdentity name="PirateGame.exe" version="1.0.0.1" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="x86" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>zxBImyxLFPsu58ZwTOthG1Ddn3s=</dsig:DigestValue>
+        <dsig:DigestValue>EGcSD/aCEn6++L7lsduE0nn7qsk=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

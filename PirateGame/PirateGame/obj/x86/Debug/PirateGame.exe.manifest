@@ -55,14 +55,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="168896">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="171456">
       <assemblyIdentity name="PirateGame" version="3.4.0.456" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>iPcSutILfEPOy0uU/+CIJ3PiXGI=</dsig:DigestValue>
+        <dsig:DigestValue>8mdHvuS0uDnuW9BviOuV11xBhdM=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -174,6 +174,15 @@
       </hash>
     </dependentAssembly>
   </dependency>
+  <file name="Content\Alignment_Status_Bar_Resized.png" size="1768">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>e2VA72qV5ua+ToZHyvw+jU3wND4=</dsig:DigestValue>
+    </hash>
+  </file>
   <file name="Content\Continue.png" size="2997">
     <hash>
       <dsig:Transforms>
@@ -181,6 +190,96 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>qp20McqcQqSezyf6WmkFyBVGPvk=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Health_Status_Bar_Eight.png" size="1640">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>ue3QfGFW7N+Yf8xEj+CE+auS20Y=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Health_Status_Bar_Five.png" size="1043">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>qGmkhoPBQkCPZf5dAbUGfpk1YXU=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Health_Status_Bar_Four.png" size="866">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>By5rQOP0sVUqoCvHMMIObRsEIyU=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Health_Status_Bar_Nine.png" size="1858">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>XI2lCmy/ELase/ZqjjGFMy/nbB8=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Health_Status_Bar_One.png" size="332">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>EwC8hY3ADm4X6Zv+r0LxtjkrXxY=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Health_Status_Bar_Resized.png" size="2043">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>HX9xmoC3V928J3QNjxFrrh6MmQo=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Health_Status_Bar_Seven.png" size="1430">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>boHIVnUBkqefmrmLmmRSu6N5ojg=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Health_Status_Bar_Six.png" size="1239">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>vo2GH8BBTMHYoNAsoRZpvmVBwW8=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Health_Status_Bar_Three.png" size="709">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>yTsogkWQzQfnf9oyD6TiF0PUveo=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Health_Status_Bar_Two.png" size="493">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>IQ4r9A6lGMz8REaa83ZsQAeJQyg=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\Instructions.png" size="3134">
@@ -255,6 +354,96 @@
       <dsig:DigestValue>BtIjWASDjZ/2ie3jBP4DgjdRx8I=</dsig:DigestValue>
     </hash>
   </file>
+  <file name="Content\Morale_Status_Bar_Eight.png" size="1274">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>t4V4wGpNvdvYMp4JzQpiSV3auhg=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Morale_Status_Bar_Five.png" size="807">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>Vo6j8BdzzQ7lZNlmFDq3iFbpVaA=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Morale_Status_Bar_Four.png" size="680">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>X1uRQlJT/THMZ2cV6FjsdOrlyh0=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Morale_Status_Bar_Nine.png" size="1446">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>P3SVeNOPc/h2gHmYMoA7bxibioU=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Morale_Status_Bar_One.png" size="282">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>WwxxX3+vGuuzLgY6vfvrJe656wI=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Morale_Status_Bar_Resized.png" size="1543">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>pLwR7wqFlOcCRHqKkiNxoYpgYY8=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Morale_Status_Bar_Seven.png" size="1113">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>kDAKBz3CENNSChtkpLr2kc8r1p8=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Morale_Status_Bar_Six.png" size="954">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>RA+OprAg6mLo1WCDFc1wZXQ+Xe0=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Morale_Status_Bar_Three.png" size="549">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>aSqY/AzH3lxH1yDZChEo6ZsKvn4=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Morale_Status_Bar_Two.png" size="424">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>uw8BTqgQBAQKoakIyG7hD1zuDaI=</dsig:DigestValue>
+    </hash>
+  </file>
   <file name="Content\NewGame.png" size="3629">
     <hash>
       <dsig:Transforms>
@@ -307,6 +496,24 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>WpHpkqDDm5VXIh3UkjvXiRiB/Ek=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Slider.png" size="708">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>jQOWdhiu3fQ+g5mSj0H0WXbBGoY=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Top_Menu_Bar_Cropped.png" size="32844">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>gY140ulr/wqXysdLV3aVseXaigE=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\WaterEffectSheet.png" size="1693">

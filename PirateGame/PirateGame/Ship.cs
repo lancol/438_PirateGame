@@ -17,6 +17,7 @@ namespace PirateGame
         private Rectangle collisionBox;
 
         #region Getters
+
         public Texture2D getImage()
         {
             return image;
@@ -25,6 +26,11 @@ namespace PirateGame
         public Texture2D getBattleImage()
         {
             return battleImage;
+        }
+
+        public float getHealth() // Nohely added
+        {
+            return health; 
         }
 
         public float getGold()
