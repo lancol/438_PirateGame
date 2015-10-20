@@ -607,6 +607,9 @@ namespace PirateGame
 
                 case 4: //Shopping
 
+                    spriteBatch.Draw(shop_window_background, new Rectangle(240, 185, 509, 449), Color.White);
+                    spriteBatch.Draw(shop_back_button, new Rectangle(645, 575, 38, 72), Color.White);
+                    spriteBatch.Draw(shop_repair_button, new Rectangle(290, 575, 38, 134), Color.White);
                     break;
 
                 default:
@@ -657,3 +660,4 @@ namespace PirateGame
 
     }
 }
+#endregion

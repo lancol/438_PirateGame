@@ -40,3 +40,6 @@ D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\Pi
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Ocean_web48_t127.png
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Battle_Cannonball32.png
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Battle_Cannonball16.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\obj\x86\Debug\PirateGame.exe
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\obj\x86\Debug\PirateGame.pdb
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\obj\x86\Debug\PirateGame.csprojResolveAssemblyReference.cache
