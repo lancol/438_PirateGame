@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
 
 namespace PirateGame
@@ -12,12 +13,17 @@ namespace PirateGame
         private float b_acceleration;
         private float b_speed;
         private float max_speed;
+        private float fireDistance;
+        Texture2D cBall_image;
+        List<Cannonball> cannonballs = new List<Cannonball>();
 
         public PlayerShip(float X, float Y, float Rotate)
         {
             setX(X);
             setY(Y);
             setRotate(Rotate);
+            fireDistance = 300;
+            
         }
 
         public float getMorale()
@@ -48,6 +54,11 @@ namespace PirateGame
         public void setMorale(float Morale)
         {
             morale = Morale;
+        }
+
+        public void setCBallImage(Texture2D CballImage)
+        {
+            cBall_image = CballImage;
         }
 
         public void setAlignment(float Align)
@@ -99,7 +110,7 @@ namespace PirateGame
         {
             if (b_speed - (b_speed * (b_acceleration * DT)) > 0) //if slowing it down doesn't put it below the speed of 0, so it doesn't go into reverse at any point
             {
-                b_speed -= (float)(b_acceleration * DT) * b_speed; //subtract 50% (or current acc_rate) of ships speed per second (DT will make the effect happen more or less over the course of a second)
+                b_speed -= (b_acceleration * DT) * b_speed; //subtract 50% (or current acc_rate) of ships speed per second (DT will make the effect happen more or less over the course of a second)
             }
             else
             {
@@ -223,6 +234,53 @@ namespace PirateGame
             }
 
             return s_p;
+        }
+
+        public void fireCannon(NPCShip enemyShip, float DT)
+        {
+            if (getX() < enemyShip.getX()) //This is temporary
+            {
+                //float xSpeed = ((b_speed + 50) * (float)Math.Cos(MathHelper.ToRadians(getRotate())))*DT;
+                //float ySpeed = ((b_speed + 50) * (float)Math.Sin(MathHelper.ToRadians(getRotate())))*DT;
+                if (cannonballs.Count < 3)
+                {
+                    cannonballs.Add(new Cannonball((int)getX(), (int)getY(), true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() + 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() + 90)))); //0 == good, 1 == bad; FireDistance, xSpeed, ySpeed
+                    cannonballs.Add(new Cannonball((int)getX() + 10, (int)getY() + 10, true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() + 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() + 90))));
+                    cannonballs.Add(new Cannonball((int)getX() - 10, (int)getY() - 10, true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() + 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() + 90))));
+
+                }
+            }
+            else //left
+            {
+                //float xSpeed = ((b_speed + 50) * (float)Math.Cos(MathHelper.ToRadians(getRotate())))*DT;
+                //float ySpeed = ((b_speed + 50) * (float)Math.Sin(MathHelper.ToRadians(getRotate())))*DT;
+                if (cannonballs.Count < 3)
+                {
+                    cannonballs.Add(new Cannonball((int)getX(), (int)getY(), true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() - 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() - 90)))); //0 == good, 1 == bad; FireDistance, xSpeed, ySpeed
+                    cannonballs.Add(new Cannonball((int)getX() + 10, (int)getY() + 10, true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() - 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() - 90))));
+                    cannonballs.Add(new Cannonball((int)getX() - 10, (int)getY() - 10, true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() - 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() - 90))));
+                }
+            }
+        }
+
+        public void updateCannonBalls(float DT, NPCShip enemy)
+        {
+            for (int i = 0; i < cannonballs.Count; i++)
+            {
+                cannonballs[i].Update(DT);
+                if (cannonballs[i].TTL <= 0)
+                {
+                    cannonballs.RemoveAt(i);
+                }
+            }
+        }
+
+        public void drawCannonBalls(SpriteBatch spriteBatch)
+        {
+            for (int i = 0; i < cannonballs.Count; i++)
+            {
+                spriteBatch.Draw(cBall_image, new Vector2(cannonballs[i].getX(), cannonballs[i].getY()), Color.White);
+            }
         }
     }
 }

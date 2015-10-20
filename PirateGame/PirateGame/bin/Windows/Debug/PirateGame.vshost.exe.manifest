@@ -55,14 +55,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="170944">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="172480">
       <assemblyIdentity name="PirateGame" version="3.4.0.456" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>bzELJDLjEc4dmfq+J3dYssJTsU0=</dsig:DigestValue>
+        <dsig:DigestValue>qY8VJHlr3HtKXND1WX8oUHj/t9E=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -174,6 +174,15 @@
       </hash>
     </dependentAssembly>
   </dependency>
+  <file name="Content\Battle_Cannonball16.png" size="229">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>RI+shkNKoY64x1iVJtoX3C6n/K8=</dsig:DigestValue>
+    </hash>
+  </file>
   <file name="Content\Battle_Cannonball32.png" size="305">
     <hash>
       <dsig:Transforms>

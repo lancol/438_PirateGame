@@ -15,7 +15,6 @@ namespace PirateGame
         List<Cannonball> cannonballs = new List<Cannonball>();
         Texture2D cBall_image;
 
-
         public NPCShip(Texture2D cBall_Image, float x, float y, float rotate, string Faction)
         {
             cBall_image = cBall_Image; //terrible code.
@@ -51,119 +50,120 @@ namespace PirateGame
             return stance;
         }
 
-        public void runStandardBattleAI(PlayerShip player)
+        public void runStandardBattleAI(PlayerShip player, float DT)
         {
-            bool raycastHitR = false;
+            //Move forward
+            bool raycastHitR = false; //boolean hit
             bool raycastHitL = false;
-            float rayXr = getX();
+            float rayXr = getX(); //init start position
             float rayYr = getY();
             float rayXl = getX();
             float rayYl = getY();
             //Start
-
+            Vector2[] cb = player.getCollisionbox(); //bounding box of player
+            float distanceY = (float)Math.Sqrt(Math.Pow(cb[0].Y, 2) + Math.Pow(cb[3].Y, 2));
+            float distanceX = (float)Math.Sqrt(Math.Pow(cb[1].Y, 2) + Math.Pow(cb[2].Y, 2));
+            float midY = cb[3].Y - (distanceY / 2);
+            float midX = cb[1].X + (distanceX / 2);
             //Raycasts
             #region Raycasts
             //k is the current step along the raycast
-            for (int k = 0; k < (fireDistance/RC_StepSize); k++)
+            for (int k = 0; k < (fireDistance / RC_StepSize); k++)
             {
-                rayXr = (getX() + k * RC_StepSize) * (float)Math.Cos(MathHelper.ToRadians(getRotate() - 90)); //right side
-                rayYr = (getY() + k * RC_StepSize) * (float)Math.Sin(MathHelper.ToRadians(getRotate() - 90)); //right side
-                //if raycast right point is within collisionbox, raycastHit = true, break;
-                rayXl = (getX() + k * RC_StepSize) * (float)Math.Cos(MathHelper.ToRadians(getRotate() + 90)); //left side
-                rayYl = (getY() + k * RC_StepSize) * (float)Math.Sin(MathHelper.ToRadians(getRotate() + 90)); //left side
-                //if raycast right point is within collisionbox, raycastHit = true, break;
+                rayXr = getX() + ((k * RC_StepSize) * (float)Math.Cos(MathHelper.ToRadians(getRotate() + 90))); //right side
+                rayYr = getY() + ((k * RC_StepSize) * (float)Math.Sin(MathHelper.ToRadians(getRotate() + 90))); //right side
+                rayXl = getX() + ((k * RC_StepSize) * (float)Math.Cos(MathHelper.ToRadians(getRotate() - 90))); //left side
+                rayYl = getY() + ((k * RC_StepSize) * (float)Math.Sin(MathHelper.ToRadians(getRotate() - 90))); //left side
 
-                Vector2[] cb = player.getCollisionbox();
-
-                //the following part doesn't ring true, when it should.
-                //begin printing out raycast positions
-                //print out cb positions. Run manual cases
-                //Debug.WriteLine("player: " + cb[0] + ", " + cb[1] + ", " + cb[2] + ", " + cb[3]);
-                //Debug.WriteLine("RaycastL: " + rayXl + ", " + rayYl);
-
-                
-                /*
-                Raycast Y is being made really small.
-
-                player: {X:2521.664 Y:4680.367}, {X:2520.698 Y:4800.714}, {X:2590.631 Y:4681.27}, {X:2588.447 Y:4801.601}
-                RaycastL: 2704, 0.0008224735
-                player: {X:2521.664 Y:4680.367}, {X:2520.698 Y:4800.714}, {X:2590.631 Y:4681.27}, {X:2588.447 Y:4801.601}
-                RaycastL: 2706, 0.0008228231
-                player: {X:2521.664 Y:4680.367}, {X:2520.698 Y:4800.714}, {X:2590.631 Y:4681.27}, {X:2588.447 Y:4801.601}
-                RaycastL: 2708, 0.0008231729
-                player: {X:2521.664 Y:4680.367}, {X:2520.698 Y:4800.714}, {X:2590.631 Y:4681.27}, {X:2588.447 Y:4801.601}
-                RaycastL: 2710, 0.0008235226
-                player: {X:2521.664 Y:4680.367}, {X:2520.698 Y:4800.714}, {X:2590.631 Y:4681.27}, {X:2588.447 Y:4801.601}
-                RaycastL: 2712, 0.0008238722
-                player: {X:2521.664 Y:4680.367}, {X:2520.698 Y:4800.714}, {X:2590.631 Y:4681.27}, {X:2588.447 Y:4801.601}
-                RaycastL: 2714, 0.0008242219
-                */
-
-
-                if (rayYr > cb[0].Y && rayYr < cb[3].Y) //if the point is 'below' the highest point and 'above' the lowest
+                if (rayYr > cb[0].Y && rayYr < cb[3].Y && rayXr > cb[1].X && rayXr < cb[2].X) //if the point is 'below' the highest point and 'above' the lowest
                 {
-                    if (rayXr > cb[0].X && rayXr < cb[2].X)
-                    {
-                        Debug.WriteLine("RaycastHitR");
-                        raycastHitR = true;
-                        break;
-                    }
+                    //Debug.WriteLine("RaycastHitR");
+                    raycastHitR = true;
+                    break;
                 }
-                else if (rayYl > cb[0].Y && rayYl < cb[3].Y) //if the point is 'below' the highest point and 'above' the lowest
+                else if (rayYl > cb[0].Y && rayYl < cb[3].Y && rayXl > cb[1].X && rayXl < cb[2].X) //if the point is 'below' the highest point and 'above' the lowest
                 {
-                    if (rayXl > cb[0].X && rayXl < cb[2].X)
-                    {
-                        Debug.WriteLine("RaycastHitL");
-                        raycastHitL = true;
-                        break;
-                    }
+                    //Debug.WriteLine("RaycastHitL");
+                    raycastHitL = true;
+                    break;
                 }
             }
             #endregion
 
+            #region Fire if necessary
             //Raycast hit?
             if (raycastHitR == true) //if on right side
             {
                 //Fire gun
-                fireCannon(0);
+                if (cannonballs.Count < 1)
+                    fireCannon(0);
             }
             else if (raycastHitL == true)
             {
-                fireCannon(1);
+                if (cannonballs.Count < 1)
+                    fireCannon(1);
             }
-            else
-            {
-                //Rotate step towards perpendicular to player
-            }
+            #endregion
+
+            //if close enough, rotate guns towards center of player
+            rotateTowardsPlayer(player, DT);
+            //else sail towards a good vantage point +/- k distance from top or bottom of player ship
+
             //Sail forward
-        }
+            setX(getX() + (30 * DT) * (float)Math.Cos(MathHelper.ToRadians(getRotate()))); //update positions
+            setY(getY() + (30 * DT) * (float)Math.Sin(MathHelper.ToRadians(getRotate())));
+        } //needs lots of work
 
         private void fireCannon(int direction)
         {
-            Debug.WriteLine("Fire!");
-            Debug.WriteLine(cBall_image.Name);
             if (direction == 0) //0 == right
             {
-                cannonballs.Add(new Cannonball(false, fireDistance, 5, 5)); //0 == good, 1 == bad; FireDistance, xSpeed, ySpeed
+                cannonballs.Add(new Cannonball((int)getX(), (int)getY(), false, fireDistance, 175*(float)Math.Cos(MathHelper.ToRadians(getRotate()+90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate()+90)))); //0 == good, 1 == bad; FireDistance, xSpeed, ySpeed
             }
             else //left
             {
-                cannonballs.Add(new Cannonball(false, fireDistance, 5, 5)); //0 == good, 1 == bad; FireDistance, xSpeed, ySpeed
+                cannonballs.Add(new Cannonball((int)getX(), (int)getY(), false, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() - 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() - 90)))); //0 == good, 1 == bad; FireDistance, xSpeed, ySpeed
+                //cannonballs.Add(new Cannonball((int)getX(), (int)getY(), false, fireDistance, -30, 30)); //0 == good, 1 == bad; FireDistance, xSpeed, ySpeed
             }
         }
 
-        public void updateCannonBalls(float DT)
+        public void rotateTowardsPlayer(PlayerShip player, float DT)
         {
+            //check if above or below
+            //if player above, rotate cwise
+            //if player below, ccwise
+
+            if ((player.getY() < getY() && player.getX() < getX()) || (player.getY() > getY() && player.getX() > getX())) //if player is above enemy and to the left OR below and to the right
+            {
+                setRotate(getRotate() + 30 * DT);
+            }
+            else if ((player.getY() > getY() && player.getX() > getX()) || (player.getY() < getY() && player.getX() > getX())) //if player is below enemy and to the left OR above and to the right
+            {
+                setRotate(getRotate() - 30 * DT);
+            }
+            
+        } //garbage. Needs a lot of work.
+
+        public void updateCannonBalls(float DT, PlayerShip player)
+        {
+
+            Vector2[] cb = player.getCollisionbox();
+
             for (int i = 0; i < cannonballs.Count; i++)
             {
+                cannonballs[i].Update(DT);
+
+                if ((cannonballs[i].getY() > cb[0].Y) && (cannonballs[i].getY() < cb[3].Y) && cannonballs[i].getX() > cb[1].X && cannonballs[i].getX() < cb[2].X)
+                {
+                    cannonballs[i].TTL = 0;
+                }
+
                 if (cannonballs[i].TTL <= 0)
                 {
                     cannonballs.RemoveAt(i);
                 }
-                cannonballs[i].Update(DT);
-            }
+            }   
         }
-
         public void drawCannonBalls(SpriteBatch spriteBatch)
         {
             for (int i = 0; i < cannonballs.Count; i++)

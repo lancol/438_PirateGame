@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Diagnostics;
 
@@ -16,6 +17,7 @@ namespace PirateGame
         GraphicsDeviceManager graphics;
         Camera camera;
         SpriteBatch spriteBatch;
+        //Song backgroundSong;
         //ParticleEngine ow_ShipSprayEffect;
         float DT;
         int gameState;
@@ -153,7 +155,7 @@ namespace PirateGame
 
                 shipImg[0] = Content.Load<Texture2D>("Ship1v2");
                 b_shipImg[0] = Content.Load<Texture2D>("Ship_TopDown136_68");
-                cannonball = Content.Load<Texture2D>("Battle_Cannonball32");
+                cannonball = Content.Load<Texture2D>("Battle_Cannonball16");
 
                 player.setImage(shipImg[0]);
                 player.setBattleImage(b_shipImg[0]);
@@ -163,6 +165,8 @@ namespace PirateGame
                     OtherShip[i].setImage(shipImg[0]);
                     OtherShip[i].setBattleImage(b_shipImg[0]);
                 }
+
+                //backgroundSong = Content.Load<Song>("PirateSong");
             }
             catch
             {
@@ -193,6 +197,7 @@ namespace PirateGame
             bool updown;
             bool leftdown;
             bool downdown;
+            bool spacedown;
 
             bool Collision;
 
@@ -228,7 +233,7 @@ namespace PirateGame
             updown = false;
             leftdown = false;
             downdown = false;
-
+            spacedown = false;
             #endregion
 
             #region Input
@@ -262,6 +267,10 @@ namespace PirateGame
                 facingRight = true;
                 moving = true;
             }
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                spacedown = true;
+            }
             if (Keyboard.GetState().IsKeyDown(Keys.B)) //Temporary until overworld enemy ship collisions
             {
                 gameState = 3;
@@ -284,7 +293,8 @@ namespace PirateGame
                     break;
                 case 2: //overworld
                     #region Overworld
-
+                    //MediaPlayer.Play(backgroundSong);
+                    //MediaPlayer.IsRepeating = true;
                     //check for pause
 
                     //Update enemy positions
@@ -395,6 +405,8 @@ namespace PirateGame
                     player.setX(player.getX() + (player.get_bSpeed() * DT) * (float)Math.Cos(MathHelper.ToRadians(player.getRotate()))); //update positions
                     player.setY(player.getY() + (player.get_bSpeed() * DT) * (float)Math.Sin(MathHelper.ToRadians(player.getRotate())));
 
+                    player.updateCannonBalls(DT, EnemyShip);
+
                     #region sailing particles
                     //Update ParticleEnginePosition
                     b_SailStream.setX(player.getX() + (-46.1f * (float)Math.Cos(MathHelper.ToRadians(player.getRotate()) + .61f))); //PlayerX + ([angle length of Hypotenuse] * Cos([playerRotate] + [angle between desired position and origin])
@@ -419,9 +431,13 @@ namespace PirateGame
                     b_SailStream2.Update(DT);
                     #endregion
 
+                    //Player Cannon Fire
+                    if (spacedown)
+                        player.fireCannon(EnemyShip, DT);
+
                     //EnemyShip
-                    EnemyShip.runStandardBattleAI(player);
-                    EnemyShip.updateCannonBalls(DT);
+                    EnemyShip.runStandardBattleAI(player, DT);
+                    EnemyShip.updateCannonBalls(DT, player);
 
                     #endregion
                     break;       
@@ -481,7 +497,6 @@ namespace PirateGame
                         }
                     }
 
-
                     //draw islands
                     for (int i = 0; i < island.Length; i++)
                         spriteBatch.Draw(island[i], new Vector2(isl_x[i], isl_y[i]), Color.White);
@@ -514,7 +529,7 @@ namespace PirateGame
                     break;
                 case 3: //in battle
                     #region In Battle
-
+                    
                     //draw Ocean
                     //int bh = ((int)camera.position.Y / OceanTile.Height) * OceanTile.Height;
                     //int bw = ((int)camera.position.X / OceanTile.Width) * OceanTile.Width;
@@ -555,6 +570,9 @@ namespace PirateGame
                     spriteBatch.Draw(player.getBattleImage(), new Vector2(player.getX(), player.getY()), null, Color.White,
                                         MathHelper.ToRadians(player.getRotate()), new Vector2(55, 34), 1f, SpriteEffects.None, 1);
 
+                    //Draw player cannonballs
+                    player.drawCannonBalls(spriteBatch);
+
                     //draws collision box vertices
                     Vector2[] p = player.getCollisionbox();
                     for (int i = 0; i < 4; i++)
@@ -579,7 +597,7 @@ namespace PirateGame
             camera.position = new Vector2(player.getX() - (screen_W / 2), player.getY() - (screen_H / 2));
 
             //EnemyShip = //whatever collided with
-            EnemyShip = new NPCShip(whiteblock, player.getX() + 200, player.getY() + 200, 270, "pirate");
+            EnemyShip = new NPCShip(cannonball, player.getX() + 200, player.getY() + 200, 270, "pirate");
             EnemyShip.setBattleImage(b_shipImg[0]);
             b_SailStream = new ParticleEngine(whiteblock, 20, -1, 0,0,0);
             b_SailStream.setX(player.getX());
@@ -598,6 +616,8 @@ namespace PirateGame
             player.setRotate(0);
             camera.position = new Vector2(player.getX() - (screen_W / 2), player.getY() - (screen_H / 2));
             ow_sailSpray = new ParticleEngine(whiteblock, 20, -1, 0, 0, 0);
+
+            player.setCBallImage(cannonball);
 
             ow_sailSpray.setX(player.getX());
             ow_sailSpray.setY(player.getY());
