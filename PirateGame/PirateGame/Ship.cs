@@ -26,6 +26,11 @@ namespace PirateGame
             return battleImage;
         }
 
+        public Vector2 getPos()
+        {
+            return new Vector2(getX(), getY());
+        }
+
         public float getGold()
         {
             return gold;

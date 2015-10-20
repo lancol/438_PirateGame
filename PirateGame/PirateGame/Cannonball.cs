@@ -1,4 +1,6 @@
-﻿namespace PirateGame
+﻿using Microsoft.Xna.Framework;
+
+namespace PirateGame
 {
     class Cannonball : Entity
     {
@@ -7,8 +9,10 @@
         private float xSpeed;
         private float ySpeed;
 
-        public Cannonball(bool Good, float FireDistance, float XSpeed, float YSpeed)
+        public Cannonball(int X,int Y, bool Good, float FireDistance, float XSpeed, float YSpeed)
         {
+            setX(X);
+            setY(Y);
             good = Good;
             TTL = FireDistance;
             xSpeed = XSpeed;
@@ -18,8 +22,12 @@
         public void Update(float DT)
         {
             TTL--;
-            setX(getX() + xSpeed*DT);
-            setY(getY() + ySpeed*DT);
+
+            float nextStepX = getX() + xSpeed * DT;
+            float nextStepY = getY() + ySpeed * DT;
+
+            setX(nextStepX);
+            setY(nextStepY);
         }
     }
 }
