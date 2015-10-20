@@ -63,14 +63,13 @@ namespace PirateGame
         Texture2D whiteblock;
         #endregion
 
-
         #region Shop Window
         Store shop_window;
         Texture2D shop_window_background;
         Texture2D shop_back_button;
         Texture2D shop_repair_button;
         #endregion
-
+        #endregion
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
