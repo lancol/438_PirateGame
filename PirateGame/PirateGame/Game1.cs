@@ -61,6 +61,12 @@ namespace PirateGame
         Texture2D whiteblock;
         #endregion
 
+
+        #region Shop Window
+        Store shop_window;
+        Texture2D shop_window_background;
+        Texture2D shop_back_button;
+        Texture2D shop_repair_button;
         #endregion
 
         public Game1()
@@ -90,7 +96,7 @@ namespace PirateGame
             gameState = 2;
             #endregion
 
-            #region Enviornment
+            #region Environment
             island = new Texture2D[3];
             isl_x = new int[3];
             isl_y = new int[3];
@@ -154,6 +160,10 @@ namespace PirateGame
                 shipImg[0] = Content.Load<Texture2D>("Ship1v2");
                 b_shipImg[0] = Content.Load<Texture2D>("Ship_TopDown136_68");
                 cannonball = Content.Load<Texture2D>("Battle_Cannonball32");
+
+                shop_window_background = Content.Load<Texture2D>("Shop_Window_Background");
+                shop_back_button = Content.Load<Texture2D>("Back_Button");
+                shop_repair_button = Content.Load<Texture2D>("Repair_Ship_Button");
 
                 player.setImage(shipImg[0]);
                 player.setBattleImage(b_shipImg[0]);
@@ -268,9 +278,15 @@ namespace PirateGame
                 battle_init(); //temporary
             }
 
+            if (Keyboard.GetState().IsKeyDown(Keys.S)) //Temporary until overworld island interaction
+            {
+                gameState = 4;
+                
+            }
+
             #endregion
 
-            switch (gameState)
+            switch (gameState) //this gameState is for loading
             {
                 case 0: //Main Menu
                     #region Main Menu
@@ -424,7 +440,13 @@ namespace PirateGame
                     EnemyShip.updateCannonBalls(DT);
 
                     #endregion
-                    break;       
+                    break;
+
+                case 4: //Shopping for items   
+
+                    break;   
+
+
                 default:
                     Exit();
                     break;
@@ -443,7 +465,7 @@ namespace PirateGame
             var viewMatrix = camera.GetViewMatrix();//Camera stuff
             spriteBatch.Begin(transformMatrix: viewMatrix);
 
-            switch (gameState)
+            switch (gameState) //this gameState is for drawing
             {
                 case 0: //Main menu
                     #region Main Menu
@@ -564,6 +586,11 @@ namespace PirateGame
 
                     #endregion
                     break;
+
+                case 4: //Shopping
+
+                    break;
+
                 default:
                     Exit();
                     break;
