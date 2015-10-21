@@ -379,13 +379,6 @@ namespace PirateGame
                     else// if (updown == true)
                     {
                         ow_sailSpray.removeAll();
-                        //ow_sailSpray.setX((facingRight) ? player.getX() + 18 : player.getX() - 18);
-                        //ow_sailSpray.setY(player.getY());
-                        //ow_sailSpray.setXSpeed((facingRight) ? -.1f : .1f);
-                        //ow_sailSpray.setXAccl((facingRight) ? -2 : 2);
-                        //ow_sailSpray.setYSpeed(20 - .3f);
-                        //ow_sailSpray.setYAccl(.5f);
-                        //ow_sailSpray.setTimeLimit(rand.Next(10, 20));
                     }
                     ow_sailSpray.Update(DT);
                     #endregion
@@ -496,17 +489,7 @@ namespace PirateGame
                 case 2: //overworld
                     #region Overworld
                     //draw ocean and ocean effects
-                    //int h = ((int)camera.position.Y / OceanTile.Height) * OceanTile.Height;
-                    //int w = ((int)camera.position.X / OceanTile.Width) * OceanTile.Width;
 
-                    //for (int y = h; y < (h + screen_H + OceanTile.Height); y += OceanTile.Height)
-                    //{
-                    //    for (int x = w; x < (w + screen_W + OceanTile.Width); x += OceanTile.Width)
-                    //    {
-                    //        spriteBatch.Draw(OceanTile, new Vector2(x, y), Color.White);
-                    //        spriteBatch.Draw(OceanWeb, new Vector2(x + (float)(stepRadius * Math.Sin(effectT)), y), Color.White);
-                    //    }
-                    //}
                     int h = ((int)camera.position.Y / OceanTile48.Height) * OceanTile48.Height;
                     int w = ((int)camera.position.X / OceanTile48.Width) * OceanTile48.Width;
 
@@ -539,11 +522,7 @@ namespace PirateGame
                     #region particle crap
                     if (moving)
                     {
-                        ow_sailSpray.Draw(spriteBatch);
-                        //spriteBatch.Draw(SailSprayEffect,
-                        //(facingRight) ? new Rectangle((int)player.getX() - 14, (int)player.getY() - 11, 34, 13) : new Rectangle((int)player.getX() - 20, (int)player.getY() - 11, 34, 13), //this code sucks. Sorry.
-                        //new Rectangle(step * 34, 0, 34, 13), Color.White, 0, new Vector2(0, 0),                                                                                    //basically, the offset for the animation is different
-                        //(facingRight) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 1);                  
+                        ow_sailSpray.Draw(spriteBatch);               
                     }
                     #endregion
                     //Draw clouds/wind/weather/anything else
@@ -553,17 +532,6 @@ namespace PirateGame
                     #region In Battle
                     
                     //draw Ocean
-                    //int bh = ((int)camera.position.Y / OceanTile.Height) * OceanTile.Height;
-                    //int bw = ((int)camera.position.X / OceanTile.Width) * OceanTile.Width;
-
-                    //for (int y = bh; y < (bh + screen_H + OceanTile.Height); y += OceanTile.Height)
-                    //{
-                    //    for (int x = bw; x < (bw + screen_W + OceanTile.Width); x += OceanTile.Width)
-                    //    {
-                    //        spriteBatch.Draw(OceanTile, new Vector2(x, y), Color.White);
-                    //        spriteBatch.Draw(OceanWeb, new Vector2(x + (float)(stepRadius * Math.Sin(effectT)), y), Color.White);
-                    //    }
-                    //}
                     int bh = ((int)camera.position.Y / OceanTile48.Height) * OceanTile48.Height;
                     int bw = ((int)camera.position.X / OceanTile48.Width) * OceanTile48.Width;
 
@@ -644,15 +612,12 @@ namespace PirateGame
             camera.position = new Vector2(player.getX() - (screen_W / 2), player.getY() - (screen_H / 2));
             ow_sailSpray = new ParticleEngine(whiteblock, 20, -1, 0, 0, 0);
 
+            
             player.setCBallImage(cannonball);
 
             ow_sailSpray.setX(player.getX());
             ow_sailSpray.setY(player.getY());
             ow_sailSpray.setActive(true);
-
-            //b_SailStream.setActive(false);
-            //b_SailStream2.setActive(false);
-
         }
 
     }
