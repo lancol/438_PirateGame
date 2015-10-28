@@ -461,6 +461,8 @@ namespace PirateGame
                     //update ocean effects (if applicable)
 
                     //update weather effects (if applicable)
+                    IsMouseVisible = false;
+
 
                     //Check for collisions
                     #region Get Next Position
@@ -809,7 +811,6 @@ namespace PirateGame
                 {
                     Exit();
                 }
-
             }
         }
 
