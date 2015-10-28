@@ -141,8 +141,8 @@ namespace PirateGame
         protected override void Initialize()
         {
             #region System/Game Control
-            world_H = 5000;
-            world_W = 5000;
+            world_H = 3000;
+            world_W = 3000;
             screen_H = GraphicsDevice.Viewport.Height;
             screen_W = GraphicsDevice.Viewport.Width;
             Random rand = new Random();
@@ -155,24 +155,24 @@ namespace PirateGame
             isl_x = new int[5];
             isl_y = new int[5];
 
-            isl_x[0] = 1000;  // First island hard-coded
-            isl_y[0] = 4500;
+            isl_x[0] = 600;  // First island hard-coded
+            isl_y[0] = 2700;
 
-            isl_x[1] = 3000; // Second island hard-coded
-            isl_y[1] = 3500;
+            isl_x[1] = 1800; // Second island hard-coded
+            isl_y[1] = 2100;
 
-            isl_x[2] = 800; // Third island hard-coded
-            isl_y[2] = 1800;
+            isl_x[2] = 480; // Third island hard-coded
+            isl_y[2] = 1080;
 
-            isl_x[3] = 2000; // Fourth island hard-coded
-            isl_y[3] = 1000;
+            isl_x[3] = 1200; // Fourth island hard-coded
+            isl_y[3] = 600;
 
-            isl_x[4] = 4500; // Fifth island hard-coded
-            isl_y[4] = 500;
+            isl_x[4] = 2700; // Fifth island hard-coded
+            isl_y[4] = 300;
             #endregion
 
             #region Player Related
-            player = new PlayerShip(1000, 4500, 0);
+            player = new PlayerShip(600, 2700, 0);
             player.set_bSpeed(0);
             player.set_bAcceleration(1f);
             player.set_maxSpeed(30);
@@ -191,7 +191,7 @@ namespace PirateGame
             OtherShip = new NPCShip[20];
             for (int i = 0; i < OtherShip.Length; i++)
             {
-                OtherShip[i] = new NPCShip(cannonball, rand.Next(0, 5000), rand.Next(0, 5000), 0, "neutral");
+                OtherShip[i] = new NPCShip(cannonball, rand.Next(0, world_W), rand.Next(0, world_H), 0, "neutral");
             }
             #endregion
 
@@ -221,8 +221,7 @@ namespace PirateGame
             previousMouseState = mouseState;
 
             #endregion
-
-
+            
             base.Initialize();
         }
 
@@ -484,6 +483,17 @@ namespace PirateGame
                     }
                     #endregion
                     //  if next step is an island, stop
+
+                    if (nextPosX < 0)
+                        player.setPos(world_W, player.getY());
+                    else if(nextPosX > world_W)
+                        player.setPos(0, player.getY());
+
+                    if (nextPosY < 0)
+                        Collision = true;
+                    else if (nextPosY > world_H)
+                        Collision = true;
+                                            
                     for (int i = 0; i < island.Length; i++) //must improve collision box on final islands.
                     {
                         if (nextPosX < (isl_x[i] + island[i].Width) && nextPosX > isl_x[i])
@@ -494,8 +504,17 @@ namespace PirateGame
                             }
                         }
                     }
-                    //  if next step is a collision with other ship, go into battle with them
 
+                    //  if next step is a collision with other ship, go into battle with them
+                    for (int i = 0; i < OtherShip.Length; i++)
+                    {
+                        if (Vector2.Distance(player.getPos(), OtherShip[i].getPos()) < 30) //optimize this distance
+                        {
+                            //change gamestate and set enemy ship to othership[i]
+                            gameState = 3;
+                            battle_init();
+                        }
+                    }
                     //  if next step is a collision with a town, go into town or open town menu
 
                     if (Collision == false)
@@ -647,11 +666,11 @@ namespace PirateGame
                     //draw ocean and ocean effects
 
                     int h = ((int)camera.position.Y / OceanTile48.Height) * OceanTile48.Height;
-                    int w = ((int)camera.position.X / OceanTile48.Width) * OceanTile48.Width;
+                    int w = (((int)camera.position.X / OceanTile48.Width) * OceanTile48.Width)-OceanTile48.Width;
 
                     for (int y = h; y < (h + screen_H + OceanTile48.Height); y += OceanTile48.Height)
                     {
-                        for (int x = w; x < (w + screen_W + OceanTile48.Width); x += OceanTile48.Width)
+                        for (int x = w; x < (w + screen_W + (OceanTile48.Width*2)); x += OceanTile48.Width)
                         {
                             spriteBatch.Draw(OceanTile48, new Vector2(x, y), Color.White);
                             spriteBatch.Draw(OceanWeb, new Vector2(x + (float)(stepRadius * Math.Sin(effectT)), y), Color.White);
@@ -701,14 +720,14 @@ namespace PirateGame
                     break;
                 case 3: //in battle
                     #region In Battle
-                    
+
                     //draw Ocean
                     int bh = ((int)camera.position.Y / OceanTile48.Height) * OceanTile48.Height;
-                    int bw = ((int)camera.position.X / OceanTile48.Width) * OceanTile48.Width;
+                    int bw = (((int)camera.position.X / OceanTile48.Width) * OceanTile48.Width) - OceanTile48.Width;
 
                     for (int y = bh; y < (bh + screen_H + OceanTile48.Height); y += OceanTile48.Height)
                     {
-                        for (int x = bw; x < (bw + screen_W + OceanTile48.Width); x += OceanTile48.Width)
+                        for (int x = bw; x < (bw + screen_W + (OceanTile48.Width * 2)); x += OceanTile48.Width)
                         {
                             spriteBatch.Draw(OceanTile48, new Vector2(x, y), Color.White);
                             spriteBatch.Draw(OceanWeb, new Vector2(x + (float)(stepRadius * Math.Sin(effectT)), y), Color.White);
