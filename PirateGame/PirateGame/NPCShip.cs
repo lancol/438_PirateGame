@@ -6,18 +6,18 @@ using System.Diagnostics;
 
 namespace PirateGame
 {
-    class NPCShip : Ship
+    public class NPCShip : Ship
     {
         string faction;
         string stance;
         float fireDistance = 200;
         int RC_StepSize = 2;
         List<Cannonball> cannonballs = new List<Cannonball>();
-        Texture2D cBall_image;
+        static Texture2D cBall_image;
 
-        public NPCShip(Texture2D cBall_Image, float x, float y, float rotate, string Faction)
+        public NPCShip(float x, float y, float rotate, string Faction)
         {
-            cBall_image = cBall_Image; //terrible code.
+            //cBall_image = cBall_Image; //terrible code.
             setX(x);
             setY(y);
             setRotate(rotate);
@@ -28,6 +28,11 @@ namespace PirateGame
             setGold(100);
             faction = Faction;
             stance = "passive";
+        }
+
+        public static void setCBallImage(Texture2D Image)
+        {
+            cBall_image = Image;
         }
 
         public void setFaction(string Faction)
@@ -156,6 +161,7 @@ namespace PirateGame
                 if ((cannonballs[i].getY() > cb[0].Y) && (cannonballs[i].getY() < cb[3].Y) && cannonballs[i].getX() > cb[1].X && cannonballs[i].getX() < cb[2].X)
                 {
                     cannonballs[i].TTL = 0;
+                    player.setHealth(player.getHealth() - 5);
                 }
 
                 if (cannonballs[i].TTL <= 0)
@@ -164,6 +170,7 @@ namespace PirateGame
                 }
             }   
         }
+
         public void drawCannonBalls(SpriteBatch spriteBatch)
         {
             for (int i = 0; i < cannonballs.Count; i++)

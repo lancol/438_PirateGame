@@ -41,3 +41,7 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+*.deploy
+PirateGame/PirateGame/bin/Windows/Debug/app.publish/setup.exe
+PirateGame/PirateGame/bin/Windows/Debug/app.publish/PirateGame.application
+PirateGame/PirateGame/bin/Windows/Debug/app.publish/autorun.inf
