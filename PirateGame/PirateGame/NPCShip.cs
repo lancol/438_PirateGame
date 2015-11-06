@@ -22,9 +22,12 @@ namespace PirateGame
             setY(y);
             setRotate(rotate);
             //defaults
-            setAttack(1);
-            setDefense(1);
-            setHealth(10);
+            Random rand = new Random();
+            setAttack(30);
+            setDefense(30);
+            setHealth(100);
+            setSpeed(30);
+            setCrew(15);
             setGold(100);
             faction = Faction;
             stance = "passive";
@@ -53,6 +56,65 @@ namespace PirateGame
         public string getStance()
         {
             return stance;
+        }
+
+        public void runOverworldAI(PlayerShip player, float DT)
+        {
+            //sail along a path
+
+            //if power < playerPower
+            #region PowerLevels and Stances
+            if (getPowerlvl() * 1.5f < player.getPowerlvl())
+            {   //Stance is fearful
+                setStance("Fearful");
+                //Debug.WriteLine("Fearful");
+            }
+            else if (getPowerlvl() > player.getPowerlvl() * 1.25f) //if power > playerPower
+            {   //Stance is bold
+                setStance("Bold");
+                //Debug.WriteLine("Bold");
+
+            }
+            else
+            {   //otherwise nuetral
+                setStance("Nuetral");
+                //Debug.WriteLine("Nuetral");
+            }
+            #endregion
+            float distance = Vector2.Distance(getPos(), player.getPos());
+            float angleBetween = (float)Math.Atan2(player.getY() - getY(), player.getX() - getX());
+            
+            float x_Component = distance * (float)Math.Cos(angleBetween);
+            float y_Component = distance * (float)Math.Sin(angleBetween);
+
+            //if distance < somedistance
+            if (Vector2.Distance(getPos(),player.getPos()) < 300)
+            {
+                Debug.WriteLine(getStance());
+                //Debug.WriteLine(getStance());
+                //Debug.WriteLine("p: " + player.getPowerlvl());
+                if ((getFaction() == "Navy" && player.getAlignment() < 50) || getFaction() == "Pirate") //if a "bad guy" (to you)
+                {
+                    if (getStance() == "Bold")
+                    {
+                        //Chase
+                            setPos(getX() + .5f * x_Component * DT, getY() + .5f * y_Component * DT);
+                    }
+                    else if (getStance() == "Fearful")
+                    {
+                        //Flee
+                        setPos(getX() - .5f * x_Component * DT, getY() - .5f * y_Component * DT);
+                    }
+                    else //Nuetral
+                    {
+                        //Follow normal path
+                    }
+                }
+                else //Good guy is nuetral
+                {
+                    //Follow normal path
+                }
+            }                
         }
 
         public void runStandardBattleAI(PlayerShip player, float DT)

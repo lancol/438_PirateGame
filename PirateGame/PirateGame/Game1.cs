@@ -25,11 +25,11 @@ namespace PirateGame
         int screen_H;
         int world_W;
         int world_H;
+        bool mapOpen;
         #endregion
 
         #region Environment
         Texture2D OceanTile;
-        Texture2D OceanTile48;
         Texture2D OceanWeb;
         Texture2D SailSprayEffect;
         Texture2D[] island;
@@ -45,6 +45,8 @@ namespace PirateGame
         Texture2D instructionsButton;
         Texture2D menuBackground;
         Texture2D logo;
+
+        Texture2D Map;
 
         Vector2 startButtonPosition;
         Vector2 exitButtonPosition;
@@ -69,6 +71,7 @@ namespace PirateGame
         NPCShip[] OtherShip;
         NPCShip EnemyShip;
         Texture2D cannonball;
+        Texture2D flag;
         #endregion
 
         #region Animation related
@@ -154,6 +157,10 @@ namespace PirateGame
             player.set_maxSpeed(30);
             player.setHealth(100);
             player.setMorale(100);
+            player.setAlignment(30);
+            player.setAttack(50);
+            player.setDefense(50);
+            player.setCrew(20);
             facingRight = true;
             moving = false;
             #endregion
@@ -169,14 +176,15 @@ namespace PirateGame
             OtherShip = new NPCShip[20];
             for (int i = 0; i < OtherShip.Length; i++)
             {
-                OtherShip[i] = new NPCShip(rand.Next(0, world_W), rand.Next(0, world_H), 0, "neutral");
+                OtherShip[i] = new NPCShip(rand.Next(0, world_W), rand.Next(0, world_H), 0, "Pirate");
+                OtherShip[i].setAttack(rand.Next(20, 80));
+                OtherShip[i].setDefense(rand.Next(20, 80));
             }
             #endregion
 
             #region Main Menu
 
             //set the position of the buttons
-
 
             // if not full screen
             continueButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 40, 450); // middle of screen, width then height
@@ -221,7 +229,7 @@ namespace PirateGame
                 menuBackground = Content.Load<Texture2D>("Menu");
                 logo = Content.Load<Texture2D>("Logo");
 
-                OceanTile48 = Content.Load<Texture2D>("Ocean_Tiles48");
+                OceanTile = Content.Load<Texture2D>("Ocean_Tiles48");
                 OceanWeb = Content.Load<Texture2D>("Ocean_web48_t127");
                 SailSprayEffect = Content.Load<Texture2D>("WaterEffectSheet");
                 whiteblock = Content.Load<Texture2D>("whiteblock");
@@ -251,6 +259,10 @@ namespace PirateGame
                 shop_back_button = Content.Load<Texture2D>("Back_Button");
                 shop_repair_button = Content.Load<Texture2D>("Repair_Ship_Button");
 
+                flag = Content.Load<Texture2D>("flag");
+
+                Map = Content.Load<Texture2D>("Map678");
+
                 player.setImage(shipImg[0]);
                 player.setBattleImage(b_shipImg[0]);
 
@@ -260,6 +272,7 @@ namespace PirateGame
                     OtherShip[i].setImage(shipImg[0]);
                     OtherShip[i].setBattleImage(b_shipImg[0]);
                 }
+
 
                 //backgroundSong = Content.Load<Song>("PirateSong");
             }
@@ -305,6 +318,8 @@ namespace PirateGame
             Random rand = new Random();
 
             moving = false;
+
+            mapOpen = false;
 
             xStep = 0;
             yStep = 0;
@@ -371,6 +386,14 @@ namespace PirateGame
                 gameState = 3;
                 battle_init(OtherShip[5]); //temporary
             }
+            if (Keyboard.GetState().IsKeyDown(Keys.M)) //Temporary until overworld enemy ship collisions
+            {
+                mapOpen = true;
+            }
+            else
+            {
+                mapOpen = false;
+            }
 
             if (Keyboard.GetState().IsKeyDown(Keys.S)) //Temporary until overworld island interaction
             {
@@ -412,6 +435,8 @@ namespace PirateGame
                     //check for pause
 
                     //Update enemy positions
+                    for (int i = 0; i < OtherShip.Length; i++)
+                        OtherShip[i].runOverworldAI(player, DT);
 
                     //update ocean effects (if applicable)
 
@@ -640,14 +665,14 @@ namespace PirateGame
                     #region Overworld
                     //draw ocean and ocean effects
 
-                    int h = ((int)camera.position.Y / OceanTile48.Height) * OceanTile48.Height;
-                    int w = (((int)camera.position.X / OceanTile48.Width) * OceanTile48.Width)-OceanTile48.Width;
+                    int h = ((int)camera.position.Y / OceanTile.Height) * OceanTile.Height;
+                    int w = (((int)camera.position.X / OceanTile.Width) * OceanTile.Width)-OceanTile.Width;
 
-                    for (int y = h; y < (h + screen_H + OceanTile48.Height); y += OceanTile48.Height)
+                    for (int y = h; y < (h + screen_H + OceanTile.Height); y += OceanTile.Height)
                     {
-                        for (int x = w; x < (w + screen_W + (OceanTile48.Width*2)); x += OceanTile48.Width)
+                        for (int x = w; x < (w + screen_W + (OceanTile.Width*2)); x += OceanTile.Width)
                         {
-                            spriteBatch.Draw(OceanTile48, new Vector2(x, y), Color.White);
+                            spriteBatch.Draw(OceanTile, new Vector2(x, y), Color.White);
                             spriteBatch.Draw(OceanWeb, new Vector2(x + (float)(stepRadius * Math.Sin(effectT)), y), Color.White);
                         }
                     }
@@ -662,6 +687,28 @@ namespace PirateGame
                     {
                         spriteBatch.Draw(OtherShip[n].getImage(), new Vector2(OtherShip[n].getX(), OtherShip[n].getY()), null, Color.White,
                                         MathHelper.ToRadians(player.getRotate()), new Vector2(55, 34), 1f, SpriteEffects.None, 1);
+                        
+                        //Draw Flags
+                        int r, g, b;
+                        float cDistance;
+                        cDistance = player.getPowerlvl() - OtherShip[n].getPowerlvl();
+
+                        if (cDistance > 0) //Player is stronger
+                        {
+                            r = 0;
+                            g = 0;
+                            b = 255;
+                        }
+                        else //Enemy is stronger
+                        {
+                            r = 255;
+                            g = 0;
+                            b = 0;
+                        }
+                        Debug.WriteLine(r + "," + g + "," + b);
+
+                        Color newColor = new Color(r,g,b); //Work on this.
+                        spriteBatch.Draw(flag, OtherShip[n].getPos(),newColor); //adjust position.
                     }
 
                     //Draw player
@@ -676,9 +723,8 @@ namespace PirateGame
                     }
                     #endregion
 
+                    #region Status bar
                     // draw status bar
-
-                    // player.getHealth();
 
                     spriteBatch.Draw(statusBarBase, new Vector2(camera.position.X, camera.position.Y), Color.White);
 
@@ -689,22 +735,27 @@ namespace PirateGame
                     spriteBatch.Draw(AlignmentBar, new Vector2(camera.position.X + 180, camera.position.Y + 40), Color.White); // always same
 
                     spriteBatch.Draw(MenuSlider, new Vector2(camera.position.X + 285, camera.position.Y + 40), Color.White);
-
+                    #endregion
                     //Draw clouds/wind/weather/anything else
+
+                    //Draw Map
+                    if (mapOpen)
+                        spriteBatch.Draw(Map, new Vector2(player.getX()-(screen_W/2)+169,player.getY()-(screen_H/2)+89), Color.White);
+
                     #endregion
                     break;
                 case 3: //in battle
                     #region In Battle
 
                     //draw Ocean
-                    int bh = ((int)camera.position.Y / OceanTile48.Height) * OceanTile48.Height;
-                    int bw = (((int)camera.position.X / OceanTile48.Width) * OceanTile48.Width) - OceanTile48.Width;
+                    int bh = ((int)camera.position.Y / OceanTile.Height) * OceanTile.Height;
+                    int bw = (((int)camera.position.X / OceanTile.Width) * OceanTile.Width) - OceanTile.Width;
 
-                    for (int y = bh; y < (bh + screen_H + OceanTile48.Height); y += OceanTile48.Height)
+                    for (int y = bh; y < (bh + screen_H + OceanTile.Height); y += OceanTile.Height)
                     {
-                        for (int x = bw; x < (bw + screen_W + (OceanTile48.Width * 2)); x += OceanTile48.Width)
+                        for (int x = bw; x < (bw + screen_W + (OceanTile.Width * 2)); x += OceanTile.Width)
                         {
-                            spriteBatch.Draw(OceanTile48, new Vector2(x, y), Color.White);
+                            spriteBatch.Draw(OceanTile, new Vector2(x, y), Color.White);
                             spriteBatch.Draw(OceanWeb, new Vector2(x + (float)(stepRadius * Math.Sin(effectT)), y), Color.White);
                         }
                     }
@@ -735,27 +786,27 @@ namespace PirateGame
                         spriteBatch.Draw(whiteblock, new Vector2(p[i].X, p[i].Y), null, Color.Red);
                     }
 
-                    #endregion
-
+                    #region Status bar
                     //status bar
                     spriteBatch.Draw(statusBarBase, new Vector2(camera.position.X, camera.position.Y), Color.White);
 
                     spriteBatch.Draw(MoraleBar, new Vector2(camera.position.X + 735, camera.position.Y + 10), new Rectangle(0, 0, (int)((player.getMorale() / 100f) * MoraleBar.Width), MoraleBar.Height), Color.White);
 
-                    spriteBatch.Draw(HealthBar, new Vector2(camera.position.X + 180, camera.position.Y + 10), new Rectangle(0,0, (int)((player.getHealth()/100f) * HealthBar.Width),HealthBar.Height) , Color.White);
+                    spriteBatch.Draw(HealthBar, new Vector2(camera.position.X + 180, camera.position.Y + 10), new Rectangle(0, 0, (int)((player.getHealth() / 100f) * HealthBar.Width), HealthBar.Height), Color.White);
 
                     spriteBatch.Draw(AlignmentBar, new Vector2(camera.position.X + 180, camera.position.Y + 40), Color.White); // always same
 
                     spriteBatch.Draw(MenuSlider, new Vector2(camera.position.X + 285, camera.position.Y + 40), Color.White);
+                    #endregion
+                    #endregion
                     break;
-
                 case 4: //Shopping
-
+                    #region Shopping
                     spriteBatch.Draw(shop_window_background, new Rectangle(240, 185, 509, 449), Color.White);
                     spriteBatch.Draw(shop_back_button, new Rectangle(645, 575, 38, 72), Color.White);
                     spriteBatch.Draw(shop_repair_button, new Rectangle(290, 575, 38, 134), Color.White);
+                    #endregion
                     break;
-
                 default:
                     Exit();
                     break;
@@ -808,7 +859,7 @@ namespace PirateGame
             }
         }
 
-        public void battle_init(NPCShip Enemy)
+        protected void battle_init(NPCShip Enemy)
         {
             player.setRotate(0);
             camera.position = new Vector2(player.getX() - (screen_W / 2), player.getY() - (screen_H / 2));
@@ -838,8 +889,7 @@ namespace PirateGame
             player.setRotate(0);
             camera.position = new Vector2(player.getX() - (screen_W / 2), player.getY() - (screen_H / 2));
             ow_sailSpray = new ParticleEngine(whiteblock, 20, -1, 0, 0, 0);
-
-            
+          
             player.setCBallImage(cannonball);
 
             ow_sailSpray.setX(player.getX());

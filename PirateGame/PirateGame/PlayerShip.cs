@@ -85,12 +85,6 @@ namespace PirateGame
             max_speed = max_Speed;
         }
 
-        public void setPos(float X, float Y)
-        {
-            setX(X);
-            setY(Y);
-        }
-
         public void raise_Sails(float DT)
         {
             if (b_speed + (b_speed * (b_acceleration * DT)) < max_speed) //if speed is not going over the max speed.
@@ -131,8 +125,6 @@ namespace PirateGame
         {
             setRotate(getRotate() - (15 * DT));
         }
-
-
 
         public void fireCannon(NPCShip enemyShip, float DT)
         {

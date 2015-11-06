@@ -15,7 +15,8 @@ namespace PirateGame
         private float defense;
         private float health;
         private float attack;
-
+        private float PowerLevel;
+        
         #region Getters
         public Texture2D getImage()
         {
@@ -30,6 +31,12 @@ namespace PirateGame
         public Vector2 getPos()
         {
             return new Vector2(getX(), getY());
+        }
+
+        public float getPowerlvl()
+        {
+            PowerLevel = (0.6f * health) + (0.5f)*attack + (0.5f)*defense + (crew / 3) + (speed / 5); //a bit arbitrary...
+            return PowerLevel;
         }
 
         public float getGold()
@@ -178,6 +185,13 @@ namespace PirateGame
         #endregion
 
         #region Setters
+
+        public void setPos(float X, float Y)
+        {
+            setX(X);
+            setY(Y);
+        }
+
         public void setImage(Texture2D Image)
         {
             image = Image;

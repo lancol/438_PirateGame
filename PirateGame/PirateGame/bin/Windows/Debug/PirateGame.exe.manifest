@@ -55,14 +55,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="177600">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="178624">
       <assemblyIdentity name="PirateGame" version="3.4.0.456" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>g2iUNOybD7nFgdFVwQ3yqzAQ5Y4=</dsig:DigestValue>
+        <dsig:DigestValue>9HrWYs6H74ohs5rI1im7gvwDNi4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -210,6 +210,15 @@
       <dsig:DigestValue>qp20McqcQqSezyf6WmkFyBVGPvk=</dsig:DigestValue>
     </hash>
   </file>
+  <file name="Content\flag.png" size="196">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>ZoHHMUs09lnkD7rV9Nbnt8qVhQw=</dsig:DigestValue>
+    </hash>
+  </file>
   <file name="Content\Health_Status_Bar_Resized.png" size="2043">
     <hash>
       <dsig:Transforms>
@@ -307,6 +316,15 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>xc16XzfEx3IN40cBmXgYCmgOh+M=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Map678.png" size="126909">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>UZhFW8K+3gU9HWjXix9S7NMo3bU=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\Menu.png" size="229509">
