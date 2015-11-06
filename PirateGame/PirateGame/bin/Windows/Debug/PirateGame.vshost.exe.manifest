@@ -55,14 +55,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="178624">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="179136">
       <assemblyIdentity name="PirateGame" version="3.4.0.456" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>9HrWYs6H74ohs5rI1im7gvwDNi4=</dsig:DigestValue>
+        <dsig:DigestValue>NYEhtA6Ury1lysV7cQXuAtA41IQ=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -237,15 +237,6 @@
       <dsig:DigestValue>C4wL29LzGFuGN5VCiaU4g9lbV5Y=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="Content\Island1.png" size="6939">
-    <hash>
-      <dsig:Transforms>
-        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-      </dsig:Transforms>
-      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>Z+12yp8hbG9aGOn+hHT3M6SD/fE=</dsig:DigestValue>
-    </hash>
-  </file>
   <file name="Content\Island150p.png" size="7913">
     <hash>
       <dsig:Transforms>
@@ -255,15 +246,6 @@
       <dsig:DigestValue>Ys2gh+HpZ6WUSzNBnHuEaSctqmg=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="Content\Island2.png" size="6818">
-    <hash>
-      <dsig:Transforms>
-        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-      </dsig:Transforms>
-      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>KCdQmyU042uJUAx0+C3LWMbvbqc=</dsig:DigestValue>
-    </hash>
-  </file>
   <file name="Content\Island250p.png" size="8027">
     <hash>
       <dsig:Transforms>
@@ -271,15 +253,6 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>FX4NziLMH2WCk+3dVaZ1VC/kCZI=</dsig:DigestValue>
-    </hash>
-  </file>
-  <file name="Content\Island3.png" size="6566">
-    <hash>
-      <dsig:Transforms>
-        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-      </dsig:Transforms>
-      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>nx2GUjMUfv2Zcbz94xQx9Razq6Q=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\Island350p.png" size="8238">
@@ -370,6 +343,33 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>E0TRsqxegrafFzYqIGjdxNgZ5kw=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Piratev2.mp3" size="9180543">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>4he4c23yFFQ8l0keFnMVe1b/NXE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Piratev2.wma" size="7911068">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>Irw2Fb1uDpRup2+LZ02GaRQ1sGg=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Piratev2.xnb" size="126">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>r5ByJga1/VR1ZR9f/uaQkEkragY=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\Quit.png" size="2026">

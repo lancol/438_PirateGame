@@ -13,14 +13,18 @@ namespace PirateGame
     public class Game1 : Game
     {
         #region Class Variables
+        [Flags]
+        enum gameState{mainMenu,overWorld,battle,inTown}
+
+
         #region System/Game Control
         GraphicsDeviceManager graphics;
         Camera camera;
         SpriteBatch spriteBatch;
-        //Song backgroundSong;
+        Song OverworldSong;
         //ParticleEngine ow_ShipSprayEffect;
         float DT;
-        int gameState;
+        gameState currentState = new gameState();
         int screen_W;
         int screen_H;
         int world_W;
@@ -126,7 +130,7 @@ namespace PirateGame
             screen_W = GraphicsDevice.Viewport.Width;
             Random rand = new Random();
             camera = new Camera(GraphicsDevice.Viewport);
-            gameState = 0;
+            currentState = gameState.mainMenu;
             #endregion
 
             #region Environment
@@ -135,23 +139,23 @@ namespace PirateGame
             isl_y = new int[5];
 
             isl_x[0] = 600;  // First island hard-coded
-            isl_y[0] = 2700;
+            isl_y[0] = 2300;
 
-            isl_x[1] = 1800; // Second island hard-coded
-            isl_y[1] = 2100;
+            isl_x[1] = 1900; // Second island hard-coded
+            isl_y[1] = 1850;
 
-            isl_x[2] = 480; // Third island hard-coded
-            isl_y[2] = 1080;
+            isl_x[2] = 680; // Third island hard-coded
+            isl_y[2] = 1250;
 
-            isl_x[3] = 1200; // Fourth island hard-coded
-            isl_y[3] = 600;
+            isl_x[3] = 1400; // Fourth island hard-coded
+            isl_y[3] = 750;
 
-            isl_x[4] = 2700; // Fifth island hard-coded
+            isl_x[4] = 2300; // Fifth island hard-coded
             isl_y[4] = 300;
             #endregion
 
             #region Player Related
-            player = new PlayerShip(600, 2700, 0);
+            player = new PlayerShip(1000, 2300, 0);
             player.set_bSpeed(0);
             player.set_bAcceleration(1f);
             player.set_maxSpeed(30);
@@ -274,7 +278,7 @@ namespace PirateGame
                 }
 
 
-                //backgroundSong = Content.Load<Song>("PirateSong");
+                OverworldSong = Content.Load<Song>("Piratev2");
             }
             catch
             {
@@ -381,11 +385,6 @@ namespace PirateGame
             {
                 spacedown = true;
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.B)) //Temporary until overworld enemy ship collisions
-            {
-                gameState = 3;
-                battle_init(OtherShip[5]); //temporary
-            }
             if (Keyboard.GetState().IsKeyDown(Keys.M)) //Temporary until overworld enemy ship collisions
             {
                 mapOpen = true;
@@ -397,15 +396,14 @@ namespace PirateGame
 
             if (Keyboard.GetState().IsKeyDown(Keys.S)) //Temporary until overworld island interaction
             {
-                gameState = 4;
-                
+                currentState = gameState.inTown;
             }
 
             #endregion
 
-            switch (gameState) //this gameState is for loading
+            switch (currentState) //this gameState is for loading
             {
-                case 0: //Main Menu
+                case gameState.mainMenu: //Main Menu
                     #region Main Menu
 
                     IsMouseVisible = true; //enables mouse pointer
@@ -423,12 +421,7 @@ namespace PirateGame
                     previousMouseState = mouseState;
                     #endregion
                     break;
-                case 1: //In town
-                    #region In Town
-
-                    #endregion
-                    break;
-                case 2: //overworld
+                case gameState.overWorld: //overworld
                     #region Overworld
                     //MediaPlayer.Play(backgroundSong);
                     //MediaPlayer.IsRepeating = true;
@@ -499,7 +492,7 @@ namespace PirateGame
                         if (distance < 45) //optimize this distance
                         {
                             //change gamestate and set enemy ship to othership[i]
-                            gameState = 3;
+                            currentState = gameState.battle;
                             battle_init(OtherShip[i]);
                         }
                     }
@@ -540,7 +533,7 @@ namespace PirateGame
 
                     #endregion
                     break;
-                case 3: //In battle
+                case gameState.battle: //In battle
                     #region In Battle
 
                     //check for pause
@@ -548,13 +541,13 @@ namespace PirateGame
                     //check if player is dead
                     if (player.getHealth() <= 0)
                     {
-                        gameState = 2;
+                        currentState = gameState.overWorld;
                     }
                     //check if enemy is dead
                     if (EnemyShip.getHealth() <= 0)
                     {
                         //ship is inactive
-                        gameState = 2;
+                        currentState = gameState.overWorld;
                     }
 
                     //Move Player
@@ -614,12 +607,9 @@ namespace PirateGame
 
                     #endregion
                     break;
-
-                case 4: //Shopping for items   
+                case gameState.inTown: //inTown  
 
                     break;   
-
-
                 default:
                     Exit();
                     break;
@@ -638,9 +628,9 @@ namespace PirateGame
             var viewMatrix = camera.GetViewMatrix();//Camera stuff
             spriteBatch.Begin(transformMatrix: viewMatrix);
 
-            switch (gameState) //this gameState is for drawing
+            switch (currentState) //this gameState is for drawing
             {
-                case 0: //Main menu
+                case gameState.mainMenu: //Main menu
                     #region Main Menu
 
                     //draw menu
@@ -656,12 +646,7 @@ namespace PirateGame
 
                     #endregion
                     break;
-                case 1: //In Town
-                    #region In Town
-
-                    #endregion
-                    break;
-                case 2: //overworld
+                case gameState.overWorld: //overworld
                     #region Overworld
                     //draw ocean and ocean effects
 
@@ -705,7 +690,7 @@ namespace PirateGame
                             g = 0;
                             b = 0;
                         }
-                        Debug.WriteLine(r + "," + g + "," + b);
+                        //Debug.WriteLine(r + "," + g + "," + b);
 
                         Color newColor = new Color(r,g,b); //Work on this.
                         spriteBatch.Draw(flag, OtherShip[n].getPos(),newColor); //adjust position.
@@ -740,11 +725,22 @@ namespace PirateGame
 
                     //Draw Map
                     if (mapOpen)
-                        spriteBatch.Draw(Map, new Vector2(player.getX()-(screen_W/2)+169,player.getY()-(screen_H/2)+89), Color.White);
-
+                    {
+                        Vector2 mapPos = new Vector2(player.getX() - (screen_W / 2) + 169, player.getY() - (screen_H / 2) + 89);
+                        spriteBatch.Draw(Map, mapPos, Color.White);
+                        //.226
+                        Vector2 islPos;
+                        for (int i = 0; i < 5; i++)
+                        {
+                            islPos = new Vector2(mapPos.X + isl_x[i] *.226f, mapPos.Y + isl_y[i] * .226f);
+                            spriteBatch.Draw(island[i], islPos, null, Color.White,0,new Vector2(0,0), 0.226f, SpriteEffects.None,1);
+                        }
+                        
+                        spriteBatch.Draw(whiteblock, mapPos + player.getPos()*.226f, Color.Red);
+                    }
                     #endregion
                     break;
-                case 3: //in battle
+                case gameState.battle: //in battle
                     #region In Battle
 
                     //draw Ocean
@@ -800,7 +796,7 @@ namespace PirateGame
                     #endregion
                     #endregion
                     break;
-                case 4: //Shopping
+                case gameState.inTown: //Shopping
                     #region Shopping
                     spriteBatch.Draw(shop_window_background, new Rectangle(240, 185, 509, 449), Color.White);
                     spriteBatch.Draw(shop_back_button, new Rectangle(645, 575, 38, 72), Color.White);
@@ -823,7 +819,7 @@ namespace PirateGame
 
 
             //check the startmenu
-            if (gameState == 0)
+            if (currentState == gameState.mainMenu)
             {
 
                 Rectangle continueButtonRect = new Rectangle((int)continueButtonPosition.X,
@@ -837,12 +833,12 @@ namespace PirateGame
 
                 if (mouseClickRect.Intersects(startButtonRect)) //player clicked start button
                 {
-                    gameState = 2;
+                    currentState = gameState.overWorld;
                     overworld_init();
                 }
                 else if (mouseClickRect.Intersects(continueButtonRect))
                 {
-                    gameState = 2;
+                    currentState = gameState.overWorld;
                     overworld_init();
                 }
 
@@ -886,6 +882,10 @@ namespace PirateGame
 
         protected void overworld_init()
         {
+            //MediaPlayer.Play(Overworld_Song);
+            MediaPlayer.Volume = 1.0f;
+            MediaPlayer.IsRepeating = true;
+
             player.setRotate(0);
             camera.position = new Vector2(player.getX() - (screen_W / 2), player.getY() - (screen_H / 2));
             ow_sailSpray = new ParticleEngine(whiteblock, 20, -1, 0, 0, 0);

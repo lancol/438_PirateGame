@@ -17,7 +17,6 @@ namespace PirateGame
 
         public NPCShip(float x, float y, float rotate, string Faction)
         {
-            //cBall_image = cBall_Image; //terrible code.
             setX(x);
             setY(y);
             setRotate(rotate);
@@ -90,7 +89,7 @@ namespace PirateGame
             //if distance < somedistance
             if (Vector2.Distance(getPos(),player.getPos()) < 300)
             {
-                Debug.WriteLine(getStance());
+                //Debug.WriteLine(getStance());
                 //Debug.WriteLine(getStance());
                 //Debug.WriteLine("p: " + player.getPowerlvl());
                 if ((getFaction() == "Navy" && player.getAlignment() < 50) || getFaction() == "Pirate") //if a "bad guy" (to you)
