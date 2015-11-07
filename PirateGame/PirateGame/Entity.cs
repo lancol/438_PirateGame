@@ -1,7 +1,7 @@
 ﻿using System;
 namespace PirateGame
 {
-    class Entity
+    public class Entity
     {
         private float x;
         private float y;

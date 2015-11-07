@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>D:/My Docs/SchoolWork/SMCM/Fall2015/COSC438_GameDev/PirateGame/438_PirateGame/PirateGame/PirateGame/Content/Piratev2.mp3</File>
+  </SourceFiles>
+</SourceFileCollection>
