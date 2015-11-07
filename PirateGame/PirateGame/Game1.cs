@@ -99,11 +99,22 @@ namespace PirateGame
         #endregion
 
         #region Shop Window
-        Store shop_window;
+      //  Store shop_window;
         Texture2D shop_window_background;
         Texture2D shop_back_button;
         Texture2D shop_repair_button;
+        Texture2D shop_item_image;
+        Texture2D shop_label;
+        Texture2D crew_label;
+        Texture2D upgrades_label;
+
+        Vector2 shop_back_button_position;
+        Vector2 shop_repair_button_position;
+        Vector2 shop_item_one_button_position;
+        Vector2 shop_item_two_button_position;
+        Vector2 shop_item_three_button_position;
         #endregion
+
         #endregion
 
         public Game1()
@@ -188,30 +199,35 @@ namespace PirateGame
 
             #region Main Menu
 
-            //set the position of the buttons
-
-            // if not full screen
+            //set the position of main menu items
             continueButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 40, 450); // middle of screen, width then height
             startButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 48, 525);
             instructionsButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 50, 600);
             exitButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 17, 675);
             logoPosition = new Vector2((GraphicsDevice.Viewport.Width / 30) - 48, 5);
 
-            /*
-            // if full screen
-             continueButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2 - 50 ), GraphicsDevice.Viewport.Height / 2 + 70); // middle of screen, width then height
-             startButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2 - 57), GraphicsDevice.Viewport.Height / 2 + 150);
-             instructionsButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2 - 60), GraphicsDevice.Viewport.Height / 2 + 220);
-             exitButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2- 25 ), GraphicsDevice.Viewport.Height / 2 + 290);
-             logoPosition = new Vector2((GraphicsDevice.Viewport.Width / 80) - 30, GraphicsDevice.Viewport.Height / 40);
-             */
-
             //get the mouse state
             mouseState = Mouse.GetState();
             previousMouseState = mouseState;
 
-            #endregion
+/*
+            //set the position shop menu items
+            shop_back_button_position = new Vector2((GraphicsDevice.Viewport.Width / 2) - 505, 640);
+            shop_repair_button_position = new Vector2((GraphicsDevice.Viewport.Width / 2) - 710, 160);
+            shop_item_one_button_position = new Vector2((GraphicsDevice.Viewport.Width / 2) - 210,300);
+            shop_item_two_button_position = new Vector2((GraphicsDevice.Viewport.Width / 2) - 210, 420);
+            shop_item_three_button_position = new Vector2((GraphicsDevice.Viewport.Width / 2) - 210, 54);
+
+
             
+            shop_back_button_position = new Vector2(camera.position.X + 505, camera.position.Y + 640);
+            shop_repair_button_position = new Vector2(camera.position.X + 710, camera.position.Y + 160);
+            shop_item_one_button_position = new Vector2(camera.position.X + 210, camera.position.Y + 300);
+            shop_item_two_button_position = new Vector2(camera.position.X + 210, camera.position.Y + 420);
+            shop_item_three_button_position = new Vector2(camera.position.X + 210, camera.position.Y + 54);
+*/
+            #endregion
+
             base.Initialize();
         }
 
@@ -252,19 +268,29 @@ namespace PirateGame
                 island[3] = Content.Load<Texture2D>("Island450p");
                 island[4] = Content.Load<Texture2D>("Island550p");
 
+                //loads combat images
                 shipImg = new Texture2D[1];
                 b_shipImg = new Texture2D[1];
 
+                //loads combat images
                 shipImg[0] = Content.Load<Texture2D>("Ship1v3");
                 b_shipImg[0] = Content.Load<Texture2D>("Ship_TopDown136_68");
                 cannonball = Content.Load<Texture2D>("Battle_Cannonball16");
 
-                shop_window_background = Content.Load<Texture2D>("Shop_Window_Background");
+                // loads shop elements
+                shop_window_background = Content.Load<Texture2D>("Shop_Window_Background_Biggest");
                 shop_back_button = Content.Load<Texture2D>("Back_Button");
                 shop_repair_button = Content.Load<Texture2D>("Repair_Ship_Button");
+                shop_item_image = Content.Load<Texture2D>("Shop_ItemBox");
+                shop_label = Content.Load<Texture2D>("Shop_Label");
+                crew_label = Content.Load<Texture2D>("Hire_Crew_Label");
+                upgrades_label = Content.Load<Texture2D>("Upgrades_Label");
+                
 
+                //loads flag
                 flag = Content.Load<Texture2D>("flag");
 
+                //loads minimap
                 Map = Content.Load<Texture2D>("Map678");
 
                 player.setImage(shipImg[0]);
@@ -802,11 +828,52 @@ namespace PirateGame
                     #endregion
                     #endregion
                     break;
-                case gameState.inTown: //Shopping
-                    #region Shopping
-                    spriteBatch.Draw(shop_window_background, new Rectangle(240, 185, 509, 449), Color.White);
-                    spriteBatch.Draw(shop_back_button, new Rectangle(645, 575, 38, 72), Color.White);
-                    spriteBatch.Draw(shop_repair_button, new Rectangle(290, 575, 38, 134), Color.White);
+                case gameState.inTown: //Shop 
+                    #region Shop
+                    IsMouseVisible = true;
+
+                    #region Draw Ocean Background 
+                    int ab = ((int)camera.position.Y / OceanTile.Height) * OceanTile.Height;
+                    int bc = (((int)camera.position.X / OceanTile.Width) * OceanTile.Width) - OceanTile.Width;
+
+                    for (int y = ab; y < (ab + screen_H + OceanTile.Height); y += OceanTile.Height)
+                    {
+                        for (int x = bc; x < (bc + screen_W + (OceanTile.Width * 2)); x += OceanTile.Width)
+                        {
+                            spriteBatch.Draw(OceanTile, new Vector2(x, y), Color.White);
+                            spriteBatch.Draw(OceanWeb, new Vector2(x + (float)(stepRadius * Math.Sin(effectT)), y), Color.White);
+                        }
+                    }
+                    #endregion
+
+                    #region Draw Status Bar 
+                    spriteBatch.Draw(statusBarBase, new Vector2(camera.position.X, camera.position.Y), Color.White);
+                    spriteBatch.Draw(MoraleBar, new Vector2(camera.position.X + 735, camera.position.Y + 10), new Rectangle(0, 0, (int)((player.getMorale() / 100f) * MoraleBar.Width), MoraleBar.Height), Color.White);
+                    spriteBatch.Draw(HealthBar, new Vector2(camera.position.X + 180, camera.position.Y + 10), new Rectangle(0, 0, (int)((player.getHealth() / 100f) * HealthBar.Width), HealthBar.Height), Color.White);
+                    spriteBatch.Draw(AlignmentBar, new Vector2(camera.position.X + 180, camera.position.Y + 40), Color.White); // always same
+                    spriteBatch.Draw(MenuSlider, new Vector2(camera.position.X + 285, camera.position.Y + 40), Color.White);
+
+                    //draw shop window objects
+                    spriteBatch.Draw(shop_window_background, new Vector2(camera.position.X + 170, camera.position.Y + 115), Color.White);
+                    spriteBatch.Draw(shop_label, new Vector2(camera.position.X + 445, camera.position.Y + 140), Color.White);
+                    spriteBatch.Draw(upgrades_label, new Vector2(camera.position.X + 250, camera.position.Y + 215), Color.White);
+                    spriteBatch.Draw(crew_label, new Vector2(camera.position.X + 630, camera.position.Y + 215), Color.White);
+
+                    /*
+                    spriteBatch.Draw(shop_item_image, shop_item_one_button_position, Color.White);
+                    spriteBatch.Draw(shop_item_image, shop_item_two_button_position, Color.White);
+                    spriteBatch.Draw(shop_item_image, shop_item_three_button_position, Color.White);
+                    spriteBatch.Draw(shop_repair_button, shop_repair_button_position, Color.White);
+                    spriteBatch.Draw(shop_back_button, shop_back_button_position, Color.White);
+                    */
+                    
+                    spriteBatch.Draw(shop_item_image, new Vector2(camera.position.X + 210, camera.position.Y + 300), Color.White);
+                    spriteBatch.Draw(shop_item_image, new Vector2(camera.position.X + 210, camera.position.Y + 420), Color.White);
+                    spriteBatch.Draw(shop_item_image, new Vector2(camera.position.X + 210, camera.position.Y + 540), Color.White);
+                    spriteBatch.Draw(shop_repair_button, new Vector2(camera.position.X + 710, camera.position.Y + 160), Color.White);
+                    spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 505, camera.position.Y + 640), Color.White);
+                    
+
                     #endregion
                     break;
                 default:
@@ -822,6 +889,47 @@ namespace PirateGame
         {
             //creates a rectangle of 10x10 around the place where the mouse was clicked
             Rectangle mouseClickRect = new Rectangle(x, y, 10, 10);
+
+            //check the shop menu
+            if (currentState == gameState.inTown)
+            {
+
+                Rectangle backButtonRect = new Rectangle((int)shop_back_button_position.X,
+                      (int)shop_back_button_position.Y, 100, 20);
+                Rectangle repairShipButtonRect = new Rectangle((int)shop_repair_button_position.X,
+                                      (int)shop_repair_button_position.Y, 100, 20);
+                Rectangle itemOneRect = new Rectangle((int)shop_item_one_button_position.X,
+                                      (int)shop_item_one_button_position.Y, 100, 20);
+                Rectangle itemTwoRect = new Rectangle((int)shop_item_two_button_position.X,
+                                      (int)shop_item_two_button_position.Y, 100, 20);
+                Rectangle itemThreeRect = new Rectangle((int)shop_item_three_button_position.X,
+                      (int)shop_item_three_button_position.Y, 100, 20);
+                      
+
+                if (mouseClickRect.Intersects(backButtonRect)) //player clicked start button
+                {
+                    currentState = gameState.overWorld;
+                    overworld_init();
+                }
+                else if (mouseClickRect.Intersects(itemOneRect))
+                {
+                    currentState = gameState.overWorld;
+                    overworld_init();
+                }
+
+                else if (mouseClickRect.Intersects(itemTwoRect))
+                {
+                    currentState = gameState.overWorld;
+                    overworld_init();
+                }
+
+                else if (mouseClickRect.Intersects(itemThreeRect)) //player clicked exit button
+                {
+                    currentState = gameState.overWorld;
+                    overworld_init();
+                }
+            }
+                    
 
 
             //check the startmenu
@@ -904,3 +1012,4 @@ namespace PirateGame
         }
     }
 }
+#endregion
