@@ -55,14 +55,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="179648">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="180160">
       <assemblyIdentity name="PirateGame" version="3.4.0.456" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>5zqaoNx/KyKcKtr8lM6jikdHivs=</dsig:DigestValue>
+        <dsig:DigestValue>ooA/pGxtJ48SWWtXk0rWYwr6I6Y=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -370,6 +370,24 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>r5ByJga1/VR1ZR9f/uaQkEkragY=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\poof1.png" size="644">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>lNOPd/y0b9+FGK6vW/xZ87JraIc=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\poof2.png" size="597">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>1H9ut73qwKEFGX+QGrxwuEpdNzI=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\Quit.png" size="2026">

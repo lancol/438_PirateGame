@@ -88,6 +88,7 @@ namespace PirateGame
         ParticleEngine b_SailStream;
         ParticleEngine b_SailStream2;
         Texture2D whiteblock;
+        Texture2D[] smoke;
         #endregion
 
         #region General Status Bar Elements
@@ -175,6 +176,10 @@ namespace PirateGame
             step = 0; //used in animating. Hopefully will merge with t at somepoint
             stepRadius = 3; //used only in the ocean shifting effect
             effectT = 0; //also only used in ocean shifting effect
+
+            smoke = new Texture2D[2];
+            smoke[0] = Content.Load<Texture2D>("poof1");
+            smoke[1] = Content.Load<Texture2D>("poof2");
             #endregion
 
             #region Other Ships
@@ -602,7 +607,7 @@ namespace PirateGame
 
                     //Player Cannon Fire
                     if (spacedown)
-                        player.fireCannon(EnemyShip, DT);
+                        player.fireCannon(EnemyShip, DT, smoke[rand.Next(0,1)]);//verify this is inclusive
 
                     //EnemyShip
                     EnemyShip.runStandardBattleAI(player, DT);

@@ -15,6 +15,7 @@ namespace PirateGame
         private float max_speed;
         private float fireDistance;
         Texture2D cBall_image;
+        ParticleEngine PE;
         List<Cannonball> cannonballs = new List<Cannonball>();
 
         public PlayerShip(float X, float Y, float Rotate)
@@ -28,6 +29,12 @@ namespace PirateGame
             setDefense(1);
             setHealth(10);
             setGold(100);
+
+            Random random = new Random();
+
+            PE = new ParticleEngine(smoke, 10, random.Next(-2, 2), random.Next(-2, 2), random.Next(-1, 1), random.Next(-1, 1));
+            PE.setActive(false);
+
         }
 
         public float getMorale()
@@ -126,14 +133,18 @@ namespace PirateGame
             setRotate(getRotate() - (15 * DT));
         }
 
-        public void fireCannon(NPCShip enemyShip, float DT)
+        public void fireCannon(NPCShip enemyShip, float DT, Texture2D smoke)
         {
+            PE.EmitterLocation = new Vector2(getX(),getY());
+            PE.setActive(true);
+
             if (getX() < enemyShip.getX()) //This is temporary
             {
                 //float xSpeed = ((b_speed + 50) * (float)Math.Cos(MathHelper.ToRadians(getRotate())))*DT;
                 //float ySpeed = ((b_speed + 50) * (float)Math.Sin(MathHelper.ToRadians(getRotate())))*DT;
                 if (cannonballs.Count < 3)
                 {
+                    
                     cannonballs.Add(new Cannonball((int)getX(), (int)getY(), true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() + 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() + 90)))); //0 == good, 1 == bad; FireDistance, xSpeed, ySpeed
                     cannonballs.Add(new Cannonball((int)getX() + 10, (int)getY() + 10, true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() + 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() + 90))));
                     cannonballs.Add(new Cannonball((int)getX() - 10, (int)getY() - 10, true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() + 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() + 90))));
@@ -157,6 +168,9 @@ namespace PirateGame
         {
             Vector2[] cb = enemy.getCollisionbox();
 
+            if (PE.getActive())
+                PE.Update(DT);
+
             for (int i = 0; i < cannonballs.Count; i++)
             {
                 cannonballs[i].Update(DT);
@@ -176,6 +190,9 @@ namespace PirateGame
 
         public void drawCannonBalls(SpriteBatch spriteBatch)
         {
+            if (PE.getActive())
+                PE.Draw(spriteBatch);
+
             for (int i = 0; i < cannonballs.Count; i++)
             {
                 spriteBatch.Draw(cBall_image, new Vector2(cannonballs[i].getX(), cannonballs[i].getY()), Color.White);
