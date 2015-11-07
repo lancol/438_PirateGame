@@ -56,7 +56,7 @@ namespace PirateGame
         Vector2 exitButtonPosition;
         Vector2 continueButtonPosition;
         Vector2 instructionsButtonPosition;
-        Vector2 logoPosition;
+        Vector2 logoPosition; 
 
         MouseState mouseState;
         MouseState previousMouseState;
@@ -91,7 +91,7 @@ namespace PirateGame
 
         #region General Status Bar Elements
         Texture2D statusBarBase;
-        SpriteFont VinerHand;
+      //  SpriteFont VinerHand;
         Texture2D AlignmentBar;
         Texture2D HealthBar; // full bar
         Texture2D MoraleBar; // full bar
@@ -107,12 +107,6 @@ namespace PirateGame
         Texture2D shop_label;
         Texture2D crew_label;
         Texture2D upgrades_label;
-
-        Vector2 shop_back_button_position;
-        Vector2 shop_repair_button_position;
-        Vector2 shop_item_one_button_position;
-        Vector2 shop_item_two_button_position;
-        Vector2 shop_item_three_button_position;
         #endregion
 
         #endregion
@@ -199,33 +193,17 @@ namespace PirateGame
 
             #region Main Menu
 
-            //set the position of main menu items
+            //set the position of main menu items           
             continueButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 40, 450); // middle of screen, width then height
             startButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 48, 525);
             instructionsButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 50, 600);
             exitButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 17, 675);
-            logoPosition = new Vector2((GraphicsDevice.Viewport.Width / 30) - 48, 5);
+            logoPosition = new Vector2((GraphicsDevice.Viewport.Width / 30) - 48, 5); 
 
             //get the mouse state
             mouseState = Mouse.GetState();
             previousMouseState = mouseState;
-
-/*
-            //set the position shop menu items
-            shop_back_button_position = new Vector2((GraphicsDevice.Viewport.Width / 2) - 505, 640);
-            shop_repair_button_position = new Vector2((GraphicsDevice.Viewport.Width / 2) - 710, 160);
-            shop_item_one_button_position = new Vector2((GraphicsDevice.Viewport.Width / 2) - 210,300);
-            shop_item_two_button_position = new Vector2((GraphicsDevice.Viewport.Width / 2) - 210, 420);
-            shop_item_three_button_position = new Vector2((GraphicsDevice.Viewport.Width / 2) - 210, 54);
-
-
             
-            shop_back_button_position = new Vector2(camera.position.X + 505, camera.position.Y + 640);
-            shop_repair_button_position = new Vector2(camera.position.X + 710, camera.position.Y + 160);
-            shop_item_one_button_position = new Vector2(camera.position.X + 210, camera.position.Y + 300);
-            shop_item_two_button_position = new Vector2(camera.position.X + 210, camera.position.Y + 420);
-            shop_item_three_button_position = new Vector2(camera.position.X + 210, camera.position.Y + 54);
-*/
             #endregion
 
             base.Initialize();
@@ -378,29 +356,29 @@ namespace PirateGame
 
             #region Input
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+                Exit(); // exits if esc key pressed
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            if (Keyboard.GetState().IsKeyDown(Keys.Up))  //moves ship up if up key pressed
             {
                 updown = true;
                 yStep = -60;
                 moving = true;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+            if (Keyboard.GetState().IsKeyDown(Keys.Down)) //moves ship down if down key pressed
             {
                 downdown = true;
                 yStep = 60;
                 moving = true;
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.Left))
+            if (Keyboard.GetState().IsKeyDown(Keys.Left)) //moves ship left if left key pressed
             {
                 leftdown = true;
                 facingRight = false;
                 moving = true;
                 xStep = -60;
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+            if (Keyboard.GetState().IsKeyDown(Keys.Right)) //moves ship right if right key pressed
             {
                 rightdown = true;
                 facingRight = true;
@@ -436,7 +414,7 @@ namespace PirateGame
                                            //   main_menu();
 
                     //wait for mouseclick
-                    mouseState = Mouse.GetState();
+                      mouseState = Mouse.GetState();
 
                     if (previousMouseState.LeftButton == ButtonState.Pressed &&
                     mouseState.LeftButton == ButtonState.Released)
@@ -634,7 +612,21 @@ namespace PirateGame
                     #endregion
                     break;
                 case gameState.inTown: //inTown  
+                    #region In Town
+                    IsMouseVisible = true; //enables mouse pointer
 
+                    //wait for mouseclick
+                    mouseState = Mouse.GetState();
+
+                    if (previousMouseState.LeftButton == ButtonState.Pressed &&
+                    mouseState.LeftButton == ButtonState.Released)
+                    {
+                        MouseClicked(mouseState.X, mouseState.Y);
+                    }
+
+                    previousMouseState = mouseState;
+
+                    #endregion
                     break;   
                 default:
                     Exit();
@@ -658,9 +650,6 @@ namespace PirateGame
             {
                 case gameState.mainMenu: //Main menu
                     #region Main Menu
-
-                    //draw menu
-                    IsMouseVisible = true;
 
                     //draw the start menu
                     spriteBatch.Draw(menuBackground, new Rectangle(0, 0, menuBackground.Width, menuBackground.Height), Color.White);
@@ -828,10 +817,8 @@ namespace PirateGame
                     #endregion
                     #endregion
                     break;
-                case gameState.inTown: //Shop 
-                    #region Shop
-                    IsMouseVisible = true;
-
+                case gameState.inTown: //Shop                
+                    #region In Shop
                     #region Draw Ocean Background 
                     int ab = ((int)camera.position.Y / OceanTile.Height) * OceanTile.Height;
                     int bc = (((int)camera.position.X / OceanTile.Width) * OceanTile.Width) - OceanTile.Width;
@@ -847,33 +834,30 @@ namespace PirateGame
                     #endregion
 
                     #region Draw Status Bar 
+                    
                     spriteBatch.Draw(statusBarBase, new Vector2(camera.position.X, camera.position.Y), Color.White);
                     spriteBatch.Draw(MoraleBar, new Vector2(camera.position.X + 735, camera.position.Y + 10), new Rectangle(0, 0, (int)((player.getMorale() / 100f) * MoraleBar.Width), MoraleBar.Height), Color.White);
                     spriteBatch.Draw(HealthBar, new Vector2(camera.position.X + 180, camera.position.Y + 10), new Rectangle(0, 0, (int)((player.getHealth() / 100f) * HealthBar.Width), HealthBar.Height), Color.White);
                     spriteBatch.Draw(AlignmentBar, new Vector2(camera.position.X + 180, camera.position.Y + 40), Color.White); // always same
                     spriteBatch.Draw(MenuSlider, new Vector2(camera.position.X + 285, camera.position.Y + 40), Color.White);
+                    #endregion
 
+                    #region Draw Shop Items
                     //draw shop window objects
                     spriteBatch.Draw(shop_window_background, new Vector2(camera.position.X + 170, camera.position.Y + 115), Color.White);
                     spriteBatch.Draw(shop_label, new Vector2(camera.position.X + 445, camera.position.Y + 140), Color.White);
                     spriteBatch.Draw(upgrades_label, new Vector2(camera.position.X + 250, camera.position.Y + 215), Color.White);
                     spriteBatch.Draw(crew_label, new Vector2(camera.position.X + 630, camera.position.Y + 215), Color.White);
 
-                    /*
-                    spriteBatch.Draw(shop_item_image, shop_item_one_button_position, Color.White);
-                    spriteBatch.Draw(shop_item_image, shop_item_two_button_position, Color.White);
-                    spriteBatch.Draw(shop_item_image, shop_item_three_button_position, Color.White);
-                    spriteBatch.Draw(shop_repair_button, shop_repair_button_position, Color.White);
-                    spriteBatch.Draw(shop_back_button, shop_back_button_position, Color.White);
-                    */
-                    
+                    spriteBatch.Draw(shop_repair_button, new Vector2(camera.position.X + 500, camera.position.Y + 640), Color.White);
+                    spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 710, camera.position.Y + 160), Color.White);
                     spriteBatch.Draw(shop_item_image, new Vector2(camera.position.X + 210, camera.position.Y + 300), Color.White);
                     spriteBatch.Draw(shop_item_image, new Vector2(camera.position.X + 210, camera.position.Y + 420), Color.White);
                     spriteBatch.Draw(shop_item_image, new Vector2(camera.position.X + 210, camera.position.Y + 540), Color.White);
-                    spriteBatch.Draw(shop_repair_button, new Vector2(camera.position.X + 710, camera.position.Y + 160), Color.White);
-                    spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 505, camera.position.Y + 640), Color.White);
-                    
 
+                  //  spriteBatch.Draw(whiteblock, (new Vector2((int)camera.position.X + 500, (int)camera.position.Y + 640)), Color.White);
+
+                    #endregion
                     #endregion
                     break;
                 default:
@@ -894,44 +878,61 @@ namespace PirateGame
             if (currentState == gameState.inTown)
             {
 
-                Rectangle backButtonRect = new Rectangle((int)shop_back_button_position.X,
-                      (int)shop_back_button_position.Y, 100, 20);
-                Rectangle repairShipButtonRect = new Rectangle((int)shop_repair_button_position.X,
-                                      (int)shop_repair_button_position.Y, 100, 20);
-                Rectangle itemOneRect = new Rectangle((int)shop_item_one_button_position.X,
-                                      (int)shop_item_one_button_position.Y, 100, 20);
-                Rectangle itemTwoRect = new Rectangle((int)shop_item_two_button_position.X,
-                                      (int)shop_item_two_button_position.Y, 100, 20);
-                Rectangle itemThreeRect = new Rectangle((int)shop_item_three_button_position.X,
-                      (int)shop_item_three_button_position.Y, 100, 20);
-                      
+                Rectangle repairShipButtonRect = new Rectangle(500, 640, 138, 40);
+                Rectangle backButtonRect = new Rectangle(710, 160, 138, 40); 
+                Rectangle itemOneRect = new Rectangle(210, 300, 51, 50); 
+                Rectangle itemTwoRect = new Rectangle(210, 420, 51, 50); 
+                Rectangle itemThreeRect = new Rectangle(210, 540, 51, 50); 
 
-                if (mouseClickRect.Intersects(backButtonRect)) //player clicked start button
+              
+                if (mouseClickRect.Intersects(repairShipButtonRect)) //player clicked start button
                 {
+                  //  Exit();
+                    
                     currentState = gameState.overWorld;
                     overworld_init();
+                    
                 }
+                else if (mouseClickRect.Intersects(backButtonRect))
+                {
+                  //  Exit();
+                    
+                    currentState = gameState.overWorld;
+                    overworld_init();
+                    
+                } 
                 else if (mouseClickRect.Intersects(itemOneRect))
                 {
+                    // Exit();
+                    
                     currentState = gameState.overWorld;
                     overworld_init();
+                    
                 }
 
                 else if (mouseClickRect.Intersects(itemTwoRect))
                 {
+                   // Exit();
+                    
                     currentState = gameState.overWorld;
                     overworld_init();
+                    
                 }
 
-                else if (mouseClickRect.Intersects(itemThreeRect)) //player clicked exit button
+                else if (mouseClickRect.Intersects(itemThreeRect))
                 {
+                    // Exit();
+                    
                     currentState = gameState.overWorld;
                     overworld_init();
+                    
+                } 
+                else
+                {
+                    currentState = gameState.inTown;
                 }
             }
                     
-
-
             //check the startmenu
             if (currentState == gameState.mainMenu)
             {
@@ -1012,4 +1013,3 @@ namespace PirateGame
         }
     }
 }
-#endregion
