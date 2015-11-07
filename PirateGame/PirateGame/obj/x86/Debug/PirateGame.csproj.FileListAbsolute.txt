@@ -124,3 +124,11 @@ C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Window
 C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Hire_Crew_Label.png
 C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Upgrades_Label.png
 C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Shop_Label.png
+C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Enter Town Prompt.png
+C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\No.png
+C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Yes.png
+C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Cape Coast Label.png
+C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Butterfly Label.png
+C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Chicken Nugget Label.png
+C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Croissant Label.png
+C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Rattata Label.png

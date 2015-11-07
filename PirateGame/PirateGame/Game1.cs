@@ -32,6 +32,8 @@ namespace PirateGame
         bool mapOpen;
         #endregion
 
+        bool drawSign; 
+
         #region Environment
         Texture2D OceanTile;
         Texture2D OceanWeb;
@@ -62,11 +64,25 @@ namespace PirateGame
         MouseState previousMouseState;
         #endregion
 
+        #region enter town notification
+        Texture2D townNotificationSign;
+        Texture2D yesButton;
+        Texture2D noButton;
+        #endregion
+
         #region Player Related
         PlayerShip player;
         Rectangle ow_Player_CollBox; //overworld Player collisionbox
         bool facingRight;
         bool moving;
+        #endregion
+
+        #region Island Labels
+        Texture2D butterflyLabel;
+        Texture2D capeCoastLabel;
+        Texture2D chickenNuggetLabel;
+        Texture2D croissantLabel;
+        Texture2D rattataLabel;
         #endregion
 
         #region Ships and NPCS
@@ -138,7 +154,7 @@ namespace PirateGame
             currentState = gameState.mainMenu;
             #endregion
 
-            #region Environment
+            #region Islands
             island = new Texture2D[5];
             isl_x = new int[5];
             isl_y = new int[5];
@@ -160,7 +176,9 @@ namespace PirateGame
             #endregion
 
             #region Player Related
-            player = new PlayerShip(1000, 2300, 0);
+          //  player = new PlayerShip(1000, 2300, 0);
+            player = new PlayerShip(2300, 300, 0); // TEMPORARY FOR TESTING
+
             player.set_bSpeed(0);
             player.set_bAcceleration(1f);
             player.set_maxSpeed(30);
@@ -263,7 +281,18 @@ namespace PirateGame
                 shop_label = Content.Load<Texture2D>("Shop_Label");
                 crew_label = Content.Load<Texture2D>("Hire_Crew_Label");
                 upgrades_label = Content.Load<Texture2D>("Upgrades_Label");
-                
+
+                // load island labels
+                butterflyLabel = Content.Load<Texture2D>("Butterfly Label");
+                capeCoastLabel = Content.Load<Texture2D>("Cape Coast Label");
+                chickenNuggetLabel = Content.Load<Texture2D>("Chicken Nugget Label");
+                croissantLabel = Content.Load<Texture2D>("Croissant Label");
+                rattataLabel = Content.Load<Texture2D>("Rattata Label");
+
+                // load enter town elements
+                townNotificationSign = Content.Load<Texture2D>("Enter Town Prompt");
+                noButton = Content.Load<Texture2D>("No");
+                yesButton = Content.Load<Texture2D>("Yes");
 
                 //loads flag
                 flag = Content.Load<Texture2D>("flag");
@@ -461,17 +490,23 @@ namespace PirateGame
                     }
                     #endregion
                     //  if next step is an island, stop
-
+                    #region Collisions
                     if (nextPosX < 0)
                         player.setPos(world_W, player.getY());
                     else if(nextPosX > world_W)
                         player.setPos(0, player.getY());
 
                     if (nextPosY < 0)
+                    {
                         Collision = true;
+                        drawSign = true; // necessary?
+                    }
                     else if (nextPosY > world_H)
+                    {
                         Collision = true;
-                                            
+                        drawSign = true; // necessary?
+                    }  
+                                              
                     for (int i = 0; i < island.Length; i++) //must improve collision box on final islands.
                     {
                         if (nextPosX < (isl_x[i] + island[i].Width) && nextPosX > isl_x[i])
@@ -479,6 +514,13 @@ namespace PirateGame
                             if (nextPosY < (isl_y[i] + island[i].Height) && nextPosY > isl_y[i])
                             {
                                 Collision = true;
+
+                                //draws sign
+                                /*
+                                drawSign = true; // nohely added  
+                                IsMouseVisible = true; // need to fix so stays on screen, doesn't just show up at collision
+                                */
+
                             }
                         }
                     }
@@ -535,6 +577,7 @@ namespace PirateGame
                     //update camera
                     camera.position = new Vector2(player.getX() - (screen_W / 2), player.getY() - (screen_H / 2));
 
+                    #endregion
                     #endregion
                     break;
                 case gameState.battle: //In battle
@@ -680,7 +723,6 @@ namespace PirateGame
                     //draw islands
                     for (int i = 0; i < island.Length; i++)
                         spriteBatch.Draw(island[i], new Vector2(isl_x[i], isl_y[i]), Color.White);
-                    //draw island extras (towns etc)
 
                     //Draw enemy ships
                     for (int n = 0; n < OtherShip.Length; n++)
@@ -729,20 +771,37 @@ namespace PirateGame
                     }
                     #endregion
 
-                    #region Status bar
-                    // draw status bar
+                    #region Draws Island Labels
+                    //Draw Island Labels
+                    spriteBatch.Draw(capeCoastLabel, new Vector2(710, 2410), Color.White);
+                    spriteBatch.Draw(chickenNuggetLabel, new Vector2(1975, 1940), Color.White);
+                    spriteBatch.Draw(butterflyLabel, new Vector2(750, 1390), Color.White);
+                    spriteBatch.Draw(rattataLabel, new Vector2(1490, 900), Color.White);
+                    spriteBatch.Draw(croissantLabel, new Vector2(2300, 460), Color.White);
+                    #endregion
+
+                    #region Status bar 
+                    // draws status bar
 
                     spriteBatch.Draw(statusBarBase, new Vector2(camera.position.X, camera.position.Y), Color.White);
-
                     spriteBatch.Draw(MoraleBar, new Vector2(camera.position.X + 735, camera.position.Y + 10), new Rectangle(0, 0, (int)((player.getMorale() / 100f) * MoraleBar.Width), MoraleBar.Height), Color.White);
-
                     spriteBatch.Draw(HealthBar, new Vector2(camera.position.X + 180, camera.position.Y + 10), new Rectangle(0, 0, (int)((player.getHealth() / 100f) * HealthBar.Width), HealthBar.Height), Color.White);
-
-                    spriteBatch.Draw(AlignmentBar, new Vector2(camera.position.X + 180, camera.position.Y + 40), Color.White); // always same
-
+                    spriteBatch.Draw(AlignmentBar, new Vector2(camera.position.X + 180, camera.position.Y + 40), Color.White); 
                     spriteBatch.Draw(MenuSlider, new Vector2(camera.position.X + 285, camera.position.Y + 40), Color.White);
                     #endregion
                     //Draw clouds/wind/weather/anything else
+
+                    // draw when collide with island
+                    //stop ship movement
+                    //turn mouse on
+
+                    if (drawSign == true)
+                    {
+                        spriteBatch.Draw(townNotificationSign, new Vector2(camera.position.X + 280, camera.position.Y + 180), Color.White);
+                        spriteBatch.Draw(noButton, new Vector2(camera.position.X + 310, camera.position.Y + 400), Color.White);
+                        spriteBatch.Draw(yesButton, new Vector2(camera.position.X + 550, camera.position.Y + 400), Color.White);
+                    }
+
 
                     //Draw Map
                     if (mapOpen)
@@ -759,6 +818,8 @@ namespace PirateGame
                         
                         spriteBatch.Draw(whiteblock, mapPos + player.getPos()*.226f, Color.Red);
                     }
+
+
                     #endregion
                     break;
                 case gameState.battle: //in battle
@@ -1011,5 +1072,6 @@ namespace PirateGame
             ow_sailSpray.setY(player.getY());
             ow_sailSpray.setActive(true);
         }
+
     }
 }
