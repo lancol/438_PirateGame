@@ -255,7 +255,7 @@ namespace PirateGame
                 shipImg = new Texture2D[1];
                 b_shipImg = new Texture2D[1];
 
-                shipImg[0] = Content.Load<Texture2D>("Ship1v2");
+                shipImg[0] = Content.Load<Texture2D>("Ship1v3");
                 b_shipImg[0] = Content.Load<Texture2D>("Ship_TopDown136_68");
                 cannonball = Content.Load<Texture2D>("Battle_Cannonball16");
 
@@ -370,16 +370,16 @@ namespace PirateGame
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
                 leftdown = true;
-                xStep = -60;
                 facingRight = false;
                 moving = true;
+                xStep = -60;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
                 rightdown = true;
-                xStep = 60;
                 facingRight = true;
                 moving = true;
+                xStep = 60;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
@@ -669,9 +669,9 @@ namespace PirateGame
 
                     //Draw enemy ships
                     for (int n = 0; n < OtherShip.Length; n++)
-                    {
-                        spriteBatch.Draw(OtherShip[n].getImage(), new Vector2(OtherShip[n].getX(), OtherShip[n].getY()), null, Color.White,
-                                        MathHelper.ToRadians(player.getRotate()), new Vector2(55, 34), 1f, SpriteEffects.None, 1);
+                    {   //change distance to stance, but I'd prefer if stances were an enum first
+                        spriteBatch.Draw(OtherShip[n].getImage(), OtherShip[n].getPos(), null, Color.White,  
+                                        MathHelper.ToRadians(player.getRotate()), new Vector2(34, 50), 1f, ((player.getX() < OtherShip[n].getX()) && (Vector2.Distance(player.getPos(), OtherShip[n].getPos()) < 250)) ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 1);
                         
                         //Draw Flags
                         int r, g, b;
@@ -690,15 +690,21 @@ namespace PirateGame
                             g = 0;
                             b = 0;
                         }
-                        //Debug.WriteLine(r + "," + g + "," + b);
 
+                        //44 * Math.Cos(player.getRotate()-90)
+
+                        //Vector2 shipPos = new Vector2(OtherShip[n].getX() - OtherShip[n].getImage().Width / 2, OtherShip[n].getY() - (OtherShip[n].getImage().Height / 2) - 10);
+
+                        Vector2 shipPos = new Vector2(OtherShip[n].getX() + (45 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() - 90))), OtherShip[n].getY() + (45 * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() - 90))));
                         Color newColor = new Color(r,g,b); //Work on this.
-                        spriteBatch.Draw(flag, OtherShip[n].getPos(),newColor); //adjust position.
+
+                        spriteBatch.Draw(flag, shipPos, null, newColor,
+                                        MathHelper.ToRadians(player.getRotate()), new Vector2(flag.Width, flag.Height/2), 1f, SpriteEffects.None, 1);
                     }
 
                     //Draw player
                     spriteBatch.Draw(player.getImage(), new Vector2(player.getX(), player.getY()), null, Color.White,
-                    MathHelper.ToRadians(player.getRotate()), new Vector2(36, 50), 1f, (facingRight) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 1);
+                    MathHelper.ToRadians(player.getRotate()), new Vector2(34, 50), 1f, (facingRight) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 1);
 
                     //Sailing effect
                     #region particle crap
@@ -882,7 +888,7 @@ namespace PirateGame
 
         protected void overworld_init()
         {
-            //MediaPlayer.Play(Overworld_Song);
+            //MediaPlayer.Play(OverworldSong);
             MediaPlayer.Volume = 1.0f;
             MediaPlayer.IsRepeating = true;
 
@@ -896,6 +902,5 @@ namespace PirateGame
             ow_sailSpray.setY(player.getY());
             ow_sailSpray.setActive(true);
         }
-
     }
 }
