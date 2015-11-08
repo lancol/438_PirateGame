@@ -31,7 +31,7 @@ namespace PirateGame
         int world_H;
         bool mapOpen;
         bool instructionsOpen;
-        int instructionsSource;
+        int previousStateInstructions;
         #endregion
 
         bool drawSign; 
@@ -466,6 +466,8 @@ namespace PirateGame
                     }
 
                     previousMouseState = mouseState;
+
+                    previousStateInstructions = 0;
                     #endregion
                     break;
                 case gameState.overWorld: //overworld
@@ -483,6 +485,7 @@ namespace PirateGame
                     //update weather effects (if applicable)
                     IsMouseVisible = false;
 
+                    previousStateInstructions = 1;
 
                     //Check for collisions
                     #region Get Next Position
@@ -666,6 +669,7 @@ namespace PirateGame
                     EnemyShip.runStandardBattleAI(player, DT);
                     EnemyShip.updateCannonBalls(DT, player);
 
+                    previousStateInstructions = 2;
                     #endregion
                     break;
                 case gameState.inTown: //inTown  
@@ -683,6 +687,7 @@ namespace PirateGame
 
                     previousMouseState = mouseState;
 
+                    previousStateInstructions = 3;
                     #endregion
                     break;
                 case gameState.instructions: //Instructions pulled up 
@@ -991,7 +996,18 @@ namespace PirateGame
 
                 if (mouseClickRect.Intersects(instructionBackRect))
                 {
-                    currentState = gameState.mainMenu;
+                    if (previousStateInstructions == 0)
+                        currentState = gameState.mainMenu;
+                    else if (previousStateInstructions == 1)
+                        currentState = gameState.overWorld;
+                    else if (previousStateInstructions == 2)
+                        currentState = gameState.battle;
+                    else if (previousStateInstructions == 3)
+                        currentState = gameState.inTown;
+                    else
+                        currentState = gameState.mainMenu;
+
+                    // currentState = gameState.mainMenu;
                 }
                 else
                 {
