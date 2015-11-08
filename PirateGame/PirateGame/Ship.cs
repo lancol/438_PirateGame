@@ -8,7 +8,6 @@ namespace PirateGame
     {
         private Texture2D image;
         private Texture2D battleImage;
-        public static Texture2D smoke;
         private int gold;
         private int crew;
         private float speed;
@@ -201,11 +200,6 @@ namespace PirateGame
         public void setBattleImage(Texture2D Image)
         {
             battleImage = Image;
-        }
-        
-        public void setSmoke(Texture2D Smoke)
-        {
-            smoke = Smoke;
         }
 
         public void setGold(int Gold)

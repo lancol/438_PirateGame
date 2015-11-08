@@ -29,12 +29,6 @@ namespace PirateGame
             setDefense(1);
             setHealth(10);
             setGold(100);
-
-            Random random = new Random();
-
-            PE = new ParticleEngine(smoke, 10, random.Next(-2, 2), random.Next(-2, 2), random.Next(-1, 1), random.Next(-1, 1));
-            PE.setActive(false);
-
         }
 
         public float getMorale()
@@ -133,11 +127,8 @@ namespace PirateGame
             setRotate(getRotate() - (15 * DT));
         }
 
-        public void fireCannon(NPCShip enemyShip, float DT, Texture2D smoke)
+        public void fireCannon(NPCShip enemyShip, float DT)
         {
-            PE.EmitterLocation = new Vector2(getX(),getY());
-            PE.setActive(true);
-
             if (getX() < enemyShip.getX()) //This is temporary
             {
                 //float xSpeed = ((b_speed + 50) * (float)Math.Cos(MathHelper.ToRadians(getRotate())))*DT;
@@ -168,9 +159,6 @@ namespace PirateGame
         {
             Vector2[] cb = enemy.getCollisionbox();
 
-            if (PE.getActive())
-                PE.Update(DT);
-
             for (int i = 0; i < cannonballs.Count; i++)
             {
                 cannonballs[i].Update(DT);
@@ -190,8 +178,6 @@ namespace PirateGame
 
         public void drawCannonBalls(SpriteBatch spriteBatch)
         {
-            if (PE.getActive())
-                PE.Draw(spriteBatch);
 
             for (int i = 0; i < cannonballs.Count; i++)
             {

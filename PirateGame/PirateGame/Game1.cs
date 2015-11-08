@@ -607,7 +607,7 @@ namespace PirateGame
 
                     //Player Cannon Fire
                     if (spacedown)
-                        player.fireCannon(EnemyShip, DT, smoke[rand.Next(0,1)]);//verify this is inclusive
+                        player.fireCannon(EnemyShip, DT);
 
                     //EnemyShip
                     EnemyShip.runStandardBattleAI(player, DT);
