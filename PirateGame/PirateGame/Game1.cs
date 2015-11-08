@@ -14,7 +14,7 @@ namespace PirateGame
     {
         #region Class Variables
         [Flags]
-        enum gameState{mainMenu,overWorld,battle,inTown, instructions}
+        enum gameState{mainMenu,overWorld,battle,inTown,instructions}
 
 
         #region System/Game Control
@@ -439,7 +439,7 @@ namespace PirateGame
                 currentState = gameState.inTown;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.I)) //Temporary until overworld island interaction
+            if (Keyboard.GetState().IsKeyDown(Keys.I)) 
             {
                 instructionsOpen = true;
                 currentState = gameState.instructions;
@@ -476,6 +476,19 @@ namespace PirateGame
                     //MediaPlayer.IsRepeating = true;
                     //check for pause
 
+                    IsMouseVisible = false;
+
+                    //wait for mouseclick
+                    mouseState = Mouse.GetState();
+
+                    if (previousMouseState.LeftButton == ButtonState.Pressed &&
+                    mouseState.LeftButton == ButtonState.Released)
+                    {
+                        MouseClicked(mouseState.X, mouseState.Y);
+                    }
+
+                    previousMouseState = mouseState;
+
                     //Update enemy positions
                     for (int i = 0; i < OtherShip.Length; i++)
                         OtherShip[i].runOverworldAI(player, DT);
@@ -483,7 +496,6 @@ namespace PirateGame
                     //update ocean effects (if applicable)
 
                     //update weather effects (if applicable)
-                    IsMouseVisible = false;
 
                     previousStateInstructions = 1;
 
@@ -516,12 +528,10 @@ namespace PirateGame
                     if (nextPosY < 0)
                     {
                         Collision = true;
-                        drawSign = true; // necessary?
                     }
                     else if (nextPosY > world_H)
                     {
                         Collision = true;
-                        drawSign = true; // necessary?
                     }  
                                               
                     for (int i = 0; i < island.Length; i++) //must improve collision box on final islands.
@@ -531,13 +541,13 @@ namespace PirateGame
                             if (nextPosY < (isl_y[i] + island[i].Height) && nextPosY > isl_y[i])
                             {
                                 Collision = true;
+                                drawSign = true;
+                                //IsMouseVisible = true; //enables mouse pointer
 
-                                //draws sign
-                                /*
-                                drawSign = true; // nohely added  
-                                IsMouseVisible = true; // need to fix so stays on screen, doesn't just show up at collision
-                                */
+                                //get ship to stop moving
 
+                                //nextPosY =  (int)player.getY();
+                                //nextPosX = (int)player.getX();
                             }
                         }
                     }
@@ -745,6 +755,8 @@ namespace PirateGame
                     break;
                 case gameState.overWorld: //overworld
                     #region Overworld
+
+                    #region Draws Ocean and Ocean Effects
                     //draw ocean and ocean effects
 
                     int h = ((int)camera.position.Y / OceanTile.Height) * OceanTile.Height;
@@ -758,17 +770,23 @@ namespace PirateGame
                             spriteBatch.Draw(OceanWeb, new Vector2(x + (float)(stepRadius * Math.Sin(effectT)), y), Color.White);
                         }
                     }
+                    #endregion
 
+                    #region Draws Islands
                     //draw islands
                     for (int i = 0; i < island.Length; i++)
                         spriteBatch.Draw(island[i], new Vector2(isl_x[i], isl_y[i]), Color.White);
+                    #endregion
 
+                    #region Draws enemy ships
                     //Draw enemy ships
                     for (int n = 0; n < OtherShip.Length; n++)
                     {   //change distance to stance, but I'd prefer if stances were an enum first
                         spriteBatch.Draw(OtherShip[n].getImage(), OtherShip[n].getPos(), null, Color.White,
                                         MathHelper.ToRadians(player.getRotate()), new Vector2(34, 50), 1f, ((player.getX() < OtherShip[n].getX()) && (Vector2.Distance(player.getPos(), OtherShip[n].getPos()) < 250)) ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 1);
+                        #endregion
 
+                    #region Draws Flags
                         //Draw Flags
                         int r, g, b;
                         float cDistance;
@@ -797,13 +815,16 @@ namespace PirateGame
                         spriteBatch.Draw(flag, shipPos, null, newColor,
                                         MathHelper.ToRadians(player.getRotate()), new Vector2(flag.Width, flag.Height / 2), 1f, SpriteEffects.None, 1);
                     }
+                    #endregion
 
+                    #region Draws Player
                     //Draw player
                     spriteBatch.Draw(player.getImage(), new Vector2(player.getX(), player.getY()), null, Color.White,
                     MathHelper.ToRadians(player.getRotate()), new Vector2(34, 50), 1f, (facingRight) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 1);
+                    #endregion
 
-                    //Sailing effect
                     #region particle crap
+                    //Sailing effect
                     if (moving)
                     {
                         ow_sailSpray.Draw(spriteBatch);
@@ -830,18 +851,19 @@ namespace PirateGame
                     #endregion
                     //Draw clouds/wind/weather/anything else
 
+                    #region Draws Enter Town prompt
                     // draw when collide with island
-                    //stop ship movement
-                    //turn mouse on
-
                     if (drawSign == true)
                     {
+                        //draws sign
                         spriteBatch.Draw(townNotificationSign, new Vector2(camera.position.X + 280, camera.position.Y + 180), Color.White);
                         spriteBatch.Draw(noButton, new Vector2(camera.position.X + 310, camera.position.Y + 400), Color.White);
                         spriteBatch.Draw(yesButton, new Vector2(camera.position.X + 550, camera.position.Y + 400), Color.White);
+                        IsMouseVisible = true;
                     }
-
-
+                    #endregion
+                   
+                    #region Draws Map
                     //Draw Map
                     if (mapOpen)
                     {
@@ -857,13 +879,12 @@ namespace PirateGame
 
                         spriteBatch.Draw(whiteblock, mapPos + player.getPos() * .226f, Color.Red);
                     }
+                    #endregion
 
-                    // Draw instructions-add to main menu as well
-
-
+                    #region Tells to Change Gamestate for Drawing Instructions
                     if (instructionsOpen)
                         currentState = gameState.instructions;
-
+                    #endregion
                     #endregion
                     break;
                 case gameState.battle: //in battle
@@ -968,13 +989,12 @@ namespace PirateGame
                     #endregion
                     break;
                 case gameState.instructions: // Instructions
-                    
-                        spriteBatch.Draw(menuBackground, new Vector2(camera.position.X, camera.position.Y), Color.White);
+                    #region Draws instructions 
+                    spriteBatch.Draw(menuBackground, new Vector2(camera.position.X, camera.position.Y), Color.White);
                         spriteBatch.Draw(shop_window_background, new Vector2(camera.position.X + 160, camera.position.Y + 60), Color.White);
                         spriteBatch.Draw(InstructionsLabel, new Vector2(camera.position.X + 380, camera.position.Y + 110), Color.White);
                         spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 480, camera.position.Y + 565), Color.White);
-                    
-
+                    #endregion
                     break;
                 default:
                     Exit();
@@ -989,6 +1009,39 @@ namespace PirateGame
         {
             //creates a rectangle of 10x10 around the place where the mouse was clicked
             Rectangle mouseClickRect = new Rectangle(x, y, 10, 10);
+
+            if (currentState == gameState.overWorld && drawSign == true)
+            {
+                Rectangle yesEnterIslandRect = new Rectangle(550, 400, 209, 118);
+                Rectangle noEnterIslandRect = new Rectangle(310, 400, 210, 121);
+
+                if (mouseClickRect.Intersects(yesEnterIslandRect)) // click yes
+                    {
+                            currentState = gameState.inTown;
+                    }
+                    else
+                    {
+                        currentState = gameState.overWorld;
+                        IsMouseVisible = false;
+                        drawSign = false;
+                        overworld_init();
+                    }
+
+                if (mouseClickRect.Intersects(noEnterIslandRect)) // click no
+                {
+                    currentState = gameState.overWorld;
+                    IsMouseVisible = false;
+                    drawSign = false;
+                    overworld_init();
+                }
+                /*
+                else
+                {
+                    currentState = gameState.overWorld;
+                    IsMouseVisible = false;
+                   // overworld_init();
+                } */
+            }
 
             if (currentState == gameState.instructions)
             {
@@ -1006,8 +1059,6 @@ namespace PirateGame
                         currentState = gameState.inTown;
                     else
                         currentState = gameState.mainMenu;
-
-                    // currentState = gameState.mainMenu;
                 }
                 else
                 {
