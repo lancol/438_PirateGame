@@ -14,7 +14,7 @@ namespace PirateGame
     {
         #region Class Variables
         [Flags]
-        enum gameState{mainMenu,overWorld,battle,inTown}
+        enum gameState{mainMenu,overWorld,battle,inTown, instructions}
 
 
         #region System/Game Control
@@ -30,6 +30,8 @@ namespace PirateGame
         int world_W;
         int world_H;
         bool mapOpen;
+        bool instructionsOpen;
+        int instructionsSource;
         #endregion
 
         bool drawSign; 
@@ -52,6 +54,8 @@ namespace PirateGame
         Texture2D menuBackground;
         Texture2D logo;
 
+
+        Texture2D InstructionsLabel;
         Texture2D Map;
 
         Vector2 startButtonPosition;
@@ -107,7 +111,6 @@ namespace PirateGame
 
         #region General Status Bar Elements
         Texture2D statusBarBase;
-      //  SpriteFont VinerHand;
         Texture2D AlignmentBar;
         Texture2D HealthBar; // full bar
         Texture2D MoraleBar; // full bar
@@ -176,8 +179,7 @@ namespace PirateGame
             #endregion
 
             #region Player Related
-          //  player = new PlayerShip(1000, 2300, 0);
-            player = new PlayerShip(2300, 300, 0); // TEMPORARY FOR TESTING
+            player = new PlayerShip(1000, 2300, 0);
 
             player.set_bSpeed(0);
             player.set_bAcceleration(1f);
@@ -203,7 +205,7 @@ namespace PirateGame
             OtherShip = new NPCShip[20];
             for (int i = 0; i < OtherShip.Length; i++)
             {
-                OtherShip[i] = new NPCShip(rand.Next(0, world_W), rand.Next(0, world_H), 0, "Pirate");
+                OtherShip[i] = new NPCShip(rand.Next(0, world_W), rand.Next(0, world_H), 0, "Pirate"); // make sure don't spawn in island
                 OtherShip[i].setAttack(rand.Next(20, 80));
                 OtherShip[i].setDefense(rand.Next(20, 80));
             }
@@ -300,6 +302,9 @@ namespace PirateGame
                 //loads minimap
                 Map = Content.Load<Texture2D>("Map678");
 
+                //loads instructions label;
+                InstructionsLabel = Content.Load<Texture2D>("Instructions Label");
+
                 player.setImage(shipImg[0]);
                 player.setBattleImage(b_shipImg[0]);
 
@@ -357,6 +362,8 @@ namespace PirateGame
             moving = false;
 
             mapOpen = false;
+
+            instructionsOpen = false;
 
             xStep = 0;
             yStep = 0;
@@ -431,6 +438,13 @@ namespace PirateGame
             {
                 currentState = gameState.inTown;
             }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.I)) //Temporary until overworld island interaction
+            {
+                instructionsOpen = true;
+                currentState = gameState.instructions;
+            }
+
 
             #endregion
 
@@ -670,7 +684,24 @@ namespace PirateGame
                     previousMouseState = mouseState;
 
                     #endregion
-                    break;   
+                    break;
+                case gameState.instructions: //Instructions pulled up 
+                    #region Instructions
+
+                    IsMouseVisible = true; //enables mouse pointer
+
+                    //wait for mouseclick
+                    mouseState = Mouse.GetState();
+
+                    if (previousMouseState.LeftButton == ButtonState.Pressed &&
+                    mouseState.LeftButton == ButtonState.Released)
+                    {
+                        MouseClicked(mouseState.X, mouseState.Y);
+                    }
+
+                    previousMouseState = mouseState;
+                    #endregion
+                    break;
                 default:
                     Exit();
                     break;
@@ -702,6 +733,9 @@ namespace PirateGame
                     spriteBatch.Draw(exitButton, exitButtonPosition, Color.White);
                     spriteBatch.Draw(logo, logoPosition, Color.White);
 
+                   if (instructionsOpen)
+                        currentState = gameState.instructions;
+
                     #endregion
                     break;
                 case gameState.overWorld: //overworld
@@ -709,11 +743,11 @@ namespace PirateGame
                     //draw ocean and ocean effects
 
                     int h = ((int)camera.position.Y / OceanTile.Height) * OceanTile.Height;
-                    int w = (((int)camera.position.X / OceanTile.Width) * OceanTile.Width)-OceanTile.Width;
+                    int w = (((int)camera.position.X / OceanTile.Width) * OceanTile.Width) - OceanTile.Width;
 
                     for (int y = h; y < (h + screen_H + OceanTile.Height); y += OceanTile.Height)
                     {
-                        for (int x = w; x < (w + screen_W + (OceanTile.Width*2)); x += OceanTile.Width)
+                        for (int x = w; x < (w + screen_W + (OceanTile.Width * 2)); x += OceanTile.Width)
                         {
                             spriteBatch.Draw(OceanTile, new Vector2(x, y), Color.White);
                             spriteBatch.Draw(OceanWeb, new Vector2(x + (float)(stepRadius * Math.Sin(effectT)), y), Color.White);
@@ -727,9 +761,9 @@ namespace PirateGame
                     //Draw enemy ships
                     for (int n = 0; n < OtherShip.Length; n++)
                     {   //change distance to stance, but I'd prefer if stances were an enum first
-                        spriteBatch.Draw(OtherShip[n].getImage(), OtherShip[n].getPos(), null, Color.White,  
+                        spriteBatch.Draw(OtherShip[n].getImage(), OtherShip[n].getPos(), null, Color.White,
                                         MathHelper.ToRadians(player.getRotate()), new Vector2(34, 50), 1f, ((player.getX() < OtherShip[n].getX()) && (Vector2.Distance(player.getPos(), OtherShip[n].getPos()) < 250)) ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 1);
-                        
+
                         //Draw Flags
                         int r, g, b;
                         float cDistance;
@@ -753,10 +787,10 @@ namespace PirateGame
                         //Vector2 shipPos = new Vector2(OtherShip[n].getX() - OtherShip[n].getImage().Width / 2, OtherShip[n].getY() - (OtherShip[n].getImage().Height / 2) - 10);
 
                         Vector2 shipPos = new Vector2(OtherShip[n].getX() + (45 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() - 90))), OtherShip[n].getY() + (45 * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() - 90))));
-                        Color newColor = new Color(r,g,b); //Work on this.
+                        Color newColor = new Color(r, g, b); //Work on this.
 
                         spriteBatch.Draw(flag, shipPos, null, newColor,
-                                        MathHelper.ToRadians(player.getRotate()), new Vector2(flag.Width, flag.Height/2), 1f, SpriteEffects.None, 1);
+                                        MathHelper.ToRadians(player.getRotate()), new Vector2(flag.Width, flag.Height / 2), 1f, SpriteEffects.None, 1);
                     }
 
                     //Draw player
@@ -767,7 +801,7 @@ namespace PirateGame
                     #region particle crap
                     if (moving)
                     {
-                        ow_sailSpray.Draw(spriteBatch);               
+                        ow_sailSpray.Draw(spriteBatch);
                     }
                     #endregion
 
@@ -786,7 +820,7 @@ namespace PirateGame
                     spriteBatch.Draw(statusBarBase, new Vector2(camera.position.X, camera.position.Y), Color.White);
                     spriteBatch.Draw(MoraleBar, new Vector2(camera.position.X + 735, camera.position.Y + 10), new Rectangle(0, 0, (int)((player.getMorale() / 100f) * MoraleBar.Width), MoraleBar.Height), Color.White);
                     spriteBatch.Draw(HealthBar, new Vector2(camera.position.X + 180, camera.position.Y + 10), new Rectangle(0, 0, (int)((player.getHealth() / 100f) * HealthBar.Width), HealthBar.Height), Color.White);
-                    spriteBatch.Draw(AlignmentBar, new Vector2(camera.position.X + 180, camera.position.Y + 40), Color.White); 
+                    spriteBatch.Draw(AlignmentBar, new Vector2(camera.position.X + 180, camera.position.Y + 40), Color.White);
                     spriteBatch.Draw(MenuSlider, new Vector2(camera.position.X + 285, camera.position.Y + 40), Color.White);
                     #endregion
                     //Draw clouds/wind/weather/anything else
@@ -812,18 +846,24 @@ namespace PirateGame
                         Vector2 islPos;
                         for (int i = 0; i < 5; i++)
                         {
-                            islPos = new Vector2(mapPos.X + isl_x[i] *.226f, mapPos.Y + isl_y[i] * .226f);
-                            spriteBatch.Draw(island[i], islPos, null, Color.White,0,new Vector2(0,0), 0.226f, SpriteEffects.None,1);
+                            islPos = new Vector2(mapPos.X + isl_x[i] * .226f, mapPos.Y + isl_y[i] * .226f);
+                            spriteBatch.Draw(island[i], islPos, null, Color.White, 0, new Vector2(0, 0), 0.226f, SpriteEffects.None, 1);
                         }
-                        
-                        spriteBatch.Draw(whiteblock, mapPos + player.getPos()*.226f, Color.Red);
+
+                        spriteBatch.Draw(whiteblock, mapPos + player.getPos() * .226f, Color.Red);
                     }
 
+                    // Draw instructions-add to main menu as well
+
+
+                    if (instructionsOpen)
+                        currentState = gameState.instructions;
 
                     #endregion
                     break;
                 case gameState.battle: //in battle
                     #region In Battle
+
 
                     //draw Ocean
                     int bh = ((int)camera.position.Y / OceanTile.Height) * OceanTile.Height;
@@ -878,8 +918,9 @@ namespace PirateGame
                     #endregion
                     #endregion
                     break;
-                case gameState.inTown: //Shop                
+                case gameState.inTown: //Shop             
                     #region In Shop
+
                     #region Draw Ocean Background 
                     int ab = ((int)camera.position.Y / OceanTile.Height) * OceanTile.Height;
                     int bc = (((int)camera.position.X / OceanTile.Width) * OceanTile.Width) - OceanTile.Width;
@@ -895,7 +936,7 @@ namespace PirateGame
                     #endregion
 
                     #region Draw Status Bar 
-                    
+
                     spriteBatch.Draw(statusBarBase, new Vector2(camera.position.X, camera.position.Y), Color.White);
                     spriteBatch.Draw(MoraleBar, new Vector2(camera.position.X + 735, camera.position.Y + 10), new Rectangle(0, 0, (int)((player.getMorale() / 100f) * MoraleBar.Width), MoraleBar.Height), Color.White);
                     spriteBatch.Draw(HealthBar, new Vector2(camera.position.X + 180, camera.position.Y + 10), new Rectangle(0, 0, (int)((player.getHealth() / 100f) * HealthBar.Width), HealthBar.Height), Color.White);
@@ -916,10 +957,19 @@ namespace PirateGame
                     spriteBatch.Draw(shop_item_image, new Vector2(camera.position.X + 210, camera.position.Y + 420), Color.White);
                     spriteBatch.Draw(shop_item_image, new Vector2(camera.position.X + 210, camera.position.Y + 540), Color.White);
 
-                  //  spriteBatch.Draw(whiteblock, (new Vector2((int)camera.position.X + 500, (int)camera.position.Y + 640)), Color.White);
+                    //  spriteBatch.Draw(whiteblock, (new Vector2((int)camera.position.X + 500, (int)camera.position.Y + 640)), Color.White);
 
                     #endregion
                     #endregion
+                    break;
+                case gameState.instructions: // Instructions
+                    
+                        spriteBatch.Draw(menuBackground, new Vector2(camera.position.X, camera.position.Y), Color.White);
+                        spriteBatch.Draw(shop_window_background, new Vector2(camera.position.X + 160, camera.position.Y + 60), Color.White);
+                        spriteBatch.Draw(InstructionsLabel, new Vector2(camera.position.X + 380, camera.position.Y + 110), Color.White);
+                        spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 480, camera.position.Y + 565), Color.White);
+                    
+
                     break;
                 default:
                     Exit();
@@ -934,6 +984,20 @@ namespace PirateGame
         {
             //creates a rectangle of 10x10 around the place where the mouse was clicked
             Rectangle mouseClickRect = new Rectangle(x, y, 10, 10);
+
+            if (currentState == gameState.instructions)
+            {
+                Rectangle instructionBackRect = new Rectangle(480, 565, 138, 40);
+
+                if (mouseClickRect.Intersects(instructionBackRect))
+                {
+                    currentState = gameState.mainMenu;
+                }
+                else
+                {
+                    currentState = gameState.instructions;
+                }
+            }
 
             //check the shop menu
             if (currentState == gameState.inTown)
@@ -999,13 +1063,13 @@ namespace PirateGame
             {
 
                 Rectangle continueButtonRect = new Rectangle((int)continueButtonPosition.X,
-                                      (int)continueButtonPosition.Y, 100, 20);
+                                      (int)continueButtonPosition.Y, 131, 40);
                 Rectangle startButtonRect = new Rectangle((int)startButtonPosition.X,
-                                      (int)startButtonPosition.Y, 100, 20);
+                                      (int)startButtonPosition.Y, 149, 40);
                 Rectangle instructionsButtonRect = new Rectangle((int)instructionsButtonPosition.X,
-                                      (int)instructionsButtonPosition.Y, 100, 20);
+                                      (int)instructionsButtonPosition.Y, 157, 40);
                 Rectangle exitButtonRect = new Rectangle((int)exitButtonPosition.X,
-                                      (int)exitButtonPosition.Y, 100, 20);
+                                      (int)exitButtonPosition.Y, 83, 40);
 
                 if (mouseClickRect.Intersects(startButtonRect)) //player clicked start button
                 {
@@ -1020,8 +1084,9 @@ namespace PirateGame
 
                 else if (mouseClickRect.Intersects(instructionsButtonRect))
                 {
-                    //gameState = 5;
-                    Exit();
+                    currentState = gameState.mainMenu;
+                    instructionsOpen = true;
+
                 }
 
                 else if (mouseClickRect.Intersects(exitButtonRect)) //player clicked exit button

@@ -132,3 +132,4 @@ C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Window
 C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Chicken Nugget Label.png
 C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Croissant Label.png
 C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Rattata Label.png
+C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Instructions Label.png
