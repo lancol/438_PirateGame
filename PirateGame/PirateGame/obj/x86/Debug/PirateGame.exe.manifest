@@ -55,14 +55,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="183232">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="184256">
       <assemblyIdentity name="PirateGame" version="3.4.0.456" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>osD35nXw0WvYVchzxeu04YocoUc=</dsig:DigestValue>
+        <dsig:DigestValue>/s+9AxCPoNRPIE2w8lQ3wGYcbwE=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -253,6 +253,33 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>nA2rdmGiHraiMKvIROeQnr44nP0=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\File 1 Label.png" size="2323">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>mqImoOUwyR892wesjNUQ6oZWnsY=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\File 2 Label.png" size="2519">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>23+l056sjKs0hN7hGHdWSVzfhUk=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\File 3 Label.png" size="2471">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>NfqbLxyk2ipVjcDTPgdU1+VT0+M=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\flag.png" size="196">
@@ -469,6 +496,15 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>A5J1pT9tJypT6KaUtr2GX4Jir3U=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Saved Games Label.png" size="5698">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>dQ6/5/E3xnzk2pLwtxMIGkoE/Hw=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\Ship_TopDown136_68.png" size="1717">

@@ -14,8 +14,7 @@ namespace PirateGame
     {
         #region Class Variables
         [Flags]
-        enum gameState{mainMenu,overWorld,battle,inTown,instructions}
-
+        enum gameState { mainMenu, overWorld, battle, inTown, instructions, savefiles }
 
         #region System/Game Control
         GraphicsDeviceManager graphics;
@@ -32,9 +31,9 @@ namespace PirateGame
         bool mapOpen;
         bool instructionsOpen;
         int previousStateInstructions;
-        #endregion
+        bool drawSign;
 
-        bool drawSign; 
+        #endregion
 
         #region Environment
         Texture2D OceanTile;
@@ -62,7 +61,7 @@ namespace PirateGame
         Vector2 exitButtonPosition;
         Vector2 continueButtonPosition;
         Vector2 instructionsButtonPosition;
-        Vector2 logoPosition; 
+        Vector2 logoPosition;
 
         MouseState mouseState;
         MouseState previousMouseState;
@@ -118,7 +117,7 @@ namespace PirateGame
         #endregion
 
         #region Shop Window
-      //  Store shop_window;
+        //  Store shop_window;
         Texture2D shop_window_background;
         Texture2D shop_back_button;
         Texture2D shop_repair_button;
@@ -126,6 +125,13 @@ namespace PirateGame
         Texture2D shop_label;
         Texture2D crew_label;
         Texture2D upgrades_label;
+        #endregion
+
+        #region Save File elements
+        Texture2D saveFilesLabel;
+        Texture2D file1Label;
+        Texture2D file2Label;
+        Texture2D file3Label;
         #endregion
 
         #endregion
@@ -218,12 +224,12 @@ namespace PirateGame
             startButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 48, 525);
             instructionsButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 50, 600);
             exitButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 17, 675);
-            logoPosition = new Vector2((GraphicsDevice.Viewport.Width / 30) - 48, 5); 
+            logoPosition = new Vector2((GraphicsDevice.Viewport.Width / 30) - 48, 5);
 
             //get the mouse state
             mouseState = Mouse.GetState();
             previousMouseState = mouseState;
-            
+
             #endregion
 
             base.Initialize();
@@ -237,7 +243,8 @@ namespace PirateGame
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            try{
+            try
+            {
 
                 //load the buttonimages into the content pipeline
                 continueButton = Content.Load<Texture2D>("Continue");
@@ -301,6 +308,12 @@ namespace PirateGame
 
                 //loads minimap
                 Map = Content.Load<Texture2D>("Map678");
+
+                //load save file elements
+                saveFilesLabel = Content.Load<Texture2D>("Saved Games Label");
+                file1Label = Content.Load<Texture2D>("File 1 Label");
+                file2Label = Content.Load<Texture2D>("File 2 Label");
+                file3Label = Content.Load<Texture2D>("File 3 Label");
 
                 //loads instructions label;
                 InstructionsLabel = Content.Load<Texture2D>("Instructions Label");
@@ -439,7 +452,7 @@ namespace PirateGame
                 currentState = gameState.inTown;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.I)) 
+            if (Keyboard.GetState().IsKeyDown(Keys.I))
             {
                 instructionsOpen = true;
                 currentState = gameState.instructions;
@@ -457,7 +470,7 @@ namespace PirateGame
                                            //   main_menu();
 
                     //wait for mouseclick
-                      mouseState = Mouse.GetState();
+                    mouseState = Mouse.GetState();
 
                     if (previousMouseState.LeftButton == ButtonState.Pressed &&
                     mouseState.LeftButton == ButtonState.Released)
@@ -522,7 +535,7 @@ namespace PirateGame
                     #region Collisions
                     if (nextPosX < 0)
                         player.setPos(world_W, player.getY());
-                    else if(nextPosX > world_W)
+                    else if (nextPosX > world_W)
                         player.setPos(0, player.getY());
 
                     if (nextPosY < 0)
@@ -532,8 +545,8 @@ namespace PirateGame
                     else if (nextPosY > world_H)
                     {
                         Collision = true;
-                    }  
-                                              
+                    }
+
                     for (int i = 0; i < island.Length; i++) //must improve collision box on final islands.
                     {
                         if (nextPosX < (isl_x[i] + island[i].Width) && nextPosX > isl_x[i])
@@ -542,12 +555,8 @@ namespace PirateGame
                             {
                                 Collision = true;
                                 drawSign = true;
-                                //IsMouseVisible = true; //enables mouse pointer
-
                                 //get ship to stop moving
 
-                                //nextPosY =  (int)player.getY();
-                                //nextPosX = (int)player.getX();
                             }
                         }
                     }
@@ -698,6 +707,8 @@ namespace PirateGame
                     previousMouseState = mouseState;
 
                     previousStateInstructions = 3;
+
+                    drawSign = false;
                     #endregion
                     break;
                 case gameState.instructions: //Instructions pulled up 
@@ -715,6 +726,25 @@ namespace PirateGame
                     }
 
                     previousMouseState = mouseState;
+                    #endregion
+                    break;
+                case gameState.savefiles:
+                    #region Save Files
+
+                    IsMouseVisible = true; //enables mouse pointer
+
+                    //wait for mouseclick
+                    mouseState = Mouse.GetState();
+
+                    if (previousMouseState.LeftButton == ButtonState.Pressed &&
+                    mouseState.LeftButton == ButtonState.Released)
+                    {
+                        MouseClicked(mouseState.X, mouseState.Y);
+                    }
+
+                    previousMouseState = mouseState;
+
+                    previousStateInstructions = 0;
                     #endregion
                     break;
                 default:
@@ -748,7 +778,7 @@ namespace PirateGame
                     spriteBatch.Draw(exitButton, exitButtonPosition, Color.White);
                     spriteBatch.Draw(logo, logoPosition, Color.White);
 
-                   if (instructionsOpen)
+                    if (instructionsOpen)
                         currentState = gameState.instructions;
 
                     #endregion
@@ -786,7 +816,7 @@ namespace PirateGame
                                         MathHelper.ToRadians(player.getRotate()), new Vector2(34, 50), 1f, ((player.getX() < OtherShip[n].getX()) && (Vector2.Distance(player.getPos(), OtherShip[n].getPos()) < 250)) ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 1);
                         #endregion
 
-                    #region Draws Flags
+                        #region Draws Flags
                         //Draw Flags
                         int r, g, b;
                         float cDistance;
@@ -862,7 +892,7 @@ namespace PirateGame
                         IsMouseVisible = true;
                     }
                     #endregion
-                   
+
                     #region Draws Map
                     //Draw Map
                     if (mapOpen)
@@ -991,9 +1021,23 @@ namespace PirateGame
                 case gameState.instructions: // Instructions
                     #region Draws instructions 
                     spriteBatch.Draw(menuBackground, new Vector2(camera.position.X, camera.position.Y), Color.White);
-                        spriteBatch.Draw(shop_window_background, new Vector2(camera.position.X + 160, camera.position.Y + 60), Color.White);
-                        spriteBatch.Draw(InstructionsLabel, new Vector2(camera.position.X + 380, camera.position.Y + 110), Color.White);
-                        spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 480, camera.position.Y + 565), Color.White);
+                    spriteBatch.Draw(shop_window_background, new Vector2(camera.position.X + 160, camera.position.Y + 60), Color.White);
+                    spriteBatch.Draw(InstructionsLabel, new Vector2(camera.position.X + 380, camera.position.Y + 110), Color.White);
+                    spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 480, camera.position.Y + 565), Color.White);
+                    #endregion
+                    break;
+                case gameState.savefiles:
+                    #region Draw Save Files Elements
+                    spriteBatch.Draw(menuBackground, new Vector2(camera.position.X, camera.position.Y), Color.White);
+                    spriteBatch.Draw(shop_window_background, new Vector2(camera.position.X + 160, camera.position.Y + 60), Color.White);
+                    spriteBatch.Draw(saveFilesLabel, new Vector2(camera.position.X + 380, camera.position.Y + 110), Color.White);
+                    spriteBatch.Draw(file1Label, new Vector2(camera.position.X + 220, camera.position.Y + 200), Color.White);
+                    spriteBatch.Draw(file2Label, new Vector2(camera.position.X + 220, camera.position.Y + 350), Color.White);
+                    spriteBatch.Draw(file3Label, new Vector2(camera.position.X + 220, camera.position.Y + 500), Color.White);
+                    spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 490, camera.position.Y + 605), Color.White);
+                    spriteBatch.Draw(continueButton, new Vector2(camera.position.X + 675, camera.position.Y + 215), Color.White);
+                    spriteBatch.Draw(continueButton, new Vector2(camera.position.X + 675, camera.position.Y + 365), Color.White);
+                    spriteBatch.Draw(continueButton, new Vector2(camera.position.X + 675, camera.position.Y + 515), Color.White);
                     #endregion
                     break;
                 default:
@@ -1016,16 +1060,16 @@ namespace PirateGame
                 Rectangle noEnterIslandRect = new Rectangle(310, 400, 210, 121);
 
                 if (mouseClickRect.Intersects(yesEnterIslandRect)) // click yes
-                    {
-                            currentState = gameState.inTown;
-                    }
-                    else
-                    {
-                        currentState = gameState.overWorld;
-                        IsMouseVisible = false;
-                        drawSign = false;
-                        overworld_init();
-                    }
+                {
+                    currentState = gameState.inTown;
+                }
+                else
+                {
+                    currentState = gameState.overWorld;
+                    IsMouseVisible = false;
+                    drawSign = false;
+                    overworld_init();
+                }
 
                 if (mouseClickRect.Intersects(noEnterIslandRect)) // click no
                 {
@@ -1034,134 +1078,121 @@ namespace PirateGame
                     drawSign = false;
                     overworld_init();
                 }
-                /*
-                else
-                {
-                    currentState = gameState.overWorld;
-                    IsMouseVisible = false;
-                   // overworld_init();
-                } */
             }
-
-            if (currentState == gameState.instructions)
-            {
-                Rectangle instructionBackRect = new Rectangle(480, 565, 138, 40);
-
-                if (mouseClickRect.Intersects(instructionBackRect))
+                if (currentState == gameState.instructions)
                 {
-                    if (previousStateInstructions == 0)
-                        currentState = gameState.mainMenu;
-                    else if (previousStateInstructions == 1)
-                        currentState = gameState.overWorld;
-                    else if (previousStateInstructions == 2)
-                        currentState = gameState.battle;
-                    else if (previousStateInstructions == 3)
-                        currentState = gameState.inTown;
+                    Rectangle instructionBackRect = new Rectangle(480, 565, 138, 40);
+
+                    if (mouseClickRect.Intersects(instructionBackRect))
+                    {
+                        if (previousStateInstructions == 0)
+                            currentState = gameState.mainMenu;
+                        else if (previousStateInstructions == 1)
+                            currentState = gameState.overWorld;
+                        else if (previousStateInstructions == 2)
+                            currentState = gameState.battle;
+                        else if (previousStateInstructions == 3)
+                            currentState = gameState.inTown;
+                        else
+                            currentState = gameState.mainMenu;
+                    }
                     else
+                    {
+                        currentState = gameState.instructions;
+                    }
+
+                }
+
+                //check the shop menu
+                if (currentState == gameState.inTown)
+                {
+
+                    Rectangle repairShipButtonRect = new Rectangle(500, 640, 138, 40);
+                    Rectangle backButtonRect = new Rectangle(710, 160, 138, 40);
+                    Rectangle itemOneRect = new Rectangle(210, 300, 51, 50);
+                    Rectangle itemTwoRect = new Rectangle(210, 420, 51, 50);
+                    Rectangle itemThreeRect = new Rectangle(210, 540, 51, 50);
+
+
+                    if (mouseClickRect.Intersects(repairShipButtonRect)) //player clicked start button
+                    {
+                        currentState = gameState.overWorld;
+                        overworld_init();
+                    }
+                    else if (mouseClickRect.Intersects(backButtonRect))
+                    {
+                        currentState = gameState.overWorld;
+                        overworld_init();
+                    }
+                    else if (mouseClickRect.Intersects(itemOneRect))
+                    {
+                        currentState = gameState.overWorld;
+                        overworld_init();
+                    }
+
+                    else if (mouseClickRect.Intersects(itemTwoRect))
+                    {
+                        currentState = gameState.overWorld;
+                        overworld_init();
+                    }
+
+                    else if (mouseClickRect.Intersects(itemThreeRect))
+                    {
+                        currentState = gameState.overWorld;
+                        overworld_init();
+                    }
+                    else
+                    {
+                        currentState = gameState.inTown;
+                    }
+                }
+
+                //check the startmenu
+                if (currentState == gameState.mainMenu)
+                {
+
+                    Rectangle continueButtonRect = new Rectangle((int)continueButtonPosition.X,
+                                          (int)continueButtonPosition.Y, 131, 40);
+                    Rectangle startButtonRect = new Rectangle((int)startButtonPosition.X,
+                                          (int)startButtonPosition.Y, 149, 40);
+                    Rectangle instructionsButtonRect = new Rectangle((int)instructionsButtonPosition.X,
+                                          (int)instructionsButtonPosition.Y, 157, 40);
+                    Rectangle exitButtonRect = new Rectangle((int)exitButtonPosition.X,
+                                          (int)exitButtonPosition.Y, 83, 40);
+
+                    if (mouseClickRect.Intersects(startButtonRect)) //player clicked start button
+                    {
+                        currentState = gameState.overWorld;
+                        overworld_init();
+                    }
+                    else if (mouseClickRect.Intersects(continueButtonRect))
+                    {
+                        currentState = gameState.savefiles;
+                    }
+
+                    else if (mouseClickRect.Intersects(instructionsButtonRect))
+                    {
                         currentState = gameState.mainMenu;
-                }
-                else
-                {
-                    currentState = gameState.instructions;
-                }
-            }
+                        instructionsOpen = true;
 
-            //check the shop menu
-            if (currentState == gameState.inTown)
-            {
+                    }
 
-                Rectangle repairShipButtonRect = new Rectangle(500, 640, 138, 40);
-                Rectangle backButtonRect = new Rectangle(710, 160, 138, 40); 
-                Rectangle itemOneRect = new Rectangle(210, 300, 51, 50); 
-                Rectangle itemTwoRect = new Rectangle(210, 420, 51, 50); 
-                Rectangle itemThreeRect = new Rectangle(210, 540, 51, 50); 
-
-              
-                if (mouseClickRect.Intersects(repairShipButtonRect)) //player clicked start button
-                {
-                  //  Exit();
-                    
-                    currentState = gameState.overWorld;
-                    overworld_init();
-                    
-                }
-                else if (mouseClickRect.Intersects(backButtonRect))
-                {
-                  //  Exit();
-                    
-                    currentState = gameState.overWorld;
-                    overworld_init();
-                    
-                } 
-                else if (mouseClickRect.Intersects(itemOneRect))
-                {
-                    // Exit();
-                    
-                    currentState = gameState.overWorld;
-                    overworld_init();
-                    
+                    else if (mouseClickRect.Intersects(exitButtonRect)) //player clicked exit button
+                    {
+                        Exit();
+                    }
                 }
 
-                else if (mouseClickRect.Intersects(itemTwoRect))
+                if (currentState == gameState.savefiles) // not working right
                 {
-                   // Exit();
-                    
-                    currentState = gameState.overWorld;
-                    overworld_init();
-                    
-                }
+                    Rectangle gobackRect = new Rectangle(490, 605, 138, 40);
 
-                else if (mouseClickRect.Intersects(itemThreeRect))
-                {
-                    // Exit();
-                    
-                    currentState = gameState.overWorld;
-                    overworld_init();
-                    
-                } 
-                else
-                {
-                    currentState = gameState.inTown;
+                    if (mouseClickRect.Intersects(gobackRect))
+                    {
+                        currentState = gameState.mainMenu;
+                    }
                 }
             }
-                    
-            //check the startmenu
-            if (currentState == gameState.mainMenu)
-            {
-
-                Rectangle continueButtonRect = new Rectangle((int)continueButtonPosition.X,
-                                      (int)continueButtonPosition.Y, 131, 40);
-                Rectangle startButtonRect = new Rectangle((int)startButtonPosition.X,
-                                      (int)startButtonPosition.Y, 149, 40);
-                Rectangle instructionsButtonRect = new Rectangle((int)instructionsButtonPosition.X,
-                                      (int)instructionsButtonPosition.Y, 157, 40);
-                Rectangle exitButtonRect = new Rectangle((int)exitButtonPosition.X,
-                                      (int)exitButtonPosition.Y, 83, 40);
-
-                if (mouseClickRect.Intersects(startButtonRect)) //player clicked start button
-                {
-                    currentState = gameState.overWorld;
-                    overworld_init();
-                }
-                else if (mouseClickRect.Intersects(continueButtonRect))
-                {
-                    currentState = gameState.overWorld;
-                    overworld_init();
-                }
-
-                else if (mouseClickRect.Intersects(instructionsButtonRect))
-                {
-                    currentState = gameState.mainMenu;
-                    instructionsOpen = true;
-
-                }
-
-                else if (mouseClickRect.Intersects(exitButtonRect)) //player clicked exit button
-                {
-                    Exit();
-                }
-            }
-        }
 
         protected void battle_init(NPCShip Enemy)
         {
@@ -1176,13 +1207,13 @@ namespace PirateGame
             EnemyShip.setRotate(270);
             //EnemyShip.setBattleImage(b_shipImg[0]);
 
-            b_SailStream = new ParticleEngine(whiteblock, 20, -1, 0,0,0);
+            b_SailStream = new ParticleEngine(whiteblock, 20, -1, 0, 0, 0);
             b_SailStream.setX(player.getX());
-            b_SailStream.setY(player.getY()-30);
+            b_SailStream.setY(player.getY() - 30);
             b_SailStream.setActive(true);
-            b_SailStream2 = new ParticleEngine(whiteblock, 20, -1, 0,0,0);
+            b_SailStream2 = new ParticleEngine(whiteblock, 20, -1, 0, 0, 0);
             b_SailStream2.setX(player.getX());
-            b_SailStream2.setY(player.getY()+50);
+            b_SailStream2.setY(player.getY() + 50);
             b_SailStream2.setActive(true);
 
             ow_sailSpray.setActive(false);
@@ -1197,13 +1228,15 @@ namespace PirateGame
             player.setRotate(0);
             camera.position = new Vector2(player.getX() - (screen_W / 2), player.getY() - (screen_H / 2));
             ow_sailSpray = new ParticleEngine(whiteblock, 20, -1, 0, 0, 0);
-          
+
             player.setCBallImage(cannonball);
 
             ow_sailSpray.setX(player.getX());
             ow_sailSpray.setY(player.getY());
             ow_sailSpray.setActive(true);
         }
-
     }
 }
+
+    
+

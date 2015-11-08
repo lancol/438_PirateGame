@@ -133,3 +133,7 @@ C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Window
 C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Croissant Label.png
 C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Rattata Label.png
 C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Instructions Label.png
+C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\File 1 Label.png
+C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\File 2 Label.png
+C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\File 3 Label.png
+C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Saved Games Label.png
