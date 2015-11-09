@@ -602,7 +602,7 @@ namespace PirateGame
                     }
                     //  if next step is a collision with a town, go into town or open town menu
 
-                    if (Collision == false)
+                    if (Collision == false && drawSign == false)
                     {
                         player.setPos(player.getX() + (xStep * DT), player.getY() + (yStep * DT));
                         ow_Player_CollBox.X = (int)player.getX();
