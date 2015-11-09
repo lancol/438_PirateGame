@@ -189,6 +189,7 @@ namespace PirateGame
                 OtherShip[i] = new NPCShip(rand.Next(0, world_W), rand.Next(0, world_H), 0, "Pirate");
                 OtherShip[i].setAttack(rand.Next(20, 80));
                 OtherShip[i].setDefense(rand.Next(20, 80));
+                OtherShip[i].setPath(rand.Next(0, 2));
             }
             #endregion
 
@@ -430,8 +431,7 @@ namespace PirateGame
                     break;
                 case gameState.overWorld: //overworld
                     #region Overworld
-                    //MediaPlayer.Play(backgroundSong);
-                    //MediaPlayer.IsRepeating = true;
+
                     //check for pause
 
                     //Update enemy positions
@@ -440,11 +440,8 @@ namespace PirateGame
 
                     //update ocean effects (if applicable)
 
-                    //update weather effects (if applicable)
-                    IsMouseVisible = false;
-
-
                     //Check for collisions
+                    #region Collision Checks
                     #region Get Next Position
                     if (updown)
                     {
@@ -464,7 +461,7 @@ namespace PirateGame
                     }
                     #endregion
                     //  if next step is an island, stop
-
+                    #region nextStep an island?
                     if (nextPosX < 0)
                         player.setPos(world_W, player.getY());
                     else if(nextPosX > world_W)
@@ -474,7 +471,7 @@ namespace PirateGame
                         Collision = true;
                     else if (nextPosY > world_H)
                         Collision = true;
-                                            
+                    
                     for (int i = 0; i < island.Length; i++) //must improve collision box on final islands.
                     {
                         if (nextPosX < (isl_x[i] + island[i].Width) && nextPosX > isl_x[i])
@@ -485,8 +482,10 @@ namespace PirateGame
                             }
                         }
                     }
+                    #endregion
 
                     //  if next step is a collision with other ship, go into battle with them
+                    #region nextStep another ship?
                     for (int i = 0; i < OtherShip.Length; i++)
                     {
                         float distance = 0;
@@ -503,7 +502,9 @@ namespace PirateGame
                             battle_init(OtherShip[i]);
                         }
                     }
+                    #endregion
                     //  if next step is a collision with a town, go into town or open town menu
+                    #endregion
 
                     if (Collision == false)
                     {

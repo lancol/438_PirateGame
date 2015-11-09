@@ -15,13 +15,17 @@ namespace PirateGame
         List<Cannonball> cannonballs = new List<Cannonball>();
         static Texture2D cBall_image;
 
+        [Flags]
+        enum pathtype {none, circle, line}
+
+        pathtype currentPath = new pathtype();
+
         public NPCShip(float x, float y, float rotate, string Faction)
         {
             setX(x);
             setY(y);
             setRotate(rotate);
             //defaults
-            Random rand = new Random();
             setAttack(30);
             setDefense(30);
             setHealth(100);
@@ -30,6 +34,7 @@ namespace PirateGame
             setGold(100);
             faction = Faction;
             stance = "passive";
+            currentPath = pathtype.none;
         }
 
         public static void setCBallImage(Texture2D Image)
@@ -45,6 +50,11 @@ namespace PirateGame
         public void setStance(string Stance)
         {
             stance = Stance;
+        }
+
+        public void setPath(int path)
+        {
+            currentPath = (pathtype)path;
         }
 
         public string getFaction()
@@ -72,7 +82,6 @@ namespace PirateGame
             {   //Stance is bold
                 setStance("Bold");
                 //Debug.WriteLine("Bold");
-
             }
             else
             {   //otherwise nuetral
@@ -80,18 +89,18 @@ namespace PirateGame
                 //Debug.WriteLine("Nuetral");
             }
             #endregion
+
+            #region get useful info
             float distance = Vector2.Distance(getPos(), player.getPos());
             float angleBetween = (float)Math.Atan2(player.getY() - getY(), player.getX() - getX());
             
             float x_Component = distance * (float)Math.Cos(angleBetween);
             float y_Component = distance * (float)Math.Sin(angleBetween);
+            #endregion
 
             //if distance < somedistance
             if (Vector2.Distance(getPos(),player.getPos()) < 300)
             {
-                //Debug.WriteLine(getStance());
-                //Debug.WriteLine(getStance());
-                //Debug.WriteLine("p: " + player.getPowerlvl());
                 if ((getFaction() == "Navy" && player.getAlignment() < 50) || getFaction() == "Pirate") //if a "bad guy" (to you)
                 {
                     if (getStance() == "Bold")
@@ -107,13 +116,31 @@ namespace PirateGame
                     else //Nuetral
                     {
                         //Follow normal path
+                        followPath(DT);
                     }
                 }
                 else //Good guy is nuetral
                 {
                     //Follow normal path
+                    followPath(DT);
                 }
             }                
+        }
+
+        private void followPath(float DT)
+        {
+            if (currentPath == pathtype.circle)
+            {
+                setPos(getX() + (float)Math.Sqrt(20f * DT + Math.Pow(getY(),2)), getY() + (float)Math.Sqrt(20f * DT + Math.Pow(getX(), 2)));
+            }
+            else if(currentPath == pathtype.line) //change this up maybe
+            {
+                setPos(getX() + .5f  * DT, getY());
+            }
+            else
+            {
+                //do nothing
+            }
         }
 
         public void runStandardBattleAI(PlayerShip player, float DT)
