@@ -168,19 +168,19 @@ namespace PirateGame
             isl_x = new int[5];
             isl_y = new int[5];
 
-            isl_x[0] = 600;  // First island hard-coded
+            isl_x[0] = 600;  // First island hard-coded  Cape Coast
             isl_y[0] = 2300;
 
-            isl_x[1] = 1900; // Second island hard-coded
+            isl_x[1] = 1900; // Second island hard-coded Chicken Nugget
             isl_y[1] = 1850;
 
-            isl_x[2] = 680; // Third island hard-coded
+            isl_x[2] = 680; // Third island hard-coded   Butterfly
             isl_y[2] = 1250;
 
-            isl_x[3] = 1400; // Fourth island hard-coded
-            isl_y[3] = 750;
+            isl_x[3] = 1400; // Fourth island hard-coded Rattata
+            isl_y[3] = 700;
 
-            isl_x[4] = 2300; // Fifth island hard-coded
+            isl_x[4] = 2300; // Fifth island hard-coded Croissant
             isl_y[4] = 300;
             #endregion
 
@@ -207,16 +207,38 @@ namespace PirateGame
             effectT = 0; //also only used in ocean shifting effect
             #endregion
 
+            
             #region Other Ships
+
             OtherShip = new NPCShip[20];
+
             for (int i = 0; i < OtherShip.Length; i++)
             {
-                OtherShip[i] = new NPCShip(rand.Next(0, world_W), rand.Next(0, world_H), 0, "Pirate"); // make sure don't spawn in island
-                OtherShip[i].setAttack(rand.Next(20, 80));
-                OtherShip[i].setDefense(rand.Next(20, 80));
-            }
-            #endregion
 
+                int a, b, k;
+                bool valid = true;
+
+                do
+                {
+                    a = rand.Next(0, world_W);
+                    b = rand.Next(0, world_H);
+
+                    for (k = 0; k < 4; k++)
+                    {
+                        if (a > isl_x[k] && a < isl_x[k] + 396 && (b > isl_y[k] && b < isl_y[k] + 396))
+                        {
+                            valid = false;
+                            break;
+                        }
+                        else
+                        {
+                            valid = true;
+                        }
+                        OtherShip[i] = new NPCShip(a, b, 0, "Pirate");
+                    }
+                } while (valid == false || i > OtherShip.Length);        
+}
+            #endregion
             #region Main Menu
 
             //set the position of main menu items           
@@ -893,6 +915,11 @@ namespace PirateGame
                     }
                     #endregion
 
+                    #region Tells to Change Gamestate for Drawing Instructions
+                    if (instructionsOpen)
+                        currentState = gameState.instructions;
+                    #endregion
+
                     #region Draws Map
                     //Draw Map
                     if (mapOpen)
@@ -911,10 +938,6 @@ namespace PirateGame
                     }
                     #endregion
 
-                    #region Tells to Change Gamestate for Drawing Instructions
-                    if (instructionsOpen)
-                        currentState = gameState.instructions;
-                    #endregion
                     #endregion
                     break;
                 case gameState.battle: //in battle
