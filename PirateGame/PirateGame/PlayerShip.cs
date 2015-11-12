@@ -1,23 +1,33 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
 
 namespace PirateGame
 {
-    class PlayerShip : Ship
+    public class PlayerShip : Ship
     {
         private float morale;
         private float align;
         private float b_acceleration;
         private float b_speed;
         private float max_speed;
+        private float fireDistance;
+        Texture2D cBall_image;
+        List<Cannonball> cannonballs = new List<Cannonball>();
 
         public PlayerShip(float X, float Y, float Rotate)
         {
             setX(X);
             setY(Y);
             setRotate(Rotate);
+            fireDistance = 300;
+
+            setAttack(1);
+            setDefense(1);
+            setHealth(10);
+            setGold(100);
         }
 
         public float getMorale()
@@ -50,6 +60,11 @@ namespace PirateGame
             morale = Morale;
         }
 
+        public void setCBallImage(Texture2D CballImage)
+        {
+            cBall_image = CballImage;
+        }
+
         public void setAlignment(float Align)
         {
             align = Align;
@@ -68,12 +83,6 @@ namespace PirateGame
         public void set_maxSpeed(float max_Speed)
         {
             max_speed = max_Speed;
-        }
-
-        public void setPos(float X, float Y)
-        {
-            setX(X);
-            setY(Y);
         }
 
         public void raise_Sails(float DT)
@@ -99,7 +108,7 @@ namespace PirateGame
         {
             if (b_speed - (b_speed * (b_acceleration * DT)) > 0) //if slowing it down doesn't put it below the speed of 0, so it doesn't go into reverse at any point
             {
-                b_speed -= (float)(b_acceleration * DT) * b_speed; //subtract 50% (or current acc_rate) of ships speed per second (DT will make the effect happen more or less over the course of a second)
+                b_speed -= (b_acceleration * DT) * b_speed; //subtract 50% (or current acc_rate) of ships speed per second (DT will make the effect happen more or less over the course of a second)
             }
             else
             {
@@ -117,112 +126,60 @@ namespace PirateGame
             setRotate(getRotate() - (15 * DT));
         }
 
-        public Vector2[] getCollisionbox() //returns an array of vectors that have been sorted top to bottom.
-        {                                   
-            /*
-                I don't expect anyone to follow my code in this method. But basically what happens is that
-                it calculates the 4 edge points of the rectangle at whatever rotation it's currently at.
-                It then sorts them by top to bottom, so when it returns you can do some collision logic
-                knowing about where things are in relation to eachother.
-            */
-
-            float x1, y1, x2, y2, x3, y3, x4, y4;
-            Vector2[] p = new Vector2[4];           //points
-            Vector2[] s_p = new Vector2[4];         //sorted points
-
-            x1 = getX() + 65.5f * (float)Math.Cos(MathHelper.ToRadians(getRotate() + 148.23f)); //opposite p2
-            y1 = getY()-1 + 65.5f * (float)Math.Sin(MathHelper.ToRadians(getRotate() + 148.23f));
-
-            x2 = getX() + 73 * (float)Math.Cos(MathHelper.ToRadians(getRotate() - 27.65f)); //opposite p1
-            y2 = getY()-1 + 73 * (float)Math.Sin(MathHelper.ToRadians(getRotate() - 27.65f));
-
-            x3 = getX() + 65.5f * (float)Math.Cos(MathHelper.ToRadians(getRotate() - 148.23f)); //opposite p4
-            y3 = getY()-1 + 65.5f * (float)Math.Sin(MathHelper.ToRadians(getRotate() - 148.23f));
-
-            x4 = getX() + 73 * (float)Math.Cos(MathHelper.ToRadians(getRotate() + 27.65f)); //opposite p3
-            y4 = getY()-1 + 73 * (float)Math.Sin(MathHelper.ToRadians(getRotate() + 27.65f));
-
-            p[0] = new Vector2(x1, y1);
-            p[1] = new Vector2(x2, y2);
-            p[2] = new Vector2(x3, y3);
-            p[3] = new Vector2(x4, y4);
-
-            s_p[0] = new Vector2(x1, y1);
-            s_p[1] = new Vector2(x2, y2);
-            s_p[2] = new Vector2(x3, y3);
-            s_p[3] = new Vector2(x4, y4);
-
-            //sort by Highest
-            int highest = 0;
-            for(int i = 0; i < 4; i++)
+        public void fireCannon(NPCShip enemyShip, float DT)
+        {
+            if (getX() < enemyShip.getX()) //This is temporary
             {
-                if (p[i].Y < p[highest].Y) //Highest is lowest... on y axis... on computers at least.
+                //float xSpeed = ((b_speed + 50) * (float)Math.Cos(MathHelper.ToRadians(getRotate())))*DT;
+                //float ySpeed = ((b_speed + 50) * (float)Math.Sin(MathHelper.ToRadians(getRotate())))*DT;
+                if (cannonballs.Count < 3)
                 {
-                    highest = i;
+                    cannonballs.Add(new Cannonball((int)getX(), (int)getY(), true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() + 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() + 90)))); //0 == good, 1 == bad; FireDistance, xSpeed, ySpeed
+                    cannonballs.Add(new Cannonball((int)getX() + 10, (int)getY() + 10, true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() + 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() + 90))));
+                    cannonballs.Add(new Cannonball((int)getX() - 10, (int)getY() - 10, true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() + 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() + 90))));
+
                 }
             }
-
-            int second_highest = -1;
-            for(int i = 0; i < 4; i++)
+            else //left
             {
-                if (p[i].Y > p[highest].Y) //defaulting to 0
+                //float xSpeed = ((b_speed + 50) * (float)Math.Cos(MathHelper.ToRadians(getRotate())))*DT;
+                //float ySpeed = ((b_speed + 50) * (float)Math.Sin(MathHelper.ToRadians(getRotate())))*DT;
+                if (cannonballs.Count < 3)
                 {
-                    if (second_highest == -1)
-                        second_highest = i;
-                    
-                    if (p[i].Y <= p[second_highest].Y)
-                    {
-                        second_highest = i;
-                    }
+                    cannonballs.Add(new Cannonball((int)getX(), (int)getY(), true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() - 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() - 90)))); //0 == good, 1 == bad; FireDistance, xSpeed, ySpeed
+                    cannonballs.Add(new Cannonball((int)getX() + 10, (int)getY() + 10, true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() - 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() - 90))));
+                    cannonballs.Add(new Cannonball((int)getX() - 10, (int)getY() - 10, true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() - 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() - 90))));
                 }
             }
+        }
 
-            s_p[0] = p[highest];
-            s_p[1] = p[second_highest];
+        public void updateCannonBalls(float DT, NPCShip enemy)
+        {
+            Vector2[] cb = enemy.getCollisionbox();
 
-            switch (highest)
+            for (int i = 0; i < cannonballs.Count; i++)
             {
-                case 0:
-                    s_p[3] = p[1];
-                    break;
-                case 1:
-                    s_p[3] = p[0];
-                    break;
-                case 2:
-                    s_p[3] = p[3];
-                    break;
-                case 3:
-                    s_p[3] = p[2];
-                    break;
+                cannonballs[i].Update(DT);
+
+                if ((cannonballs[i].getY() > cb[0].Y) && (cannonballs[i].getY() < cb[3].Y) && cannonballs[i].getX() > cb[1].X && cannonballs[i].getX() < cb[2].X)
+                {
+                    cannonballs[i].TTL = 0;
+                    enemy.setHealth(enemy.getHealth() - 5);
+                }
+
+                if (cannonballs[i].TTL <= 0)
+                {
+                    cannonballs.RemoveAt(i);
+                }
             }
-            switch (second_highest)
+        }
+
+        public void drawCannonBalls(SpriteBatch spriteBatch)
+        {
+            for (int i = 0; i < cannonballs.Count; i++)
             {
-                case 0:
-                    s_p[2] = p[1];
-                    break;
-                case 1:
-                    s_p[2] = p[0];
-                    break;
-                case 2:
-                    s_p[2] = p[3];
-                    break;
-                case 3:
-                    s_p[2] = p[2];
-                    break;
+                spriteBatch.Draw(cBall_image, new Vector2(cannonballs[i].getX(), cannonballs[i].getY()), Color.White);
             }
-
-            if (s_p[1].X > s_p[2].X) //make the smaller x go first (farthest left)
-            {
-                Vector2 temp1;
-                Vector2 temp2;
-                temp1 = new Vector2(s_p[1].X, s_p[1].Y);
-                temp2 = new Vector2(s_p[2].X, s_p[2].Y);
-
-                s_p[1] = temp2;
-                s_p[2] = temp1;
-            }
-
-            return s_p;
         }
     }
 }

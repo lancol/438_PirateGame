@@ -7,7 +7,7 @@ namespace PirateGame
     public class Camera
     {
         private readonly Viewport viewport;
-        public Vector2 origin {get; set;}
+        public Vector2 origin { get; set; }
         public Vector2 position { get; set; }
 
         public Camera(Viewport view_port)

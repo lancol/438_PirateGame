@@ -7,8 +7,8 @@ namespace PirateGame
     public class Particle
     {
         //Source: http://rbwhitaker.wikidot.com/2d-particle-engine-2
-        public Texture2D Texture { get; set; }        
-        public Vector2 Position { get; set; }               
+        public Texture2D Texture { get; set; }
+        public Vector2 Position { get; set; }
         public int TTL { get; set; }                //Time to Live
         public float xSpeed;
         public float ySpeed;

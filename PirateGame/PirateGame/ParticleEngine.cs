@@ -7,7 +7,7 @@ namespace PirateGame
 {
     class ParticleEngine : Entity
     {
-        bool active = false;
+        bool active = true;
         public Vector2 EmitterLocation { get; set; }
         private List<Particle> particles;
         private Texture2D img;
@@ -64,8 +64,8 @@ namespace PirateGame
         {
             for (int p = 0; p < particles.Count; p++)
             {
-                    particles.RemoveAt(p);
-                    p--;
+                particles.RemoveAt(p);
+                p--;
             }
         }
 

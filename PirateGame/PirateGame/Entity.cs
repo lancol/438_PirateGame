@@ -1,7 +1,7 @@
 ﻿using System;
 namespace PirateGame
 {
-    class Entity
+    public class Entity
     {
         private float x;
         private float y;
@@ -43,7 +43,7 @@ namespace PirateGame
             else if (rotate < 0)
             {
                 rotate %= 360;
-                rotate = 360+(rotate % 360);
+                rotate = 360 + (rotate % 360);
             }
         }
 
