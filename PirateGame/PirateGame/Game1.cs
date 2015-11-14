@@ -550,6 +550,11 @@ namespace PirateGame
                     {
                         currentState = gameState.overWorld;
                         overworld_init();
+                        player.setHealth(50);
+                        player.setPos(1000, 2300);
+                        player.setGold((int)(player.getGold()*.75f));
+                        if (player.getMorale() >= 10)
+                            player.setMorale(player.getMorale() - 10f);
                     }
                     //check if enemy is dead
                     if (EnemyShip.getHealth() <= 0)
@@ -557,6 +562,9 @@ namespace PirateGame
                         //ship is inactive
                         currentState = gameState.overWorld;
                         overworld_init();
+                        player.setGold(player.getGold() + EnemyShip.getGold());
+                        if (player.getMorale() < 100)
+                            player.setMorale(player.getMorale() + 10f);
                     }
 
                     //Move Player
@@ -681,7 +689,7 @@ namespace PirateGame
                     for (int n = 0; n < OtherShip.Length; n++)
                     {   //change distance to stance, but I'd prefer if stances were an enum first
                         SpriteEffects flip = new SpriteEffects();
-                        flip = ((player.getX() < OtherShip[n].getX()) && (Vector2.Distance(player.getPos(), OtherShip[n].getPos()) < 250)) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                        flip = ((player.getX() < OtherShip[n].getX()) && (Vector2.Distance(player.getPos(), OtherShip[n].getPos()) < 250) || !OtherShip[n].facingRight) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
                         spriteBatch.Draw(OtherShip[n].getImage(), OtherShip[n].getPos(), null, Color.White,
                                         MathHelper.ToRadians(player.getRotate()), new Vector2(34, 50), 1f, flip, 1);
@@ -761,7 +769,13 @@ namespace PirateGame
                             spriteBatch.Draw(island[i], islPos, null, Color.White,0,new Vector2(0,0), 0.226f, SpriteEffects.None,1);
                         }
                         
-                        spriteBatch.Draw(whiteblock, mapPos + player.getPos()*.226f, Color.Red);
+                        for (int k = 0; k < OtherShip.Length; k++)
+                        {
+                            spriteBatch.Draw(whiteblock, mapPos + OtherShip[k].getPos() * .226f, Color.Red);
+
+                        }
+
+                        spriteBatch.Draw(whiteblock, mapPos + player.getPos()*.226f, Color.LawnGreen);
                     }
                     #endregion
                     break;
@@ -908,7 +922,7 @@ namespace PirateGame
 
         protected void overworld_init()
         {
-            //MediaPlayer.Play(OverworldSong);
+            MediaPlayer.Play(OverworldSong);
             MediaPlayer.Volume = 1.0f;
             MediaPlayer.IsRepeating = true;
 

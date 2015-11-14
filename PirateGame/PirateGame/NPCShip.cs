@@ -10,8 +10,9 @@ namespace PirateGame
     {
         string faction;
         string stance;
-        float fireDistance = 200;
+        float fireDistance = 150;
         int RC_StepSize = 2;
+        public bool facingRight;
         List<Cannonball> cannonballs = new List<Cannonball>();
         static Texture2D cBall_image;
 
@@ -34,6 +35,7 @@ namespace PirateGame
             setGold(100);
             faction = Faction;
             stance = "passive";
+            facingRight = true;
             currentPath = pathtype.none;
         }
 
@@ -124,6 +126,10 @@ namespace PirateGame
                     //Follow normal path
                     followPath(DT);
                 }
+            }
+            else
+            {
+                followPath(DT);
             }                
         }
 
@@ -131,11 +137,26 @@ namespace PirateGame
         {
             if (currentPath == pathtype.circle)
             {
-                setPos(getX() + (float)Math.Sqrt(20f * DT + Math.Pow(getY(),2)), getY() + (float)Math.Sqrt(20f * DT + Math.Pow(getX(), 2)));
+                //setPos(getX() + (float)Math.Sqrt(20f * DT + Math.Pow(getY(),2)), getY() + (float)Math.Sqrt(20f * DT + Math.Pow(getX(), 2)));
+                facingRight = true;
+                setPos(getX() - 20f * DT, getY());
+
+                if (getX() < 0)
+                {
+                    currentPath = pathtype.line;
+                }
+
             }
             else if(currentPath == pathtype.line) //change this up maybe
             {
-                setPos(getX() + .5f  * DT, getY());
+                facingRight = true;
+                setPos(getX() + 20f  * DT, getY());
+
+                if (getX() > 3000)
+                {
+                    currentPath = pathtype.circle;
+                }
+
             }
             else
             {
