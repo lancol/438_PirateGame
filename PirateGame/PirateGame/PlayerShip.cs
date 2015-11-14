@@ -15,6 +15,7 @@ namespace PirateGame
         private float max_speed;
         private float fireDistance;
         Texture2D cBall_image;
+        ParticleEngine PE;
         List<Cannonball> cannonballs = new List<Cannonball>();
 
         public PlayerShip(float X, float Y, float Rotate)
@@ -134,6 +135,7 @@ namespace PirateGame
                 //float ySpeed = ((b_speed + 50) * (float)Math.Sin(MathHelper.ToRadians(getRotate())))*DT;
                 if (cannonballs.Count < 3)
                 {
+                    
                     cannonballs.Add(new Cannonball((int)getX(), (int)getY(), true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() + 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() + 90)))); //0 == good, 1 == bad; FireDistance, xSpeed, ySpeed
                     cannonballs.Add(new Cannonball((int)getX() + 10, (int)getY() + 10, true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() + 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() + 90))));
                     cannonballs.Add(new Cannonball((int)getX() - 10, (int)getY() - 10, true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() + 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() + 90))));
@@ -176,6 +178,7 @@ namespace PirateGame
 
         public void drawCannonBalls(SpriteBatch spriteBatch)
         {
+
             for (int i = 0; i < cannonballs.Count; i++)
             {
                 spriteBatch.Draw(cBall_image, new Vector2(cannonballs[i].getX(), cannonballs[i].getY()), Color.White);

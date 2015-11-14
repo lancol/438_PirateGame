@@ -59,3 +59,23 @@ D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\Pi
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Piratev2.wma
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Piratev2.xnb
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Ship1v3.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\poof1.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\poof2.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Butterfly Label.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Cape Coast Label.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Chicken Nugget Label.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Croissant Label.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Enter Town Prompt.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\File 1 Label.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\File 2 Label.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\File 3 Label.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Hire_Crew_Label.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Instructions Label.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\No.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Rattata Label.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Saved Games Label.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Shop_ItemBox.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Shop_Label.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Shop_Window_Background_Biggest.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Upgrades_Label.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Yes.png
