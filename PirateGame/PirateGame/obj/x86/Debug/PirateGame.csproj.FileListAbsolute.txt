@@ -79,3 +79,5 @@ D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\Pi
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Shop_Window_Background_Biggest.png
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Upgrades_Label.png
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Yes.png
+C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\obj\x86\Debug\PirateGame.exe
+C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\obj\x86\Debug\PirateGame.pdb
