@@ -9,7 +9,11 @@ namespace PirateGame
         private float xSpeed;
         private float ySpeed;
 
+<<<<<<< HEAD
         public Cannonball(int X, int Y, bool Good, float FireDistance, float XSpeed, float YSpeed)
+=======
+        public Cannonball(int X,int Y, bool Good, float FireDistance, float XSpeed, float YSpeed)
+>>>>>>> refs/remotes/origin/master
         {
             setX(X);
             setY(Y);

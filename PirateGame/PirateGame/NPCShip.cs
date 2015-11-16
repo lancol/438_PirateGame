@@ -58,6 +58,7 @@ namespace PirateGame
         }
 
         public void runOverworldAI(PlayerShip player, float DT)
+<<<<<<< HEAD
         {
             //sail along a path
 
@@ -118,6 +119,68 @@ namespace PirateGame
 
         public void runStandardBattleAI(PlayerShip player, float DT)
         {
+=======
+        {
+            //sail along a path
+
+            //if power < playerPower
+            #region PowerLevels and Stances
+            if (getPowerlvl() * 1.5f < player.getPowerlvl())
+            {   //Stance is fearful
+                setStance("Fearful");
+                //Debug.WriteLine("Fearful");
+            }
+            else if (getPowerlvl() > player.getPowerlvl() * 1.25f) //if power > playerPower
+            {   //Stance is bold
+                setStance("Bold");
+                //Debug.WriteLine("Bold");
+
+            }
+            else
+            {   //otherwise nuetral
+                setStance("Nuetral");
+                //Debug.WriteLine("Nuetral");
+            }
+            #endregion
+            float distance = Vector2.Distance(getPos(), player.getPos());
+            float angleBetween = (float)Math.Atan2(player.getY() - getY(), player.getX() - getX());
+            
+            float x_Component = distance * (float)Math.Cos(angleBetween);
+            float y_Component = distance * (float)Math.Sin(angleBetween);
+
+            //if distance < somedistance
+            if (Vector2.Distance(getPos(),player.getPos()) < 300)
+            {
+                //Debug.WriteLine(getStance());
+                //Debug.WriteLine(getStance());
+                //Debug.WriteLine("p: " + player.getPowerlvl());
+                if ((getFaction() == "Navy" && player.getAlignment() < 50) || getFaction() == "Pirate") //if a "bad guy" (to you)
+                {
+                    if (getStance() == "Bold")
+                    {
+                        //Chase
+                            setPos(getX() + .5f * x_Component * DT, getY() + .5f * y_Component * DT);
+                    }
+                    else if (getStance() == "Fearful")
+                    {
+                        //Flee
+                        setPos(getX() - .5f * x_Component * DT, getY() - .5f * y_Component * DT);
+                    }
+                    else //Nuetral
+                    {
+                        //Follow normal path
+                    }
+                }
+                else //Good guy is nuetral
+                {
+                    //Follow normal path
+                }
+            }                
+        }
+
+        public void runStandardBattleAI(PlayerShip player, float DT)
+        {
+>>>>>>> refs/remotes/origin/master
             //Move forward
             bool raycastHitR = false; //boolean hit
             bool raycastHitL = false;
@@ -184,7 +247,11 @@ namespace PirateGame
         {
             if (direction == 0) //0 == right
             {
+<<<<<<< HEAD
                 cannonballs.Add(new Cannonball((int)getX(), (int)getY(), false, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() + 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() + 90)))); //0 == good, 1 == bad; FireDistance, xSpeed, ySpeed
+=======
+                cannonballs.Add(new Cannonball((int)getX(), (int)getY(), false, fireDistance, 175*(float)Math.Cos(MathHelper.ToRadians(getRotate()+90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate()+90)))); //0 == good, 1 == bad; FireDistance, xSpeed, ySpeed
+>>>>>>> refs/remotes/origin/master
             }
             else //left
             {
@@ -207,7 +274,11 @@ namespace PirateGame
             {
                 setRotate(getRotate() - 30 * DT);
             }
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> refs/remotes/origin/master
         } //garbage. Needs a lot of work.
 
         public void updateCannonBalls(float DT, PlayerShip player)
@@ -229,7 +300,11 @@ namespace PirateGame
                 {
                     cannonballs.RemoveAt(i);
                 }
+<<<<<<< HEAD
             }
+=======
+            }   
+>>>>>>> refs/remotes/origin/master
         }
 
         public void drawCannonBalls(SpriteBatch spriteBatch)
