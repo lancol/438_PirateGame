@@ -10,10 +10,16 @@ namespace PirateGame
     {
         string faction;
         string stance;
-        float fireDistance = 200;
+        float fireDistance = 150;
         int RC_StepSize = 2;
+        public bool facingRight;
         List<Cannonball> cannonballs = new List<Cannonball>();
         static Texture2D cBall_image;
+
+        [Flags]
+        enum pathtype {none, circle, line}
+
+        pathtype currentPath = new pathtype();
 
         public NPCShip(float x, float y, float rotate, string Faction)
         {
@@ -21,7 +27,6 @@ namespace PirateGame
             setY(y);
             setRotate(rotate);
             //defaults
-            Random rand = new Random();
             setAttack(30);
             setDefense(30);
             setHealth(100);
@@ -30,6 +35,8 @@ namespace PirateGame
             setGold(100);
             faction = Faction;
             stance = "passive";
+            facingRight = true;
+            currentPath = pathtype.none;
         }
 
         public static void setCBallImage(Texture2D Image)
@@ -45,6 +52,11 @@ namespace PirateGame
         public void setStance(string Stance)
         {
             stance = Stance;
+        }
+
+        public void setPath(int path)
+        {
+            currentPath = (pathtype)path;
         }
 
         public string getFaction()
@@ -134,7 +146,6 @@ namespace PirateGame
             {   //Stance is bold
                 setStance("Bold");
                 //Debug.WriteLine("Bold");
-
             }
             else
             {   //otherwise nuetral
@@ -142,18 +153,18 @@ namespace PirateGame
                 //Debug.WriteLine("Nuetral");
             }
             #endregion
+
+            #region get useful info
             float distance = Vector2.Distance(getPos(), player.getPos());
             float angleBetween = (float)Math.Atan2(player.getY() - getY(), player.getX() - getX());
             
             float x_Component = distance * (float)Math.Cos(angleBetween);
             float y_Component = distance * (float)Math.Sin(angleBetween);
+            #endregion
 
             //if distance < somedistance
             if (Vector2.Distance(getPos(),player.getPos()) < 300)
             {
-                //Debug.WriteLine(getStance());
-                //Debug.WriteLine(getStance());
-                //Debug.WriteLine("p: " + player.getPowerlvl());
                 if ((getFaction() == "Navy" && player.getAlignment() < 50) || getFaction() == "Pirate") //if a "bad guy" (to you)
                 {
                     if (getStance() == "Bold")
@@ -169,13 +180,50 @@ namespace PirateGame
                     else //Nuetral
                     {
                         //Follow normal path
+                        followPath(DT);
                     }
                 }
                 else //Good guy is nuetral
                 {
                     //Follow normal path
+                    followPath(DT);
                 }
+            }
+            else
+            {
+                followPath(DT);
             }                
+        }
+
+        private void followPath(float DT)
+        {
+            if (currentPath == pathtype.circle)
+            {
+                //setPos(getX() + (float)Math.Sqrt(20f * DT + Math.Pow(getY(),2)), getY() + (float)Math.Sqrt(20f * DT + Math.Pow(getX(), 2)));
+                facingRight = true;
+                setPos(getX() - 20f * DT, getY());
+
+                if (getX() < 0)
+                {
+                    currentPath = pathtype.line;
+                }
+
+            }
+            else if(currentPath == pathtype.line) //change this up maybe
+            {
+                facingRight = true;
+                setPos(getX() + 20f  * DT, getY());
+
+                if (getX() > 3000)
+                {
+                    currentPath = pathtype.circle;
+                }
+
+            }
+            else
+            {
+                //do nothing
+            }
         }
 
         public void runStandardBattleAI(PlayerShip player, float DT)

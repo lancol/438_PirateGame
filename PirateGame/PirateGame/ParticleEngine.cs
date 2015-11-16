@@ -16,6 +16,7 @@ namespace PirateGame
         float ySpeed;
         float xAccl;
         float yAccl;
+        float rotateSpeed;
 
         public ParticleEngine(Texture2D Image, float Timelimit, float XSpeed, float YSpeed, float X_Accl, float Y_Accl)
         {
@@ -26,6 +27,7 @@ namespace PirateGame
             ySpeed = YSpeed;
             xAccl = X_Accl;
             yAccl = Y_Accl;
+            rotateSpeed = 0;
             particles = new List<Particle>();
         }
 
@@ -34,7 +36,7 @@ namespace PirateGame
             if (active)
             {
                 //add particles
-                particles.Add(new Particle(img, new Vector2(getX(), getY()), (int)timelimit, xSpeed, ySpeed, xAccl, yAccl));
+                particles.Add(new Particle(img, new Vector2(getX(), getY()), (int)timelimit, xSpeed, ySpeed, xAccl, yAccl, rotateSpeed));
 
                 for (int p = 0; p < particles.Count; p++)
                 {
@@ -47,7 +49,7 @@ namespace PirateGame
                 }
             }
         }
-
+        
         public void Draw(SpriteBatch spriteBatch)
         {
             if (active)
@@ -97,6 +99,11 @@ namespace PirateGame
         public void setYAccl(float y_accl)
         {
             yAccl = y_accl;
+        }
+
+        public void setRotateSpeed(float rotatespeed)
+        {
+            rotateSpeed = rotatespeed;
         }
 
         public bool getActive()

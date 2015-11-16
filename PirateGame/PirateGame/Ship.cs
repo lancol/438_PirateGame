@@ -39,7 +39,7 @@ namespace PirateGame
             return PowerLevel;
         }
 
-        public float getGold()
+        public int getGold()
         {
             return gold;
         }
