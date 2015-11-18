@@ -44,7 +44,7 @@ namespace PirateGame
             return gold;
         }
 
-        public float getCrew()
+        public int getCrew()
         {
             return crew;
         }

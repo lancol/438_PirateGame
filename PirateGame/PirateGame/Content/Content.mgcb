@@ -19,3 +19,9 @@
 /processorParam:Quality=Best
 /build:Piratev2.mp3
 
+#begin font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:font.spritefont
+

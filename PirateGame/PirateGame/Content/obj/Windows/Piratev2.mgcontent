@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>D:/My Docs/SchoolWork/SMCM/Fall2015/COSC438_GameDev/PirateGame/438_PirateGame/PirateGame/PirateGame/Content/Piratev2.mp3</SourceFile>
-  <SourceTime>2015-11-09T15:53:55.5119209-05:00</SourceTime>
-  <DestFile>D:/My Docs/SchoolWork/SMCM/Fall2015/COSC438_GameDev/PirateGame/438_PirateGame/PirateGame/PirateGame/Content/bin/Windows/Piratev2.xnb</DestFile>
-  <DestTime>2015-11-09T16:12:59.682785-05:00</DestTime>
+  <SourceFile>C:/Users/Nohely/Documents/GitHub/438_PirateGame/PirateGame/PirateGame/Content/Piratev2.mp3</SourceFile>
+  <SourceTime>2015-11-16T14:19:00.2936618-05:00</SourceTime>
+  <DestFile>C:/Users/Nohely/Documents/GitHub/438_PirateGame/PirateGame/PirateGame/Content/bin/Windows/Piratev2.xnb</DestFile>
+  <DestTime>2015-11-16T15:07:30.6790367-05:00</DestTime>
   <Importer>Mp3Importer</Importer>
   <ImporterTime>2015-04-29T13:14:44-04:00</ImporterTime>
   <Processor>SongProcessor</Processor>
@@ -15,6 +15,6 @@
   <Dependencies />
   <BuildAsset />
   <BuildOutput>
-    <string>D:/My Docs/SchoolWork/SMCM/Fall2015/COSC438_GameDev/PirateGame/438_PirateGame/PirateGame/PirateGame/Content/bin/Windows/Piratev2.wma</string>
+    <string>C:/Users/Nohely/Documents/GitHub/438_PirateGame/PirateGame/PirateGame/Content/bin/Windows/Piratev2.wma</string>
   </BuildOutput>
 </PipelineBuildEvent>
