@@ -24,11 +24,6 @@ namespace PirateGame
             setY(Y);
             setRotate(Rotate);
             fireDistance = 300;
-
-            setAttack(1);
-            setDefense(1);
-            setHealth(10);
-            setGold(100);
         }
 
         public float getMorale()

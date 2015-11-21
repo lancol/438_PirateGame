@@ -200,15 +200,26 @@ namespace PirateGame
 
             #region Player Related
             player = new PlayerShip(1000, 2300, 0);
+
+            //read information from text file
+            String[] saveinfo = System.IO.File.ReadAllLines("save.txt");
+            for(int i = 0; i < saveinfo.Length; i++)
+            {
+                if (saveinfo[i] == getSavekey())
+                {
+                    player.setMorale(float.Parse(saveinfo[i+1]));
+                    player.setAlignment(float.Parse(saveinfo[i + 2]));
+                    player.setHealth(float.Parse(saveinfo[i + 3]));
+                    player.setAttack(float.Parse(saveinfo[i + 4]));
+                    player.setDefense(float.Parse(saveinfo[i + 5]));
+                    player.set_bAcceleration(float.Parse(saveinfo[i + 6]));
+                    player.set_maxSpeed(float.Parse(saveinfo[i + 7]));
+                    player.setGold(int.Parse(saveinfo[i + 8]));
+                    player.setCrew(int.Parse(saveinfo[i + 9]));
+                }
+            }
+
             player.set_bSpeed(0);
-            player.set_bAcceleration(1f);
-            player.set_maxSpeed(30);
-            player.setHealth(100);
-            player.setMorale(100);
-            player.setAlignment(30);
-            player.setAttack(50);
-            player.setDefense(50);
-            player.setCrew(20);
             facingRight = true;
             moving = false;
             #endregion
@@ -452,13 +463,14 @@ namespace PirateGame
                 {
                     if (saveinfo[i] == getSavekey())
                     {
-                        for (int j = 1; j < 10; j++)
-                        { //SAVE POSITION OF SHIP TOO
+                        for (int j = 1; j < 11; j++)
+                        { //TODO: SAVE POSITION OF SHIP
                             Object[] newsaveinfo =
-                                { getSavekey(), player.getMorale(), player.getAlignment(),
+                                { getSavekey(), player.getMorale(), player.getAlignment(), player.getHealth(),
                                     player.getAttack(), player.getDefense(), player.get_bAcceleration(),
                                     player.get_bSpeed(), player.getGold(), player.getCrew(),
                                     (float)gameTime.ElapsedGameTime.TotalSeconds };
+
                             saveinfo[i + j] = newsaveinfo[j].ToString();
                         }
 
@@ -1239,47 +1251,16 @@ namespace PirateGame
 
                 else if (mouseClickRect.Intersects(exitButtonRect)) //player clicked exit button
                 {
-                    /*//save information to the appropriate text file
-                    StreamReader sr = new StreamReader("save.txt");
-                    StreamWriter sw = new StreamWriter("savetemp.txt");
-                    String current_line = "";
-                    while ((current_line = sr.ReadLine()) != null) //goes through the txt file
-                    {
-                        using (sw)
-                        {
-                            
-
-                            if (current_line == getSavekey()) { //checks to see if it's the proper save file
-                                sw.WriteLine(current_line); //writes SF_ and then the player's stats
-                                sw.WriteLine(player.getMorale());
-                                sw.WriteLine(player.getAlignment());
-                                sw.WriteLine(player.getAttack());
-                                sw.WriteLine(player.getDefense());
-                                //sw.WriteLine(player.getSpeed()); probably won't need it
-                                sw.WriteLine(player.get_bAcceleration());
-                                sw.WriteLine(player.get_bSpeed());
-                                sw.WriteLine(player.getGold());
-                                sw.WriteLine(player.getCrew());
-                                sw.WriteLine((float)gameTime.ElapsedGameTime.TotalSeconds);
-                                current_line = player.getCrew().ToString();
-
-                            }
-                            else
-                            {
-                                sw.WriteLine(current_line);
-                            }
-
-                    }*/
-
+                    //save information to the appropriate text file
                     GameTime gameTime = new GameTime();
                     String[] saveinfo = System.IO.File.ReadAllLines("save.txt");
                     for (int i = 0; i < saveinfo.Length; i++)
                     {
                         if (saveinfo[i] == getSavekey()) {
-                            for (int j = 1; j < 10; j++)
+                            for (int j = 1; j < 11; j++)
                             { //SAVE POSITION OF SHIP TOO
                                 Object[] newsaveinfo = 
-                                    { getSavekey(), player.getMorale(), player.getAlignment(),
+                                    { getSavekey(), player.getMorale(), player.getAlignment(), player.getHealth(),
                                     player.getAttack(), player.getDefense(), player.get_bAcceleration(),
                                     player.get_bSpeed(), player.getGold(), player.getCrew(),
                                     (float)gameTime.ElapsedGameTime.TotalSeconds };
@@ -1289,7 +1270,8 @@ namespace PirateGame
                         }
                         
                     }
-                    System.IO.File.WriteAllLines("save.txt", saveinfo); //write new info to 
+                    //write new info to the text file
+                    System.IO.File.WriteAllLines("save.txt", saveinfo);
                     
                     Exit();
                 }
@@ -1310,16 +1292,19 @@ namespace PirateGame
                 if (mouseClickRect.Intersects(savefile1Rect))
                 {
                     setSavekey("SF1");
+                    currentState = gameState.mainMenu;
                 }
 
                 if (mouseClickRect.Intersects(savefile2Rect))
                 {
                     setSavekey("SF2");
+                    currentState = gameState.overWorld;
                 }
 
                 if (mouseClickRect.Intersects(savefile3Rect))
                 {
                     setSavekey("SF3");
+                    currentState = gameState.overWorld;
                 }
 
 
