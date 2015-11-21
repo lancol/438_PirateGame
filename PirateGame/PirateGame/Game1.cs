@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System;
 using System.Diagnostics;
+using System.IO;
 
 namespace PirateGame
 {
@@ -135,8 +136,18 @@ namespace PirateGame
         Texture2D file1Label;
         Texture2D file2Label;
         Texture2D file3Label;
+        String savekey;
         #endregion
 
+        public void setSavekey(String key)
+        {
+            savekey = key;
+        }
+
+        public String getSavekey()
+        {
+            return savekey;
+        }
         #endregion
 
         public Game1()
@@ -435,7 +446,29 @@ namespace PirateGame
 
             #region Input
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit(); // exits if esc key is pressed
+            {
+                String[] saveinfo = System.IO.File.ReadAllLines("save.txt");
+                for (int i = 0; i < saveinfo.Length; i++)
+                {
+                    if (saveinfo[i] == getSavekey())
+                    {
+                        for (int j = 1; j < 10; j++)
+                        { //SAVE POSITION OF SHIP TOO
+                            Object[] newsaveinfo =
+                                { getSavekey(), player.getMorale(), player.getAlignment(),
+                                    player.getAttack(), player.getDefense(), player.get_bAcceleration(),
+                                    player.get_bSpeed(), player.getGold(), player.getCrew(),
+                                    (float)gameTime.ElapsedGameTime.TotalSeconds };
+                            saveinfo[i + j] = newsaveinfo[j].ToString();
+                        }
+
+                    }
+
+                }
+                System.IO.File.WriteAllLines("save.txt", saveinfo); //write new info to 
+
+                Exit();
+            }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {
@@ -750,7 +783,7 @@ namespace PirateGame
                     previousMouseState = mouseState;
                     #endregion
                     break;
-                case gameState.savefiles:
+                case gameState.savefiles: //if save files are displayed
                     #region Save Files
 
                     IsMouseVisible = true; //enables mouse pointer
@@ -1206,18 +1239,90 @@ namespace PirateGame
 
                 else if (mouseClickRect.Intersects(exitButtonRect)) //player clicked exit button
                 {
+                    /*//save information to the appropriate text file
+                    StreamReader sr = new StreamReader("save.txt");
+                    StreamWriter sw = new StreamWriter("savetemp.txt");
+                    String current_line = "";
+                    while ((current_line = sr.ReadLine()) != null) //goes through the txt file
+                    {
+                        using (sw)
+                        {
+                            
+
+                            if (current_line == getSavekey()) { //checks to see if it's the proper save file
+                                sw.WriteLine(current_line); //writes SF_ and then the player's stats
+                                sw.WriteLine(player.getMorale());
+                                sw.WriteLine(player.getAlignment());
+                                sw.WriteLine(player.getAttack());
+                                sw.WriteLine(player.getDefense());
+                                //sw.WriteLine(player.getSpeed()); probably won't need it
+                                sw.WriteLine(player.get_bAcceleration());
+                                sw.WriteLine(player.get_bSpeed());
+                                sw.WriteLine(player.getGold());
+                                sw.WriteLine(player.getCrew());
+                                sw.WriteLine((float)gameTime.ElapsedGameTime.TotalSeconds);
+                                current_line = player.getCrew().ToString();
+
+                            }
+                            else
+                            {
+                                sw.WriteLine(current_line);
+                            }
+
+                    }*/
+
+                    GameTime gameTime = new GameTime();
+                    String[] saveinfo = System.IO.File.ReadAllLines("save.txt");
+                    for (int i = 0; i < saveinfo.Length; i++)
+                    {
+                        if (saveinfo[i] == getSavekey()) {
+                            for (int j = 1; j < 10; j++)
+                            { //SAVE POSITION OF SHIP TOO
+                                Object[] newsaveinfo = 
+                                    { getSavekey(), player.getMorale(), player.getAlignment(),
+                                    player.getAttack(), player.getDefense(), player.get_bAcceleration(),
+                                    player.get_bSpeed(), player.getGold(), player.getCrew(),
+                                    (float)gameTime.ElapsedGameTime.TotalSeconds };
+                                saveinfo[i + j] = newsaveinfo[j].ToString();
+                            }
+
+                        }
+                        
+                    }
+                    System.IO.File.WriteAllLines("save.txt", saveinfo); //write new info to 
+                    
                     Exit();
                 }
             }
 
             if (currentState == gameState.savefiles) // not working right
             {
-                Rectangle gobackRect = new Rectangle(490, 605, 138, 40);
+                Rectangle gobackRect = new Rectangle(490, 605, 75, 40);
+                Rectangle savefile1Rect = new Rectangle(675, 214, 138, 40);
+                Rectangle savefile2Rect = new Rectangle(675, 365, 138, 40);
+                Rectangle savefile3Rect = new Rectangle(490, 514, 138, 40);
 
                 if (mouseClickRect.Intersects(gobackRect))
                 {
                     currentState = gameState.mainMenu;
                 }
+
+                if (mouseClickRect.Intersects(savefile1Rect))
+                {
+                    setSavekey("SF1");
+                }
+
+                if (mouseClickRect.Intersects(savefile2Rect))
+                {
+                    setSavekey("SF2");
+                }
+
+                if (mouseClickRect.Intersects(savefile3Rect))
+                {
+                    setSavekey("SF3");
+                }
+
+
             }
         }
 
