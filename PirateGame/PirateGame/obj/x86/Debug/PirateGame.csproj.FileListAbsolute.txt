@@ -185,3 +185,5 @@ C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Window
 C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Objective.png
 C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Tips.png
 C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Hotkeys.png
+C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Morale Error.png
+C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Ship Repair Error.png

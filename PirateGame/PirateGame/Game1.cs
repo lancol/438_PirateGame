@@ -30,6 +30,9 @@ namespace PirateGame
         int world_H;
         bool mapOpen;
         bool buyOptionOpen;
+        bool healthFull;
+        bool moraleFull;
+        bool returnError;
         #endregion
 
         #region Sound
@@ -108,6 +111,9 @@ namespace PirateGame
         Texture2D hotkeys;
         #endregion
 
+        Texture2D moraleFullMessage;
+        Texture2D healthFullMessage;
+
         #region Animation related
         float t;
         float effectT;
@@ -152,6 +158,7 @@ namespace PirateGame
         int secondItemCost;
         int thirdItemCost;
         int itemSelected;
+        int repairCost;
         #endregion
 
         int attackUpgrade = 10;
@@ -413,6 +420,9 @@ namespace PirateGame
                 hireButton = Content.Load<Texture2D>("Hire Button");
                 buyButton = Content.Load<Texture2D>("Buy Button");
 
+
+                moraleFullMessage = Content.Load<Texture2D>("Morale Error");
+                healthFullMessage = Content.Load<Texture2D>("Ship Repair Error");
 
                 //load save file elements
                 saveFilesLabel = Content.Load<Texture2D>("Saved Games Label");
@@ -820,8 +830,9 @@ namespace PirateGame
 
                     firstItemCost = attackUpgrade * 20;
                     secondItemCost = defenseUpgrade * 20;
-                    thirdItemCost = (int)((.15) * (double)player.getGold());
+                    thirdItemCost = player.getCrew() * 5;
 
+                    repairCost = 20 * (100 - (int)player.getHealth());
 
                     if (previousMouseState.LeftButton == ButtonState.Pressed &&
                     mouseState.LeftButton == ButtonState.Released)
@@ -1223,10 +1234,12 @@ namespace PirateGame
 
                     // Write algorithm to calculate, proportional to current gold ammount
 
-                    if (buyOptionOpen == true)
+                    if (buyOptionOpen == true) 
                     {
+                        if ((itemSelected != 3 && moraleFull != false) && ((itemSelected == 3 && healthFull == false)))
                         spriteBatch.Draw(noButtonSmaller, new Vector2(camera.position.X + 340, camera.position.Y + 430), Color.White);
                         spriteBatch.Draw(yesButtonSmaller, new Vector2(camera.position.X + 580, camera.position.Y + 430), Color.White);
+                        returnError = false;
                     }
 
 
@@ -1239,11 +1252,32 @@ namespace PirateGame
                         spriteBatch.Draw(errorBackButton, new Vector2(camera.position.X + 500, camera.position.Y + 440), Color.White);
                     } 
 
+                    
+                    
+                    if (healthFull == true)
+                    {
+                        buyOptionOpen = false;
+                        spriteBatch.Draw(popUpBackground, new Vector2(camera.position.X + 205, camera.position.Y + 320), Color.White);
+                        spriteBatch.Draw(healthFullMessage, new Vector2(camera.position.X + 440, camera.position.Y + 390), Color.White);
+                        spriteBatch.Draw(errorBackButton, new Vector2(camera.position.X + 500, camera.position.Y + 440), Color.White);
+                        returnError = true;
+                    } 
+
+                    if (moraleFull == true)
+                    {
+                        buyOptionOpen = false;
+                        spriteBatch.Draw(popUpBackground, new Vector2(camera.position.X + 205, camera.position.Y + 320), Color.White);
+                        spriteBatch.Draw(moraleFullMessage, new Vector2(camera.position.X + 410, camera.position.Y + 390), Color.White);
+                        spriteBatch.Draw(errorBackButton, new Vector2(camera.position.X + 500, camera.position.Y + 440), Color.White);
+                        returnError = true;
+                    }
+                    
 
                     #region Draws Buy Item prompt
                     // draw when collide with island
                     if (buyOptionOpen == true)
                     {
+
                         //draws sign
                         spriteBatch.Draw(popUpBackground, new Vector2(camera.position.X + 205, camera.position.Y + 320), Color.White);
                         spriteBatch.DrawString(ourfont, "Are you sure you want to spend ", new Vector2(camera.position.X + 415, camera.position.Y + 355), Color.Black);
@@ -1270,7 +1304,9 @@ namespace PirateGame
                                 case 4:
                                     spriteBatch.DrawString(ourfont, (Convert.ToString(crewCost)), new Vector2(camera.position.X + 520, camera.position.Y + 390), Color.Black);
                                     break;
-
+                                case 5:
+                                    spriteBatch.DrawString(ourfont, (Convert.ToString(repairCost)), new Vector2(camera.position.X + 520, camera.position.Y + 390), Color.Black);
+                                    break;
                                 default:
                                     break;
                             }
@@ -1379,6 +1415,21 @@ namespace PirateGame
                 Rectangle buyThreeRect = new Rectangle(490, 580, 77, 40);
                 Rectangle hireButRect = new Rectangle(695, 435, 81, 40);
 
+                if (returnError == true)
+                {
+                    Rectangle closeErrorRect = new Rectangle(500, 440, 73, 40);
+                    
+                        if (mouseClickRect.Intersects(closeErrorRect))
+                        {
+                            IsMouseVisible = false;
+                            currentState = gameState.inTown;
+                            healthFull = false;
+                            moraleFull = false;       
+                        }
+
+                }
+                    //500, 440
+
                 if (buyOptionOpen == true)
                 {
 
@@ -1394,6 +1445,7 @@ namespace PirateGame
                         {
                             player.setGold(player.getGold() - firstItemCost);
                             notEnoughGold = false;
+                            player.setAttack(player.getAttack() + attackUpgrade);
                         }
                         else if (itemSelected == 1 && ((int)((player.getGold() - firstItemCost)) < 0))
                             notEnoughGold = true;
@@ -1402,17 +1454,25 @@ namespace PirateGame
                         {
                             player.setGold(player.getGold() - secondItemCost);
                             notEnoughGold = false;
+                            player.setDefense(player.getAttack() + attackUpgrade);
+                            player.set_bSpeed(player.get_bSpeed() + speedUpgrade);
+                            player.set_bAcceleration(player.get_bAcceleration() + accelerationUpgrade);
                         }
                         else if (itemSelected == 2 && ((int)((player.getGold() - secondItemCost)) < 0))
                             notEnoughGold = true;
 
-                        if (itemSelected == 3 && ((int)((player.getGold() - thirdItemCost)) >= 0))
+
+
+                        if (itemSelected == 3 && player.getMorale() < 100 && ((int)((player.getGold() - thirdItemCost)) >= 0))
                         {
                             player.setGold(player.getGold() - thirdItemCost);
                             notEnoughGold = false;
+                            player.setMorale(100);
                         }
-                        else if (itemSelected == 3 && ((int)((player.getGold() - thirdItemCost)) < 0))
+                        else if (itemSelected == 3 && player.getMorale() < 100 && ((int)((player.getGold() - thirdItemCost)) < 0))
                             notEnoughGold = true;
+                        else if (itemSelected == 3 && player.getMorale() >= 100)
+                            moraleFull = true;
 
                         if (itemSelected == 4 && ((int)((player.getGold() - crewCost)) >= 0))
                         {
@@ -1421,10 +1481,22 @@ namespace PirateGame
                             notEnoughGold = false;
                         }
                         else if (itemSelected == 4 && ((int)((player.getGold() - crewCost)) < 0))
-                         notEnoughGold = true;                      
+                            notEnoughGold = true;
+
+                        if (itemSelected == 5 && player.getHealth() < 100 && (((int)(player.getGold() - repairCost)) >= 0))
+                        {
+                            player.setGold(player.getGold() - repairCost);
+                            notEnoughGold = false;
+                        }
+                        else if (itemSelected == 5 && player.getHealth() < 100 && ((int)((player.getGold() - repairCost)) < 0))
+                            notEnoughGold = true;
+                        else if (itemSelected == 5 && player.getHealth() >= 100)
+                            healthFull = true;
 
                         buyOptionOpen = false;
                     }
+
+
                     if (mouseClickRect.Intersects(noButtonSmallerRect))
                     {
                         IsMouseVisible = false;
@@ -1437,6 +1509,7 @@ namespace PirateGame
                 if (mouseClickRect.Intersects(repairShipButtonRect)) //player clicked repair button
                 {
                     buyOptionOpen = true;
+                    itemSelected = 5;
                     //currentState = gameState.overWorld;
                     //pop up to confirm w/ gold price proportional to damage
                 }

@@ -55,14 +55,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="194496">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="195520">
       <assemblyIdentity name="PirateGame" version="3.4.0.456" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>px4P4AUyRKAP/a9qlX5BCOF3xgo=</dsig:DigestValue>
+        <dsig:DigestValue>/7Za0uAM97/WC28DB/sKJ8RicbM=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -543,6 +543,15 @@
       <dsig:DigestValue>BtIjWASDjZ/2ie3jBP4DgjdRx8I=</dsig:DigestValue>
     </hash>
   </file>
+  <file name="Content\Morale Error.png" size="3133">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>vzGu7maGq5kxeXseIZ1/WsyeUqM=</dsig:DigestValue>
+    </hash>
+  </file>
   <file name="Content\Morale_Status_Bar_Resized.png" size="1543">
     <hash>
       <dsig:Transforms>
@@ -694,6 +703,15 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>dQ6/5/E3xnzk2pLwtxMIGkoE/Hw=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Ship Repair Error.png" size="2738">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>PnW0R4OVNvuwt+w+ojJvbSaS9Xo=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\Ship Stats Label.png" size="3909">
