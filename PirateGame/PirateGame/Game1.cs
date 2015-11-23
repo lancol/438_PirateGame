@@ -102,6 +102,12 @@ namespace PirateGame
         Texture2D flag;
         #endregion
 
+        #region Instructions menu
+        Texture2D objectiveMessage;
+        Texture2D instructionTips;
+        Texture2D hotkeys;
+        #endregion
+
         #region Animation related
         float t;
         float effectT;
@@ -414,8 +420,11 @@ namespace PirateGame
                 file2Label = Content.Load<Texture2D>("File 2 Label");
                 file3Label = Content.Load<Texture2D>("File 3 Label");
 
-                //loads instructions label;
+                //loads instructions stuff
                 InstructionsLabel = Content.Load<Texture2D>("Instructions Label");
+                objectiveMessage = Content.Load<Texture2D>("Objective");
+                instructionTips = Content.Load<Texture2D>("Tips");
+                hotkeys = Content.Load<Texture2D>("Hotkeys");
 
                 //Set the players ship image
                 player.setImage(shipImg[0]);
@@ -546,17 +555,14 @@ namespace PirateGame
                 mapOpen = false;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.S)) //Temporary until overworld island interaction
-            {
-                currentState = gameState.inTown;
-                crewAdding = 0;
-
-            }
-
             if (Keyboard.GetState().IsKeyDown(Keys.I))
             {
                 instructionsOpen = true;
                 currentState = gameState.instructions;
+            }
+            else
+            {
+                instructionsOpen = false;
             }
 
             #endregion
@@ -801,9 +807,16 @@ namespace PirateGame
                     //wait for mouseclick
                     mouseState = Mouse.GetState();
 
-                    crewCost = 10 * crewAdding; // determines cost of crew members
-                    reloadSpeedUpgrade = 2 * crewAdding;
-                    accelerationUpgrade = 3 * crewAdding;
+                    /*
+                    Random rnd = new Random();
+                    int month = rnd.Next(1, 13); // creates a number between 1 and 12
+                    int dice = rnd.Next(1, 7);   // creates a number between 1 and 6
+                    int card = rnd.Next(52);     // creates a number between 0 and 51
+                    */
+
+                    crewCost = (int)((.5) * (double)player.getGold() * (double)crewAdding); // determines cost of crew members
+                    reloadSpeedUpgrade = (int)(1.2 * (double)crewAdding);
+                    accelerationUpgrade = (int)((1.5 * (double)player.get_bAcceleration()) *(double)crewAdding);
 
                     firstItemCost = attackUpgrade * 20;
                     secondItemCost = defenseUpgrade * 20;
@@ -839,6 +852,11 @@ namespace PirateGame
                     }
 
                     previousMouseState = mouseState;
+
+                    if (previousStateInstructions != 0 && previousStateInstructions != 1 && previousStateInstructions != 2 && previousStateInstructions != 3 && previousStateInstructions != 4)
+                        previousStateInstructions = 5;
+ 
+
                     #endregion
                     break;
                 case gameState.savefiles:
@@ -858,7 +876,7 @@ namespace PirateGame
 
                     previousMouseState = mouseState;
 
-                    previousStateInstructions = 0;
+                    previousStateInstructions = 4;
                     #endregion
                     break;
                 default:
@@ -1024,6 +1042,17 @@ namespace PirateGame
                         spriteBatch.Draw(whiteblock, mapPos + player.getPos()*.226f, Color.LawnGreen);
                     }
                     #endregion
+
+                    if (instructionsOpen == true)
+                    {
+                        spriteBatch.Draw(menuBackground, new Vector2(camera.position.X, camera.position.Y), Color.White);
+                        spriteBatch.Draw(shop_window_background, new Vector2(camera.position.X + 160, camera.position.Y + 60), Color.White);
+                        spriteBatch.Draw(InstructionsLabel, new Vector2(camera.position.X + 380, camera.position.Y + 110), Color.White);
+                        spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 480, camera.position.Y + 620), Color.White);
+                        spriteBatch.Draw(objectiveMessage, new Vector2(290, 170), Color.White);
+                        spriteBatch.Draw(instructionTips, new Vector2(280, 400), Color.White);
+                        spriteBatch.Draw(hotkeys, new Vector2(430, 260), Color.White);
+                    }
 
                     #region Draws Enter Town prompt
                     // draw when collide with island
@@ -1251,12 +1280,16 @@ namespace PirateGame
 
                     #endregion
                     break;
-                case gameState.instructions: // Instructions
+                case gameState.instructions: // Instructions //Doesn't draw all for overworld
                     #region Draws instructions 
                     spriteBatch.Draw(menuBackground, new Vector2(camera.position.X, camera.position.Y), Color.White);
                     spriteBatch.Draw(shop_window_background, new Vector2(camera.position.X + 160, camera.position.Y + 60), Color.White);
                     spriteBatch.Draw(InstructionsLabel, new Vector2(camera.position.X + 380, camera.position.Y + 110), Color.White);
-                    spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 480, camera.position.Y + 565), Color.White);
+                    spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 480, camera.position.Y + 620), Color.White);
+                    spriteBatch.Draw(objectiveMessage, new Vector2(camera.position.X + 290, camera.position.Y + 170), Color.White); //breaks here
+                    spriteBatch.Draw(instructionTips, new Vector2(camera.position.X + 280, camera.position.Y + 400), Color.White);
+                    spriteBatch.Draw(hotkeys, new Vector2(camera.position.X + 430, camera.position.Y + 260), Color.White);
+
                     #endregion
                     break;
                 case gameState.savefiles:
@@ -1312,28 +1345,26 @@ namespace PirateGame
                     overworld_init();
                 }
             }
-            if (currentState == gameState.instructions)
+            if (currentState == gameState.instructions) //wonky
             {
-                Rectangle instructionBackRect = new Rectangle(480, 565, 138, 40);
+                Rectangle instructionBackRect = new Rectangle(480, 620, 73, 40);
+
 
                 if (mouseClickRect.Intersects(instructionBackRect))
                 {
                     if (previousStateInstructions == 0)
                         currentState = gameState.mainMenu;
                     else if (previousStateInstructions == 1)
-                        currentState = gameState.overWorld;
+                        currentState = gameState.overWorld; // issues
                     else if (previousStateInstructions == 2)
                         currentState = gameState.battle;
                     else if (previousStateInstructions == 3)
                         currentState = gameState.inTown;
-                    else
+                    else if (previousStateInstructions == 4)
+                        currentState = gameState.savefiles;
+                    else if (previousStateInstructions == 5)
                         currentState = gameState.mainMenu;
                 }
-                else
-                {
-                    currentState = gameState.instructions;
-                }
-
             }
 
             //check the shop menu
@@ -1348,7 +1379,7 @@ namespace PirateGame
                 Rectangle buyThreeRect = new Rectangle(490, 580, 77, 40);
                 Rectangle hireButRect = new Rectangle(695, 435, 81, 40);
 
-                if (buyOptionOpen == true) // NOT WORKING
+                if (buyOptionOpen == true)
                 {
 
                     Rectangle noButtonSmallerRect = new Rectangle(340, 430, 126, 73);
@@ -1481,8 +1512,7 @@ namespace PirateGame
                 else if (mouseClickRect.Intersects(instructionsButtonRect))
                 {
                     currentState = gameState.mainMenu;
-                    instructionsOpen = true;
-
+                    instructionsOpen = true;                   
                 }
 
                 else if (mouseClickRect.Intersects(exitButtonRect)) //player clicked exit button
@@ -1491,9 +1521,9 @@ namespace PirateGame
                 }
             }
 
-            if (currentState == gameState.savefiles) // not working right
+            if (currentState == gameState.savefiles)
             {
-                Rectangle gobackRect = new Rectangle(490, 605, 138, 40);
+                Rectangle gobackRect = new Rectangle(490, 605, 73, 40);
 
                 if (mouseClickRect.Intersects(gobackRect))
                 {
@@ -1543,29 +1573,5 @@ namespace PirateGame
             ow_sailSpray.setY(player.getY());
             ow_sailSpray.setActive(true);
         }
-
-        /*
-        private void GetSave() 
-        {
-            var store = IsolatedStorageFile.GetUserStoreForApplication();
-
-            if (store.FileExists(saveFile))
-            {
-                var fs = store.OpenFile(scoreFilename, FileMode.Open);
-                using (StreamReader sr = new StreamReader(fs))
-                {
-                    attack = Convert.ToInt16(sr.ReadLine());
-                }
-            }
-            else
-            {
-                var fs = store.CreateFile(saveFile);
-                using (StreamWriter sw = new StreamWriter(fs))
-                {
-                    sw.Write("0");
-                }
-                hiScore = 0;
-            } 
-        } */
     }
 }

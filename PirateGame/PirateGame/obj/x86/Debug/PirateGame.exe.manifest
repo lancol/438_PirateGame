@@ -55,14 +55,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="193472">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="194496">
       <assemblyIdentity name="PirateGame" version="3.4.0.456" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>xZVNcaIIvV02G1nnRZsHnxfPwLk=</dsig:DigestValue>
+        <dsig:DigestValue>px4P4AUyRKAP/a9qlX5BCOF3xgo=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -435,6 +435,15 @@
       <dsig:DigestValue>r6mM3CLd+uKHxcsz5yQD2dZ4dac=</dsig:DigestValue>
     </hash>
   </file>
+  <file name="Content\Hotkeys.png" size="7742">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>U2ho0WFxQGIsTJohThY8XOLXdKQ=</dsig:DigestValue>
+    </hash>
+  </file>
   <file name="Content\Instructions Label.png" size="4558">
     <hash>
       <dsig:Transforms>
@@ -568,6 +577,15 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>NKYS0f1wlSTL6ohBieqHXtfTVjo=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Objective.png" size="11508">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>/V2I731B8DexurM1e4Ey9Lmc8Vw=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\Ocean_Tiles48.png" size="802">
@@ -775,6 +793,15 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>OYgSSn4OELPDINHMbimHPWI7jEc=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Tips.png" size="20430">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>XRjxLDC9xhX6XN19oxk7CLh2xp8=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\Top_Menu_Bar_Cropped.png" size="32844">
