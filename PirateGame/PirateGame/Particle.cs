@@ -1,10 +1,11 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace PirateGame
 {
-    public class Particle
+    public class Particle : Entity
     {
         //Source: http://rbwhitaker.wikidot.com/2d-particle-engine-2
         public Texture2D Texture { get; set; }        
@@ -16,8 +17,9 @@ namespace PirateGame
         public float yAccl;
         public float rotateSpeed;
         public float angle;
+        GameTime GT;
 
-        public Particle(Texture2D texture, Vector2 position, int ttl, float XSpeed, float YSpeed, float X_Accl, float Y_Accl, float rotatespeed)
+        public Particle(Texture2D texture, Vector2 position, int ttl, float XSpeed, float YSpeed, float X_Accl, float Y_Accl, float rotatespeed, GameTime gt)
         {
             Texture = texture;
             Position = position;
@@ -28,19 +30,19 @@ namespace PirateGame
             yAccl = Y_Accl;
             rotateSpeed = rotatespeed;
             angle = 0;
+            GT = gt;
         }
 
         public void Update(float DT)
         {
             TTL--;
-            GameTime GT = new GameTime();
-            float t = (float)GT.ElapsedGameTime.TotalSeconds;
-
+            
             if (xAccl != 0 || yAccl != 0)
             {
                 xSpeed += xAccl * DT;
                 ySpeed += yAccl * DT;
-                angle = rotateSpeed * t * DT;
+                angle = rotateSpeed * (TTL * DT) * DT;
+                //Console.WriteLine(rotateSpeed +", " + t);
                 Position = new Vector2(Position.X + xSpeed, Position.Y + ySpeed);
             }
             else

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 using System;
 using System.Diagnostics;
 
@@ -29,8 +30,15 @@ namespace PirateGame
         bool mapOpen;
         #endregion
 
+        #region Particle Engine
+        ParticleEngine PE;
+        ParticleEngine PE2;
+        bool cannonfired;
+        #endregion
+
         #region Sound
         Song OverworldSong;
+        SoundEffect cannonFire;
         #endregion
 
         #region Environment
@@ -88,6 +96,7 @@ namespace PirateGame
         Rectangle ow_Player_CollBox; //overworld Player collisionbox
         bool facingRight;
         bool moving;
+        Vector2 last_Coord;
         #endregion
 
         #region Ships and NPCS
@@ -97,6 +106,8 @@ namespace PirateGame
         NPCShip EnemyShip;
         Texture2D cannonball;
         Texture2D flag;
+        Texture2D portrait;
+        Texture2D enemyHealth;
         #endregion
 
         #region Animation related
@@ -166,6 +177,9 @@ namespace PirateGame
             currentState = gameState.mainMenu;
             #endregion
 
+            PE = new ParticleEngine(null, -1, 0, 0, 0, 0);
+            PE2 = new ParticleEngine(null, -1, 0, 0, 0, 0);
+
             #region Islands
             island = new Texture2D[5];
             isl_x = new int[5];
@@ -200,6 +214,7 @@ namespace PirateGame
             player.setCrew(20);
             facingRight = true;
             moving = false;
+            last_Coord = new Vector2(1000, 2300);
             #endregion
 
             #region Animation related
@@ -277,7 +292,8 @@ namespace PirateGame
 
                 //Sound
                 OverworldSong = Content.Load<Song>("Piratev2");
-
+                cannonFire = Content.Load<SoundEffect>("CannonFire");
+                
                 //load the buttonimages into the content pipeline
                 continueButton = Content.Load<Texture2D>("Continue");
                 startButton = Content.Load<Texture2D>("NewGame");
@@ -311,6 +327,8 @@ namespace PirateGame
                 shipImg[0] = Content.Load<Texture2D>("Ship1v3");
                 b_shipImg[0] = Content.Load<Texture2D>("Ship_TopDown136_68");
                 cannonball = Content.Load<Texture2D>("Battle_Cannonball16");
+                portrait = Content.Load<Texture2D>("Pirate128v2");
+                enemyHealth = Content.Load<Texture2D>("pirateHealth");
 
                 // loads shop elements
                 shop_window_background = Content.Load<Texture2D>("Shop_Window_Background_Biggest");
@@ -361,7 +379,7 @@ namespace PirateGame
                 }
 
                 player.setCBallImage(cannonball);
-
+                Ship.cannonFire = cannonFire;
             }
             catch
             {
@@ -588,6 +606,7 @@ namespace PirateGame
                         {
                             //change gamestate and set enemy ship to othership[i]
                             currentState = gameState.battle;
+                            last_Coord = new Vector2(player.getX(), player.getY());
                             battle_init(OtherShip[i]);
                         }
                     }
@@ -653,6 +672,8 @@ namespace PirateGame
                         player.setGold(player.getGold() + EnemyShip.getGold());
                         if (player.getMorale() < 100)
                             player.setMorale(player.getMorale() + 10f);
+
+                        EnemyShip.setPos(2000, 5000);
                     }
 
                     //Move Player
@@ -703,8 +724,66 @@ namespace PirateGame
                     #endregion
 
                     //Player Cannon Fire
-                    if (spacedown)
-                        player.fireCannon(EnemyShip, DT);
+                    float reloadSpeed;
+
+                    //morale % 50 =
+
+                    reloadSpeed = 100 / player.getCrew();
+                    reloadSpeed *= 1/(player.getMorale()/50);
+
+                    if (reloadSpeed > 10)
+                        reloadSpeed = 10;
+                    
+                    if (spacedown && PE.Count < 1 && PE2.Count < 1 && player.canFire && (gameTime.TotalGameTime.TotalSeconds - player.lastFire) > reloadSpeed)
+                    {
+                        bool fireRight = player.fireCannon(EnemyShip, DT);
+                        player.lastFire = (float)gameTime.TotalGameTime.TotalSeconds;
+                        if (fireRight)
+                        {
+                            PE = new ParticleEngine(smoke[rand.Next(0, 1)], 50, 2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() + 90)), 1.25f * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() + 90)), -2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() + 90)), -2 * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() + 90)));
+                            PE2 = new ParticleEngine(smoke[rand.Next(0, 1)], 50, 2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() + 90)), 1.25f * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() + 90)), -2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() + 90)), -2 * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() + 90)));
+
+                        }
+                        else
+                        {
+                            PE = new ParticleEngine(smoke[rand.Next(0, 1)], 50, 2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() - 90)), 1.25f * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() - 90)), -2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() - 90)), -2 * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() - 90))); 
+                            PE2 = new ParticleEngine(smoke[rand.Next(0, 1)], 50, 2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() - 90)), 1.25f * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() - 90)), -2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() - 90)), -2 * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() - 90))); 
+
+                        }
+                        //PE = new ParticleEngine(smoke[rand.Next(0, 1)], 50, 1, 1, -2, -2); //doesn't work
+
+
+                        PE.setX(player.getX());
+                        PE.setY(player.getY()+10);
+                        PE.setRotateSpeed(60);
+                        PE.EmitterLocation = player.getPos();
+                        PE.setActive(true);
+
+                        PE2.setX(player.getX());
+                        PE2.setY(player.getY()-10);
+                        PE2.setRotateSpeed(60);
+                        PE2.EmitterLocation = player.getPos();
+                        cannonfired = true;
+                        PE2.setActive(true);
+                    }
+                    if (PE.Count < 0)
+                    {
+                        PE.removeAll();
+                        PE.setActive(false);
+                    }
+                    else
+                    {
+                        PE.Update(DT);
+                    }
+                    if (PE2.Count < 0)
+                    {
+                        PE2.removeAll();
+                        PE2.setActive(false);
+                    }
+                    else
+                    {
+                        PE2.Update(DT);
+                    }
 
                     //EnemyShip
                     EnemyShip.runStandardBattleAI(player, DT);
@@ -984,12 +1063,34 @@ namespace PirateGame
                     //Draw player cannonballs
                     player.drawCannonBalls(spriteBatch);
 
-                    //draws collision box vertices
-                    Vector2[] p = player.getCollisionbox();
-                    for (int i = 0; i < 4; i++)
+                    if (PE.Count < 1)
                     {
-                        spriteBatch.Draw(whiteblock, new Vector2(p[i].X, p[i].Y), null, Color.Red);
+                        cannonfired = false;
+                        PE.setActive(false);
                     }
+
+                    if (PE.Count > 0)
+                    {
+                        PE.Draw(spriteBatch);
+                    }
+
+                    if (PE2.Count < 1)
+                    {
+                        cannonfired = false;
+                        PE2.setActive(false);
+                    }
+
+                    if (PE2.Count > 0)
+                    {
+                        PE2.Draw(spriteBatch);
+                    }
+
+                    //draws collision box vertices
+                    //Vector2[] p = player.getCollisionbox();
+                    //for (int i = 0; i < 4; i++)
+                    //{
+                    //    spriteBatch.Draw(whiteblock, new Vector2(p[i].X, p[i].Y), null, Color.Red);
+                    //}
 
                     #region Status bar
                     //status bar
@@ -998,6 +1099,18 @@ namespace PirateGame
                     spriteBatch.Draw(HealthBar, new Vector2(camera.position.X + 180, camera.position.Y + 10), new Rectangle(0, 0, (int)((player.getHealth() / 100f) * HealthBar.Width), HealthBar.Height), Color.White);
                     spriteBatch.Draw(AlignmentBar, new Vector2(camera.position.X + 180, camera.position.Y + 40), Color.White); // always same
                     spriteBatch.Draw(MenuSlider, new Vector2(camera.position.X + 285, camera.position.Y + 40), Color.White);
+                    #endregion
+
+                    #region portrait
+                    bool transparent = false;
+                    if (Vector2.Distance(new Vector2(camera.position.X, camera.position.Y + screen_H), player.getPos()) < 200)
+                        transparent = true;
+                    else if (Vector2.Distance(new Vector2(camera.position.X, camera.position.Y + screen_H), EnemyShip.getPos()) < 200)
+                        transparent = true;
+
+                    spriteBatch.Draw(portrait, new Vector2(camera.position.X, camera.position.Y + screen_H - portrait.Height), (!transparent) ? Color.White : new Color(255, 255, 255, 125));
+                    spriteBatch.Draw(enemyHealth, new Vector2(camera.position.X+7, camera.position.Y + screen_H - portrait.Height + 139), new Rectangle(0, 0, (int)((EnemyShip.getHealth() / 100f) * enemyHealth.Width), enemyHealth.Height), (!transparent) ? Color.White : new Color(255, 255, 255, 125));
+
                     #endregion
                     #endregion
                     break;
@@ -1190,6 +1303,9 @@ namespace PirateGame
                 if (mouseClickRect.Intersects(startButtonRect)) //player clicked start button
                 {
                     currentState = gameState.overWorld;
+                    MediaPlayer.Play(OverworldSong);
+                    MediaPlayer.IsRepeating = true;
+                    MediaPlayer.Volume = 1.0f;
                     overworld_init();
                 }
                 else if (mouseClickRect.Intersects(continueButtonRect))
@@ -1221,10 +1337,10 @@ namespace PirateGame
             }
         }
 
-
         protected void battle_init(NPCShip Enemy)
         {
             player.setRotate(0);
+            player.canFire = true;
             camera.position = new Vector2(player.getX() - (screen_W / 2), player.getY() - (screen_H / 2));
 
             //EnemyShip = //whatever collided with
@@ -1244,16 +1360,19 @@ namespace PirateGame
             b_SailStream2.setY(player.getY()+50);
             b_SailStream2.setActive(true);
 
+            PE.removeAll();
+            PE2.removeAll();
+
             ow_sailSpray.removeAll();
             ow_sailSpray.setActive(false);
         }
 
         protected void overworld_init()
         {
-            MediaPlayer.Play(OverworldSong);
-            MediaPlayer.Volume = 1.0f;
-            MediaPlayer.IsRepeating = true;
-
+            //MediaPlayer.Play(OverworldSong);
+            //MediaPlayer.Volume = 1.0f;
+            //MediaPlayer.IsRepeating = true;
+            player.setPos(last_Coord.X,last_Coord.Y);
             player.setRotate(0);
             camera.position = new Vector2(player.getX() - (screen_W / 2), player.getY() - (screen_H / 2));
             ow_sailSpray = new ParticleEngine(whiteblock, 20, -1, 0, 0, 0);
