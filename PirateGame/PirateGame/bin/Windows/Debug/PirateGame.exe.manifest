@@ -55,14 +55,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="195520">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="196544">
       <assemblyIdentity name="PirateGame" version="3.4.0.456" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>/7Za0uAM97/WC28DB/sKJ8RicbM=</dsig:DigestValue>
+        <dsig:DigestValue>XXu4weuIvSny4QDgTeVdV87uyuA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -307,6 +307,33 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>x9knalwCyjf5VMfhMD7j/LWavkY=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Credits Button.png" size="1334">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>jSWYqISAvjMHOZuI7r0cCRcLZiA=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Credits Label.png" size="4344">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>o/2JSK0HkklrUbyFJPdpMwLWcGo=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Credits.png" size="17347">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>3XT2HWw78dzNVf7tv/W3GxY/w7w=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\Crew Stats Label.png" size="3005">

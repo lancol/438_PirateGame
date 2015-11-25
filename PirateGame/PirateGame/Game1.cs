@@ -16,7 +16,7 @@ namespace PirateGame
     {
         #region Class Variables
         [Flags]
-        enum gameState{mainMenu,overWorld,battle,inTown, instructions, savefiles}
+        enum gameState{mainMenu,overWorld,battle,inTown, instructions, savefiles, credits}
 
         #region System/Game Control
         GraphicsDeviceManager graphics;
@@ -111,8 +111,14 @@ namespace PirateGame
         Texture2D hotkeys;
         #endregion
 
+        //error messages
         Texture2D moraleFullMessage;
         Texture2D healthFullMessage;
+
+        //credits stuff
+        Texture2D creditsButton;
+        Texture2D creditsLabel;
+        Texture2D credits;
 
         #region Animation related
         float t;
@@ -421,6 +427,9 @@ namespace PirateGame
                 buyButton = Content.Load<Texture2D>("Buy Button");
 
 
+                credits = Content.Load<Texture2D>("Credits");
+                creditsLabel = Content.Load<Texture2D>("Credits Label");
+                creditsButton = Content.Load<Texture2D>("Credits Button");
                 moraleFullMessage = Content.Load<Texture2D>("Morale Error");
                 healthFullMessage = Content.Load<Texture2D>("Ship Repair Error");
 
@@ -890,6 +899,25 @@ namespace PirateGame
                     previousStateInstructions = 4;
                     #endregion
                     break;
+                case gameState.credits:
+                    buyOptionOpen = false;
+
+                    IsMouseVisible = true; //enables mouse pointer
+
+                    //wait for mouseclick
+                    mouseState = Mouse.GetState();
+
+                    if (previousMouseState.LeftButton == ButtonState.Pressed &&
+                    mouseState.LeftButton == ButtonState.Released)
+                    {
+                        MouseClicked(mouseState.X, mouseState.Y);
+                    }
+
+                    previousMouseState = mouseState;
+
+                    previousStateInstructions = 6;
+
+                    break;
                 default:
                     Exit();
                     break;
@@ -922,7 +950,8 @@ namespace PirateGame
                     spriteBatch.Draw(startButton, startButtonPosition, Color.White);
                     spriteBatch.Draw(instructionsButton, instructionsButtonPosition, Color.White);
                     spriteBatch.Draw(exitButton, exitButtonPosition, Color.White);
-                    spriteBatch.Draw(logo, logoPosition, Color.White);
+                    spriteBatch.Draw(logo, logoPosition, Color.White);                   
+                    spriteBatch.Draw(creditsButton, new Vector2(920, 10), Color.CadetBlue);
 
                     if (instructionsOpen)
                         currentState = gameState.instructions;
@@ -1342,6 +1371,13 @@ namespace PirateGame
                     spriteBatch.Draw(continueButton, new Vector2(camera.position.X + 675, camera.position.Y + 515), Color.White);
                     #endregion
                     break;
+                case gameState.credits:
+                    spriteBatch.Draw(menuBackground, new Vector2(camera.position.X, camera.position.Y), Color.White);
+                    spriteBatch.Draw(shop_window_background, new Vector2(camera.position.X + 160, camera.position.Y + 60), Color.White);
+                    spriteBatch.Draw(creditsLabel, new Vector2(camera.position.X + 410, camera.position.Y + 125), Color.White);
+                    spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 480, camera.position.Y + 560), Color.White);
+                    spriteBatch.Draw(credits, new Vector2(camera.position.X + 370, camera.position.Y + 200), Color.White);
+                    break;
                 default:
                     Exit();
                     break;
@@ -1399,6 +1435,8 @@ namespace PirateGame
                     else if (previousStateInstructions == 4)
                         currentState = gameState.savefiles;
                     else if (previousStateInstructions == 5)
+                        currentState = gameState.mainMenu;
+                    else if (previousStateInstructions == 6)
                         currentState = gameState.mainMenu;
                 }
             }
@@ -1559,8 +1597,25 @@ namespace PirateGame
                 // }
             }
 
-            //check the startmenu
-            if (currentState == gameState.mainMenu)
+            if (currentState == gameState.credits)
+            {
+                
+
+                Rectangle goBacktoMainRect = new Rectangle(480, 560, 73, 40);
+
+                if (mouseClickRect.Intersects(goBacktoMainRect)) // click back, sends to overworld
+                {
+                    currentState = gameState.mainMenu;
+                }
+                else
+                {
+                    currentState = gameState.credits;
+                }
+
+            }
+
+                //check the startmenu
+                if (currentState == gameState.mainMenu)
             {
 
                 Rectangle continueButtonRect = new Rectangle((int)continueButtonPosition.X,
@@ -1571,6 +1626,7 @@ namespace PirateGame
                                       (int)instructionsButtonPosition.Y, 157, 40);
                 Rectangle exitButtonRect = new Rectangle((int)exitButtonPosition.X,
                                       (int)exitButtonPosition.Y, 83, 40);
+                Rectangle creditsButtonRect = new Rectangle(920, 10, 108, 39);
 
                 if (mouseClickRect.Intersects(startButtonRect)) //player clicked start button
                 {
@@ -1592,6 +1648,13 @@ namespace PirateGame
                 {
                     Exit();
                 }
+
+                else if (mouseClickRect.Intersects(creditsButtonRect)) //player clicked credits button
+                {
+                    currentState = gameState.credits;
+                    //Exit(); // Change to brings up credits page
+                }
+
             }
 
             if (currentState == gameState.savefiles)
