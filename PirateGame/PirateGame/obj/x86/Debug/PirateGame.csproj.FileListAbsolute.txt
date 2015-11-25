@@ -79,3 +79,7 @@ D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\Pi
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Shop_Window_Background_Biggest.png
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Upgrades_Label.png
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Yes.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\CannonFire.xnb
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\CannonFire.wav
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\pirate128v2.png
+D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\pirateHealth.png
