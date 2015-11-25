@@ -74,6 +74,7 @@ namespace PirateGame
             return health;
         }
 
+
         public Vector2[] getCollisionbox() //returns an array of vectors that have been sorted top to bottom.
         {
             /*
@@ -230,6 +231,10 @@ namespace PirateGame
         public void setHealth(float Health)
         {
             health = Health;
+        }
+        public void setHealth(int Health)
+        {
+            health = (float)Health;
         }
 
         public void setAttack(float Attack)

@@ -81,4 +81,82 @@ D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\Pi
 D:\My Docs\SchoolWork\SMCM\Fall2015\COSC438_GameDev\PirateGame\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Yes.png
 C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\obj\x86\Debug\PirateGame.exe
 C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\obj\x86\Debug\PirateGame.pdb
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Alignment_Status_Bar_Resized.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Back_Button.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Battle_Cannonball16.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Butterfly Label.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Cape Coast Label.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Chicken Nugget Label.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Continue.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Croissant Label.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Enter Town Prompt.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\File 1 Label.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\File 2 Label.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\File 3 Label.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\flag.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Health_Status_Bar_Resized.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Hire_Crew_Label.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Instructions Label.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Instructions.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Island150p.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Island250p.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Island350p.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Island450p.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Island550p.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Logo.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Map678.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Menu.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Morale_Status_Bar_Resized.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\NewGame.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\No.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Ocean_Tiles48.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Ocean_web48_t127.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Piratev2.mp3
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\poof1.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\poof2.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Quit.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Rattata Label.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Repair_Ship_Button.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Saved Games Label.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Ship1v2.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Ship1v3.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Ship_TopDown136_68.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Shop_ItemBox.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Shop_Label.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Shop_Window_Background.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Shop_Window_Background_Biggest.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Slider.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Top_Menu_Bar_Cropped.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Upgrades_Label.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\WaterEffectSheet.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\whiteblock.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Yes.png
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Piratev2.wma
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Piratev2.xnb
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\PirateGame.exe.manifest
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\PirateGame.application
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\PirateGame.exe
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\PirateGame.pdb
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\MonoGame.Framework.dll
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\SharpDX.MediaFoundation.dll
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\SharpDX.dll
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\SharpDX.XAudio2.dll
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\SharpDX.Direct3D11.dll
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\SharpDX.DXGI.dll
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\SharpDX.Direct2D1.dll
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\SharpDX.XInput.dll
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\SharpDX.RawInput.dll
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\SharpDX.Direct3D9.dll
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\MonoGame.Framework.xml
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\SharpDX.MediaFoundation.xml
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\SharpDX.xml
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\SharpDX.XAudio2.xml
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\SharpDX.Direct3D11.xml
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\SharpDX.DXGI.xml
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\SharpDX.Direct2D1.xml
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\SharpDX.XInput.xml
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\SharpDX.RawInput.xml
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\SharpDX.Direct3D9.xml
 C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\obj\x86\Debug\PirateGame.csprojResolveAssemblyReference.cache
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\obj\x86\Debug\PirateGame.exe.manifest
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\obj\x86\Debug\PirateGame.application
