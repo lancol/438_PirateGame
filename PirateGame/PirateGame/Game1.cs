@@ -122,6 +122,24 @@ namespace PirateGame
         Texture2D hotkeys;
         #endregion
 
+        #region Save File elements
+        Texture2D saveFilesLabel;
+        Texture2D file1Label;
+        Texture2D file2Label;
+        Texture2D file3Label;
+        String savekey;
+        #endregion
+
+        public void setSavekey(String key)
+        {
+            savekey = key;
+        }
+
+        public string getSavekey()
+        {
+            return savekey;
+        }
+
         //error messages
         Texture2D moraleFullMessage;
         Texture2D healthFullMessage;
@@ -193,13 +211,6 @@ namespace PirateGame
         Texture2D noButtonSmaller;
         Texture2D insufficientFundsMessage;
         Texture2D errorBackButton;
-
-        #region Save File elements
-        Texture2D saveFilesLabel;
-        Texture2D file1Label;
-        Texture2D file2Label;
-        Texture2D file3Label;
-        #endregion
 
         SpriteFont ourfont;
         Texture2D upArrow;
@@ -550,7 +561,30 @@ namespace PirateGame
 
             #region Input
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit(); // exits if esc key is pressed
+            {
+                String[] saveinfo = System.IO.File.ReadAllLines("save.txt");
+                for (int i = 0; i < saveinfo.Length; i++)
+                {
+                    if (saveinfo[i] == getSavekey())
+                    {   //TODO: SAVE POSITION OF SHIP
+                        Object[] newsaveinfo =
+                                { getSavekey(), player.getMorale(), player.getAlignment(), player.getHealth(),
+                                    player.getAttack(), player.getDefense(), player.get_bAcceleration(),
+                                    player.get_bSpeed(), player.getGold(), player.getCrew(),
+                                    (float)gameTime.ElapsedGameTime.TotalSeconds };
+                        for (int j = 1; j < 11; j++)
+                        {
+                            saveinfo[i + j] = newsaveinfo[j].ToString();
+                        }
+
+                    }
+
+                }
+                //Console.Write(saveinfo.ToString());
+                System.IO.File.WriteAllLines("save.txt", saveinfo); //write new info to the text file
+                Exit();
+            }
+            
 
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {
@@ -1761,9 +1795,31 @@ namespace PirateGame
 
                 else if (mouseClickRect.Intersects(exitButtonRect)) //player clicked exit button
                 {
+                    //save information to the appropriate text file
+                    String[] saveinfo = System.IO.File.ReadAllLines("save.txt");
+                    for (int i = 0; i < saveinfo.Length; i++)
+                    {
+                        if (saveinfo[i] == getSavekey())
+                        {
+                            for (int j = 1; j < 11; j++)
+                            { //SAVE POSITION OF SHIP TOO
+                                Object[] newsaveinfo =
+                                    {   getSavekey(), player.getMorale(), player.getAlignment(), player.getHealth(),
+                                        player.getAttack(), player.getDefense(), player.get_bAcceleration(),
+                                        player.get_bSpeed(), player.getGold(), player.getCrew() };
+
+                                saveinfo[i + j] = newsaveinfo[j].ToString();
+                            }
+
+                        }
+
+                    }
+                    //write new info to the text file
+                    Console.Write(saveinfo.ToString());
+                    System.IO.File.WriteAllLines("save.txt", saveinfo);
+
                     Exit();
                 }
-
                 else if (mouseClickRect.Intersects(creditsButtonRect)) //player clicked credits button
                 {
                     currentState = gameState.credits;
@@ -1772,17 +1828,44 @@ namespace PirateGame
 
             }
 
-            if (currentState == gameState.savefiles)
+            if (currentState == gameState.savefiles) // not working right
             {
-                Rectangle gobackRect = new Rectangle(490, 605, 73, 40);
+                Rectangle gobackRect = new Rectangle(490, 605, 75, 40);
+                Rectangle savefile1Rect = new Rectangle(675, 215, 138, 40);
+                Rectangle savefile2Rect = new Rectangle(675, 365, 138, 40);
+                Rectangle savefile3Rect = new Rectangle(675, 515, 138, 40);
+
 
                 if (mouseClickRect.Intersects(gobackRect))
                 {
                     currentState = gameState.mainMenu;
                 }
+
+                if (mouseClickRect.Intersects(savefile1Rect))
+                {
+                    setSavekey("SF1");
+                    currentState = gameState.overWorld;
+                    loadPlayerStats(player);
+                    overworld_init();
+                }
+
+                if (mouseClickRect.Intersects(savefile2Rect))
+                {
+                    setSavekey("SF2");
+                    currentState = gameState.overWorld;
+                    loadPlayerStats(player);
+                    overworld_init();
+                }
+
+                if (mouseClickRect.Intersects(savefile3Rect))
+                {
+                    setSavekey("SF3");
+                    currentState = gameState.overWorld;
+                    loadPlayerStats(player);
+                    overworld_init();
+                }
             }
         }
-
         protected void battle_init(NPCShip Enemy)
         {
             player.setRotate(0);
@@ -1826,6 +1909,46 @@ namespace PirateGame
             ow_sailSpray.setX(player.getX());
             ow_sailSpray.setY(player.getY());
             ow_sailSpray.setActive(true);
+        }
+
+        protected void loadPlayerStats(PlayerShip player)
+        {
+            //read information from text file
+            try
+            {
+                string[] saveinfo = File.ReadAllLines("save.txt");
+                for (int i = 0; i < saveinfo.Length; i++)
+                {
+                    if (saveinfo[i] == getSavekey())
+                    {
+                        player.setMorale(float.Parse(saveinfo[i + 1]));
+                        player.setAlignment(float.Parse(saveinfo[i + 2]));
+                        player.setHealth(float.Parse(saveinfo[i + 3]));
+                        player.setAttack(float.Parse(saveinfo[i + 4]));
+                        player.setDefense(float.Parse(saveinfo[i + 5]));
+                        player.set_bAcceleration(float.Parse(saveinfo[i + 6]));
+                        player.set_maxSpeed(float.Parse(saveinfo[i + 7]));
+                        player.setGold(int.Parse(saveinfo[i + 8]));
+                        player.setCrew(int.Parse(saveinfo[i + 9]));
+                    }
+                }
+            }
+            catch
+            {
+                Debug.WriteLine("Couldn't find save doc");
+            }
+        }
+        protected void newPlayerShip(PlayerShip player)
+        {
+            player.setMorale(50f);
+            player.setAlignment(50f);
+            player.setHealth(100f);
+            player.setAttack(50f);
+            player.setDefense(50f);
+            player.set_bAcceleration(1f);
+            player.set_maxSpeed(30f);
+            player.setGold(100);
+            player.setCrew(20);
         }
     }
 }
