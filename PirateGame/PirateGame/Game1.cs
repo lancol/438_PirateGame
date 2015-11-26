@@ -562,27 +562,34 @@ namespace PirateGame
             #region Input
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
-                String[] saveinfo = System.IO.File.ReadAllLines("save.txt");
-                for (int i = 0; i < saveinfo.Length; i++)
+                try
                 {
-                    if (saveinfo[i] == getSavekey())
-                    {   //TODO: SAVE POSITION OF SHIP
-                        Object[] newsaveinfo =
-                                { getSavekey(), player.getMorale(), player.getAlignment(), player.getHealth(),
+                    string[] saveinfo = System.IO.File.ReadAllLines("save.txt");
+                    for (int i = 0; i < saveinfo.Length; i++)
+                    {
+                        if (saveinfo[i] == getSavekey())
+                        {   //TODO: SAVE POSITION OF SHIP
+                            Object[] newsaveinfo =
+                                    { getSavekey(), player.getMorale(), player.getAlignment(), player.getHealth(),
                                     player.getAttack(), player.getDefense(), player.get_bAcceleration(),
                                     player.get_bSpeed(), player.getGold(), player.getCrew(),
                                     (float)gameTime.ElapsedGameTime.TotalSeconds };
-                        for (int j = 1; j < 11; j++)
-                        {
-                            saveinfo[i + j] = newsaveinfo[j].ToString();
+                            for (int j = 1; j < 11; j++)
+                            {
+                                saveinfo[i + j] = newsaveinfo[j].ToString();
+                            }
+
                         }
 
                     }
-
+                    //Console.Write(saveinfo.ToString());
+                    System.IO.File.WriteAllLines("save.txt", saveinfo); //write new info to the text file
+                    Exit();
                 }
-                //Console.Write(saveinfo.ToString());
-                System.IO.File.WriteAllLines("save.txt", saveinfo); //write new info to the text file
-                Exit();
+                catch
+                {
+                    Exit();
+                }
             }
             
 
@@ -1777,7 +1784,7 @@ namespace PirateGame
                 if (mouseClickRect.Intersects(startButtonRect)) //player clicked start button
                 {
                     currentState = gameState.overWorld;
-                    //MediaPlayer.Play(OverworldSong);
+                    MediaPlayer.Play(OverworldSong);
                     MediaPlayer.IsRepeating = true;
                     MediaPlayer.Volume = 1.0f;
                     overworld_init();

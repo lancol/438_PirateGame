@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Audio;
 
 namespace PirateGame
 {
@@ -15,6 +16,8 @@ namespace PirateGame
         public bool facingRight;
         List<Cannonball> cannonballs = new List<Cannonball>();
         static Texture2D cBall_image;
+
+        Random rand;
 
         [Flags]
         enum pathtype {none, circle, line}
@@ -37,6 +40,8 @@ namespace PirateGame
             stance = "passive";
             facingRight = true;
             currentPath = pathtype.none;
+
+            rand = new Random();
         }
 
         public static void setCBallImage(Texture2D Image)
@@ -225,6 +230,11 @@ namespace PirateGame
             rotateTowardsPlayer(player, DT);
             //else sail towards a good vantage point +/- k distance from top or bottom of player ship
 
+            if (Vector2.Distance(player.getPos(), getPos()) > 1500)
+            {
+                setHealth(0);
+            }
+
             //Sail forward
             setX(getX() + (30 * DT) * (float)Math.Cos(MathHelper.ToRadians(getRotate()))); //update positions
             setY(getY() + (30 * DT) * (float)Math.Sin(MathHelper.ToRadians(getRotate())));
@@ -232,12 +242,18 @@ namespace PirateGame
 
         private void fireCannon(int direction)
         {
+            SoundEffectInstance sound;
+            sound = cannonFire.CreateInstance();
             if (direction == 0) //0 == right
             {
+                sound.Pitch = rand.Next(-1, 1);
+                sound.Play();
                 cannonballs.Add(new Cannonball((int)getX(), (int)getY(), false, fireDistance, 175*(float)Math.Cos(MathHelper.ToRadians(getRotate()+90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate()+90)))); //0 == good, 1 == bad; FireDistance, xSpeed, ySpeed
             }
             else //left
             {
+                sound.Pitch = rand.Next(-1, 1);
+                sound.Play();
                 cannonballs.Add(new Cannonball((int)getX(), (int)getY(), false, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() - 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() - 90)))); //0 == good, 1 == bad; FireDistance, xSpeed, ySpeed
                 //cannonballs.Add(new Cannonball((int)getX(), (int)getY(), false, fireDistance, -30, 30)); //0 == good, 1 == bad; FireDistance, xSpeed, ySpeed
             }
@@ -253,7 +269,7 @@ namespace PirateGame
             {
                 setRotate(getRotate() + 30 * DT);
             }
-            else if ((player.getY() > getY() && player.getX() > getX()) || (player.getY() < getY() && player.getX() > getX())) //if player is below enemy and to the left OR above and to the right
+            else if ((player.getY() > getY() && player.getX() < getX()) || (player.getY() < getY() && player.getX() > getX())) //if player is below enemy and to the left OR above and to the right
             {
                 setRotate(getRotate() - 30 * DT);
             }
