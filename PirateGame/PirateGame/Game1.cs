@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Audio;
 using System;
 using System.Diagnostics;
+using System.IO;
+using System.IO.IsolatedStorage;
 
 namespace PirateGame
 {
@@ -15,7 +17,7 @@ namespace PirateGame
     {
         #region Class Variables
         [Flags]
-        enum gameState{mainMenu,overWorld,battle,inTown, instructions, savefiles}
+        enum gameState{mainMenu,overWorld,battle,inTown, instructions, savefiles, credits}
 
         #region System/Game Control
         GraphicsDeviceManager graphics;
@@ -28,6 +30,10 @@ namespace PirateGame
         int world_W;
         int world_H;
         bool mapOpen;
+        bool buyOptionOpen;
+        bool healthFull;
+        bool moraleFull;
+        bool returnError;
         #endregion
 
         #region Particle Engine
@@ -110,6 +116,21 @@ namespace PirateGame
         Texture2D enemyHealth;
         #endregion
 
+        #region Instructions menu
+        Texture2D objectiveMessage;
+        Texture2D instructionTips;
+        Texture2D hotkeys;
+        #endregion
+
+        //error messages
+        Texture2D moraleFullMessage;
+        Texture2D healthFullMessage;
+
+        //credits stuff
+        Texture2D creditsButton;
+        Texture2D creditsLabel;
+        Texture2D credits;
+
         #region Animation related
         float t;
         float effectT;
@@ -124,11 +145,13 @@ namespace PirateGame
 
         #region General Status Bar Elements
         Texture2D statusBarBase;
-        SpriteFont VinerHand;
+        //SpriteFont VinerHand;
         Texture2D AlignmentBar;
         Texture2D HealthBar; // full bar
         Texture2D MoraleBar; // full bar
         Texture2D MenuSlider;
+        Texture2D CrewIcon;
+        Texture2D GoldIcon;
         #endregion
 
         #region Shop Window
@@ -139,7 +162,37 @@ namespace PirateGame
         Texture2D shop_label;
         Texture2D crew_label;
         Texture2D upgrades_label;
+        int crewAdding = 0;
+        Texture2D shipStats;
+        Texture2D crewStats;
+        Texture2D costLabel;
+        Texture2D cannonStats;
+        Texture2D beerStats;
+        Texture2D buyButton;
+        Texture2D hireButton;
+        Texture2D line;
+        int firstItemCost; // Write algorithm to calculate, proportional to current gold ammount
+        int secondItemCost;
+        int thirdItemCost;
+        int itemSelected;
+        int repairCost;
         #endregion
+
+        int attackUpgrade = 10;
+        int defenseUpgrade = 10;
+        int speedUpgrade = 10;
+        int maxAccelerationUpgrade = 10;
+        int moraleUpgrade = 10;
+        int reloadSpeedUpgrade = 10;
+        int accelerationUpgrade = 10;
+        int crewCost;
+        bool notEnoughGold = false;
+
+        Texture2D popUpBackground;
+        Texture2D yesButtonSmaller;
+        Texture2D noButtonSmaller;
+        Texture2D insufficientFundsMessage;
+        Texture2D errorBackButton;
 
         #region Save File elements
         Texture2D saveFilesLabel;
@@ -148,6 +201,12 @@ namespace PirateGame
         Texture2D file3Label;
         #endregion
 
+        SpriteFont ourfont;
+        Texture2D upArrow;
+        Texture2D downArrow;
+        Texture2D shopShip;
+        Texture2D shopCannon;
+        Texture2D beerIcon;
         #endregion
 
         public Game1()
@@ -313,6 +372,8 @@ namespace PirateGame
                 AlignmentBar = Content.Load<Texture2D>("Alignment_Status_Bar_Resized");
                 HealthBar = Content.Load<Texture2D>("Health_Status_Bar_Resized");
                 MenuSlider = Content.Load<Texture2D>("Slider");
+                CrewIcon = Content.Load<Texture2D>("Sword_Icon_Small");
+                GoldIcon = Content.Load<Texture2D>("Gold");
 
                 //loads all islands
                 island[0] = Content.Load<Texture2D>("Island150p");
@@ -338,6 +399,16 @@ namespace PirateGame
                 shop_label = Content.Load<Texture2D>("Shop_Label");
                 crew_label = Content.Load<Texture2D>("Hire_Crew_Label");
                 upgrades_label = Content.Load<Texture2D>("Upgrades_Label");
+                shopShip = Content.Load<Texture2D>("Ship_Small");
+                shopCannon = Content.Load<Texture2D>("Cannonball_Small");
+                beerStats = Content.Load<Texture2D>("Beer Stats Label");
+                line = Content.Load<Texture2D>("Line");
+
+                popUpBackground = Content.Load<Texture2D>("Pop Up");
+                yesButtonSmaller = Content.Load<Texture2D>("Yes Smaller");
+                noButtonSmaller = Content.Load<Texture2D>("No Smaller");
+                insufficientFundsMessage = Content.Load<Texture2D>("Error Message");
+                errorBackButton = Content.Load<Texture2D>("Error_Back_Button");
 
                 // load island labels
                 butterflyLabel = Content.Load<Texture2D>("Butterfly Label");
@@ -357,6 +428,29 @@ namespace PirateGame
                 //load map
                 Map = Content.Load<Texture2D>("Map678");
 
+                //load font
+                ourfont = Content.Load<SpriteFont>("font");
+
+                // load shop arrows
+                upArrow = Content.Load<Texture2D>("Arrow_Up_Resized");
+                downArrow = Content.Load<Texture2D>("Arrow_Down_Resized");
+
+                beerIcon = Content.Load<Texture2D>("beer");
+
+                shipStats = Content.Load<Texture2D>("Ship Stats Label");
+                crewStats = Content.Load<Texture2D>("Crew Stats Label");
+                costLabel = Content.Load<Texture2D>("Cost Label");
+                cannonStats = Content.Load<Texture2D>("Attack Label");
+                hireButton = Content.Load<Texture2D>("Hire Button");
+                buyButton = Content.Load<Texture2D>("Buy Button");
+
+
+                credits = Content.Load<Texture2D>("Credits");
+                creditsLabel = Content.Load<Texture2D>("Credits Label");
+                creditsButton = Content.Load<Texture2D>("Credits Button");
+                moraleFullMessage = Content.Load<Texture2D>("Morale Error");
+                healthFullMessage = Content.Load<Texture2D>("Ship Repair Error");
+
                 //load save file elements
                 saveFilesLabel = Content.Load<Texture2D>("Saved Games Label");
                 file1Label = Content.Load<Texture2D>("File 1 Label");
@@ -365,6 +459,9 @@ namespace PirateGame
 
                 //loads instructions label;
                 InstructionsLabel = Content.Load<Texture2D>("Instructions Label");
+                objectiveMessage = Content.Load<Texture2D>("Objective");
+                instructionTips = Content.Load<Texture2D>("Tips");
+                hotkeys = Content.Load<Texture2D>("Hotkeys");
 
                 //Set the players ship image
                 player.setImage(shipImg[0]);
@@ -495,15 +592,14 @@ namespace PirateGame
                 mapOpen = false;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.S)) //Temporary until overworld island interaction
-            {
-                currentState = gameState.inTown;
-            }
-
             if (Keyboard.GetState().IsKeyDown(Keys.I))
             {
                 instructionsOpen = true;
                 currentState = gameState.instructions;
+            }
+            else
+            {
+                instructionsOpen = false;
             }
 
             #endregion
@@ -512,6 +608,9 @@ namespace PirateGame
             {
                 case gameState.mainMenu: //Main Menu
                     #region Main Menu
+
+                    crewAdding = 0;
+                    buyOptionOpen = false;
 
                     IsMouseVisible = true; //enables mouse pointer
                                            
@@ -531,6 +630,10 @@ namespace PirateGame
                     break;
                 case gameState.overWorld: //overworld
                     #region Overworld
+
+                    buyOptionOpen = false;
+                    crewAdding = 0;
+
                     IsMouseVisible = false;
 
                     //wait for mouseclick
@@ -649,6 +752,9 @@ namespace PirateGame
                     break;
                 case gameState.battle: //In battle
                     #region In Battle
+
+                    buyOptionOpen = false;
+                    crewAdding = 0;
 
                     //check for pause
 
@@ -799,6 +905,23 @@ namespace PirateGame
                     //wait for mouseclick
                     mouseState = Mouse.GetState();
 
+                    /*
+                    Random rnd = new Random();
+                    int month = rnd.Next(1, 13); // creates a number between 1 and 12
+                    int dice = rnd.Next(1, 7);   // creates a number between 1 and 6
+                    int card = rnd.Next(52);     // creates a number between 0 and 51
+                    */
+
+                    crewCost = (int)((.5) * (double)player.getGold() * (double)crewAdding); // determines cost of crew members
+                    reloadSpeedUpgrade = (int)(1.2 * (double)crewAdding);
+                    accelerationUpgrade = (int)((1.5 * (double)player.get_bAcceleration()) * (double)crewAdding);
+
+                    firstItemCost = attackUpgrade * 20;
+                    secondItemCost = defenseUpgrade * 20;
+                    thirdItemCost = player.getCrew() * 5;
+
+                    repairCost = 20 * (100 - (int)player.getHealth());
+
                     if (previousMouseState.LeftButton == ButtonState.Pressed &&
                     mouseState.LeftButton == ButtonState.Released)
                     {
@@ -815,6 +938,7 @@ namespace PirateGame
                 case gameState.instructions: //Instructions pulled up 
                     #region Instructions
 
+                    buyOptionOpen = false;
                     IsMouseVisible = true; //enables mouse pointer
 
                     //wait for mouseclick
@@ -827,10 +951,15 @@ namespace PirateGame
                     }
 
                     previousMouseState = mouseState;
+
+                    if (previousStateInstructions != 0 && previousStateInstructions != 1 && previousStateInstructions != 2 && previousStateInstructions != 3 && previousStateInstructions != 4)
+                        previousStateInstructions = 5;
+
                     #endregion
                     break;
                 case gameState.savefiles:
                     #region Save Files
+                    buyOptionOpen = false;
 
                     IsMouseVisible = true; //enables mouse pointer
 
@@ -845,8 +974,27 @@ namespace PirateGame
 
                     previousMouseState = mouseState;
 
-                    previousStateInstructions = 0;
+                    previousStateInstructions = 4;
                     #endregion
+                    break;
+                case gameState.credits:
+                    buyOptionOpen = false;
+
+                    IsMouseVisible = true; //enables mouse pointer
+
+                    //wait for mouseclick
+                    mouseState = Mouse.GetState();
+
+                    if (previousMouseState.LeftButton == ButtonState.Pressed &&
+                    mouseState.LeftButton == ButtonState.Released)
+                    {
+                        MouseClicked(mouseState.X, mouseState.Y);
+                    }
+
+                    previousMouseState = mouseState;
+
+                    previousStateInstructions = 6;
+
                     break;
                 default:
                     Exit();
@@ -881,6 +1029,7 @@ namespace PirateGame
                     spriteBatch.Draw(instructionsButton, instructionsButtonPosition, Color.White);
                     spriteBatch.Draw(exitButton, exitButtonPosition, Color.White);
                     spriteBatch.Draw(logo, logoPosition, Color.White);
+                    spriteBatch.Draw(creditsButton, new Vector2(920, 10), Color.CadetBlue);
 
                     if (instructionsOpen)
                         currentState = gameState.instructions;
@@ -983,6 +1132,9 @@ namespace PirateGame
                     spriteBatch.Draw(HealthBar, new Vector2(camera.position.X + 180, camera.position.Y + 10), new Rectangle(0, 0, (int)((player.getHealth() / 100f) * HealthBar.Width), HealthBar.Height), Color.White);
                     spriteBatch.Draw(AlignmentBar, new Vector2(camera.position.X + 180, camera.position.Y + 40), Color.White); // always same
                     spriteBatch.Draw(MenuSlider, new Vector2(camera.position.X + 285, camera.position.Y + 40), Color.White);
+                    spriteBatch.Draw(CrewIcon, new Vector2(camera.position.X + 795, camera.position.Y + 40), Color.White);
+                    spriteBatch.DrawString(ourfont, Convert.ToString(player.getCrew()), new Vector2(camera.position.X + 765, camera.position.Y + 45), Color.White);
+                    spriteBatch.DrawString(ourfont, Convert.ToString(player.getGold()), new Vector2(camera.position.X + 910, camera.position.Y + 45), Color.White);
                     #endregion
 
                     //Draw Map
@@ -1008,6 +1160,17 @@ namespace PirateGame
                         spriteBatch.Draw(whiteblock, mapPos + player.getPos()*.226f, Color.LawnGreen);
                     }
                     #endregion
+
+                    if (instructionsOpen == true)
+                    {
+                        spriteBatch.Draw(menuBackground, new Vector2(camera.position.X, camera.position.Y), Color.White);
+                        spriteBatch.Draw(shop_window_background, new Vector2(camera.position.X + 160, camera.position.Y + 60), Color.White);
+                        spriteBatch.Draw(InstructionsLabel, new Vector2(camera.position.X + 380, camera.position.Y + 110), Color.White);
+                        spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 480, camera.position.Y + 620), Color.White);
+                        spriteBatch.Draw(objectiveMessage, new Vector2(290, 170), Color.White);
+                        spriteBatch.Draw(instructionTips, new Vector2(280, 400), Color.White);
+                        spriteBatch.Draw(hotkeys, new Vector2(430, 260), Color.White);
+                    }
 
                     #region Draws Enter Town prompt
                     // draw when collide with island
@@ -1099,6 +1262,9 @@ namespace PirateGame
                     spriteBatch.Draw(HealthBar, new Vector2(camera.position.X + 180, camera.position.Y + 10), new Rectangle(0, 0, (int)((player.getHealth() / 100f) * HealthBar.Width), HealthBar.Height), Color.White);
                     spriteBatch.Draw(AlignmentBar, new Vector2(camera.position.X + 180, camera.position.Y + 40), Color.White); // always same
                     spriteBatch.Draw(MenuSlider, new Vector2(camera.position.X + 285, camera.position.Y + 40), Color.White);
+                    spriteBatch.Draw(CrewIcon, new Vector2(camera.position.X + 795, camera.position.Y + 40), Color.White);
+                    spriteBatch.DrawString(ourfont, Convert.ToString(player.getCrew()), new Vector2(camera.position.X + 765, camera.position.Y + 45), Color.White);
+                    spriteBatch.DrawString(ourfont, Convert.ToString(player.getGold()), new Vector2(camera.position.X + 910, camera.position.Y + 45), Color.White);
                     #endregion
 
                     #region portrait
@@ -1138,22 +1304,155 @@ namespace PirateGame
                     spriteBatch.Draw(HealthBar, new Vector2(camera.position.X + 180, camera.position.Y + 10), new Rectangle(0, 0, (int)((player.getHealth() / 100f) * HealthBar.Width), HealthBar.Height), Color.White);
                     spriteBatch.Draw(AlignmentBar, new Vector2(camera.position.X + 180, camera.position.Y + 40), Color.White); // always same
                     spriteBatch.Draw(MenuSlider, new Vector2(camera.position.X + 285, camera.position.Y + 40), Color.White);
+                    spriteBatch.Draw(CrewIcon, new Vector2(camera.position.X + 795, camera.position.Y + 40), Color.White);
+                    spriteBatch.DrawString(ourfont, Convert.ToString(player.getCrew()), new Vector2(camera.position.X + 765, camera.position.Y + 45), Color.White);
+                    spriteBatch.DrawString(ourfont, Convert.ToString(player.getGold()), new Vector2(camera.position.X + 910, camera.position.Y + 45), Color.White);
                     #endregion
 
                     #region Draw Shop Items
                     //draw shop window objects
                     spriteBatch.Draw(shop_window_background, new Vector2(camera.position.X + 170, camera.position.Y + 115), Color.White);
                     spriteBatch.Draw(shop_label, new Vector2(camera.position.X + 445, camera.position.Y + 140), Color.White);
-                    spriteBatch.Draw(upgrades_label, new Vector2(camera.position.X + 250, camera.position.Y + 215), Color.White);
-                    spriteBatch.Draw(crew_label, new Vector2(camera.position.X + 630, camera.position.Y + 215), Color.White);
+                    spriteBatch.Draw(upgrades_label, new Vector2(camera.position.X + 325, camera.position.Y + 215), Color.White);
+                    spriteBatch.Draw(crew_label, new Vector2(camera.position.X + 643, camera.position.Y + 215), Color.White);
 
-                    spriteBatch.Draw(shop_repair_button, new Vector2(camera.position.X + 500, camera.position.Y + 640), Color.White);
-                    spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 710, camera.position.Y + 160), Color.White);
+                    //draw buttons
+                    spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 730, camera.position.Y + 645), Color.White);
+                    spriteBatch.Draw(shop_repair_button, new Vector2(camera.position.X + 667, camera.position.Y + 540), Color.White);
+
+                    //draw item background boxes
                     spriteBatch.Draw(shop_item_image, new Vector2(camera.position.X + 210, camera.position.Y + 300), Color.White);
                     spriteBatch.Draw(shop_item_image, new Vector2(camera.position.X + 210, camera.position.Y + 420), Color.White);
                     spriteBatch.Draw(shop_item_image, new Vector2(camera.position.X + 210, camera.position.Y + 540), Color.White);
 
-                    //  spriteBatch.Draw(whiteblock, (new Vector2((int)camera.position.X + 500, (int)camera.position.Y + 640)), Color.White);
+                    //draw items for purchase icons
+                    spriteBatch.Draw(shopShip, new Vector2(camera.position.X + 213, camera.position.Y + 427), Color.White);
+                    spriteBatch.Draw(shopCannon, new Vector2(camera.position.X + 213, camera.position.Y + 302), Color.White);
+                    spriteBatch.Draw(beerIcon, new Vector2(camera.position.X + 214, camera.position.Y + 544), Color.White);
+
+                    //draw crew number
+                    spriteBatch.DrawString(ourfont, Convert.ToString(crewAdding), new Vector2(camera.position.X + 705, camera.position.Y + 298), Color.Black);
+
+                    //draw crew spinner arrows
+                    spriteBatch.Draw(upArrow, new Vector2(camera.position.X + 727, camera.position.Y + 280), Color.White);
+                    spriteBatch.Draw(downArrow, new Vector2(camera.position.X + 727, camera.position.Y + 300), Color.White);
+
+                    //draw stat labels
+                    spriteBatch.Draw(shipStats, new Vector2(camera.position.X + 300, camera.position.Y + 415), Color.White);
+                    spriteBatch.Draw(cannonStats, new Vector2(camera.position.X + 300, camera.position.Y + 315), Color.White);
+                    spriteBatch.Draw(beerStats, new Vector2(camera.position.X + 300, camera.position.Y + 555), Color.White);
+                    spriteBatch.Draw(crewStats, new Vector2(camera.position.X + 660, camera.position.Y + 335), Color.White);
+
+                    //draw purchase buttons
+                    spriteBatch.Draw(hireButton, new Vector2(camera.position.X + 695, camera.position.Y + 435), Color.White);
+                    spriteBatch.Draw(buyButton, new Vector2(camera.position.X + 490, camera.position.Y + 345), Color.White);
+                    spriteBatch.Draw(buyButton, new Vector2(camera.position.X + 490, camera.position.Y + 455), Color.White);
+                    spriteBatch.Draw(buyButton, new Vector2(camera.position.X + 490, camera.position.Y + 580), Color.White);
+
+                    //draw gold icons
+                    spriteBatch.Draw(GoldIcon, new Vector2(camera.position.X + 735, camera.position.Y + 390), Color.White);
+                    spriteBatch.Draw(GoldIcon, new Vector2(camera.position.X + 540, camera.position.Y + 410), Color.White);
+                    spriteBatch.Draw(GoldIcon, new Vector2(camera.position.X + 540, camera.position.Y + 298), Color.White);
+                    spriteBatch.Draw(GoldIcon, new Vector2(camera.position.X + 540, camera.position.Y + 535), Color.White);
+
+                    // draw line divider
+                    spriteBatch.Draw(line, new Vector2(camera.position.X + 600, camera.position.Y + 290), Color.Brown);
+
+                    spriteBatch.DrawString(ourfont, Convert.ToString(firstItemCost), new Vector2(camera.position.X + 510, camera.position.Y + 310), Color.Black);
+                    spriteBatch.DrawString(ourfont, Convert.ToString(secondItemCost), new Vector2(camera.position.X + 510, camera.position.Y + 420), Color.Black);
+                    spriteBatch.DrawString(ourfont, Convert.ToString(thirdItemCost), new Vector2(camera.position.X + 510, camera.position.Y + 550), Color.Black);
+                    spriteBatch.DrawString(ourfont, Convert.ToString(crewCost), new Vector2(camera.position.X + 705, camera.position.Y + 405), Color.Black);
+
+
+                    spriteBatch.DrawString(ourfont, Convert.ToString(attackUpgrade), new Vector2(camera.position.X + 375, camera.position.Y + 317), Color.Black);
+                    spriteBatch.DrawString(ourfont, Convert.ToString(defenseUpgrade), new Vector2(camera.position.X + 375, camera.position.Y + 420), Color.Black);
+                    spriteBatch.DrawString(ourfont, Convert.ToString(speedUpgrade), new Vector2(camera.position.X + 360, camera.position.Y + 445), Color.Black);
+                    spriteBatch.DrawString(ourfont, Convert.ToString(maxAccelerationUpgrade), new Vector2(camera.position.X + 450, camera.position.Y + 470), Color.Black);
+                    spriteBatch.DrawString(ourfont, Convert.ToString(moraleUpgrade), new Vector2(camera.position.X + 370, camera.position.Y + 557), Color.Black);
+                    spriteBatch.DrawString(ourfont, Convert.ToString(reloadSpeedUpgrade), new Vector2(camera.position.X + 780, camera.position.Y + 340), Color.Black);
+                    spriteBatch.DrawString(ourfont, Convert.ToString(accelerationUpgrade), new Vector2(camera.position.X + 780, camera.position.Y + 365), Color.Black);
+
+
+                    // Write algorithm to calculate, proportional to current gold ammount
+
+                    if (buyOptionOpen == true)
+                    {
+                        if ((itemSelected != 3 && moraleFull != false) && ((itemSelected == 3 && healthFull == false)))
+                            spriteBatch.Draw(noButtonSmaller, new Vector2(camera.position.X + 340, camera.position.Y + 430), Color.White);
+                        spriteBatch.Draw(yesButtonSmaller, new Vector2(camera.position.X + 580, camera.position.Y + 430), Color.White);
+                        returnError = false;
+                    }
+
+
+                    #endregion
+
+                    if (notEnoughGold == true)
+                    {
+                        spriteBatch.Draw(popUpBackground, new Vector2(camera.position.X + 205, camera.position.Y + 320), Color.White);
+                        spriteBatch.Draw(insufficientFundsMessage, new Vector2(camera.position.X + 255, camera.position.Y + 380), Color.White);
+                        spriteBatch.Draw(errorBackButton, new Vector2(camera.position.X + 500, camera.position.Y + 440), Color.White);
+                    }
+
+
+
+                    if (healthFull == true)
+                    {
+                        buyOptionOpen = false;
+                        spriteBatch.Draw(popUpBackground, new Vector2(camera.position.X + 205, camera.position.Y + 320), Color.White);
+                        spriteBatch.Draw(healthFullMessage, new Vector2(camera.position.X + 440, camera.position.Y + 390), Color.White);
+                        spriteBatch.Draw(errorBackButton, new Vector2(camera.position.X + 500, camera.position.Y + 440), Color.White);
+                        returnError = true;
+                    }
+
+                    if (moraleFull == true)
+                    {
+                        buyOptionOpen = false;
+                        spriteBatch.Draw(popUpBackground, new Vector2(camera.position.X + 205, camera.position.Y + 320), Color.White);
+                        spriteBatch.Draw(moraleFullMessage, new Vector2(camera.position.X + 410, camera.position.Y + 390), Color.White);
+                        spriteBatch.Draw(errorBackButton, new Vector2(camera.position.X + 500, camera.position.Y + 440), Color.White);
+                        returnError = true;
+                    }
+
+
+                    #region Draws Buy Item prompt
+                    // draw when collide with island
+                    if (buyOptionOpen == true)
+                    {
+
+                        //draws sign
+                        spriteBatch.Draw(popUpBackground, new Vector2(camera.position.X + 205, camera.position.Y + 320), Color.White);
+                        spriteBatch.DrawString(ourfont, "Are you sure you want to spend ", new Vector2(camera.position.X + 415, camera.position.Y + 355), Color.Black);
+                        spriteBatch.Draw(GoldIcon, new Vector2(camera.position.X + 565, camera.position.Y + 380), Color.White);
+                        spriteBatch.Draw(noButtonSmaller, new Vector2(camera.position.X + 340, camera.position.Y + 430), Color.White);
+                        spriteBatch.Draw(yesButtonSmaller, new Vector2(camera.position.X + 580, camera.position.Y + 430), Color.White);
+                        IsMouseVisible = true;
+
+                        {
+                            switch (itemSelected)
+                            {
+                                case 1:
+                                    spriteBatch.DrawString(ourfont, (Convert.ToString(firstItemCost)), new Vector2(camera.position.X + 520, camera.position.Y + 390), Color.Black);
+                                    break;
+
+                                case 2:
+                                    spriteBatch.DrawString(ourfont, (Convert.ToString(secondItemCost)), new Vector2(camera.position.X + 520, camera.position.Y + 390), Color.Black);
+                                    break;
+
+                                case 3:
+                                    spriteBatch.DrawString(ourfont, (Convert.ToString(thirdItemCost)), new Vector2(camera.position.X + 520, camera.position.Y + 390), Color.Black);
+                                    break;
+
+                                case 4:
+                                    spriteBatch.DrawString(ourfont, (Convert.ToString(crewCost)), new Vector2(camera.position.X + 520, camera.position.Y + 390), Color.Black);
+                                    break;
+                                case 5:
+                                    spriteBatch.DrawString(ourfont, (Convert.ToString(repairCost)), new Vector2(camera.position.X + 520, camera.position.Y + 390), Color.Black);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
 
                     #endregion
                     #endregion
@@ -1163,7 +1462,11 @@ namespace PirateGame
                     spriteBatch.Draw(menuBackground, new Vector2(camera.position.X, camera.position.Y), Color.White);
                     spriteBatch.Draw(shop_window_background, new Vector2(camera.position.X + 160, camera.position.Y + 60), Color.White);
                     spriteBatch.Draw(InstructionsLabel, new Vector2(camera.position.X + 380, camera.position.Y + 110), Color.White);
-                    spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 480, camera.position.Y + 565), Color.White);
+                    spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 480, camera.position.Y + 620), Color.White);
+                    spriteBatch.Draw(objectiveMessage, new Vector2(camera.position.X + 290, camera.position.Y + 170), Color.White); //breaks here
+                    spriteBatch.Draw(instructionTips, new Vector2(camera.position.X + 280, camera.position.Y + 400), Color.White);
+                    spriteBatch.Draw(hotkeys, new Vector2(camera.position.X + 430, camera.position.Y + 260), Color.White);
+
                     #endregion
                     break;
                 case gameState.savefiles:
@@ -1179,6 +1482,13 @@ namespace PirateGame
                     spriteBatch.Draw(continueButton, new Vector2(camera.position.X + 675, camera.position.Y + 365), Color.White);
                     spriteBatch.Draw(continueButton, new Vector2(camera.position.X + 675, camera.position.Y + 515), Color.White);
                     #endregion
+                    break;
+                case gameState.credits:
+                    spriteBatch.Draw(menuBackground, new Vector2(camera.position.X, camera.position.Y), Color.White);
+                    spriteBatch.Draw(shop_window_background, new Vector2(camera.position.X + 160, camera.position.Y + 60), Color.White);
+                    spriteBatch.Draw(creditsLabel, new Vector2(camera.position.X + 410, camera.position.Y + 125), Color.White);
+                    spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 480, camera.position.Y + 560), Color.White);
+                    spriteBatch.Draw(credits, new Vector2(camera.position.X + 370, camera.position.Y + 200), Color.White);
                     break;
                 default:
                     Exit();
@@ -1219,72 +1529,201 @@ namespace PirateGame
                     overworld_init();
                 }
             }
-            if (currentState == gameState.instructions)
+            if (currentState == gameState.instructions) //wonky
             {
-                Rectangle instructionBackRect = new Rectangle(480, 565, 138, 40);
+                Rectangle instructionBackRect = new Rectangle(480, 620, 73, 40);
+
 
                 if (mouseClickRect.Intersects(instructionBackRect))
                 {
                     if (previousStateInstructions == 0)
                         currentState = gameState.mainMenu;
                     else if (previousStateInstructions == 1)
-                        currentState = gameState.overWorld;
+                        currentState = gameState.overWorld; // issues
                     else if (previousStateInstructions == 2)
                         currentState = gameState.battle;
                     else if (previousStateInstructions == 3)
                         currentState = gameState.inTown;
-                    else
+                    else if (previousStateInstructions == 4)
+                        currentState = gameState.savefiles;
+                    else if (previousStateInstructions == 5)
+                        currentState = gameState.mainMenu;
+                    else if (previousStateInstructions == 6)
                         currentState = gameState.mainMenu;
                 }
-                else
-                {
-                    currentState = gameState.instructions;
-                }
-
             }
 
             //check the shop menu
             if (currentState == gameState.inTown)
             {
+                Rectangle repairShipButtonRect = new Rectangle(667, 540, 138, 40);
+                Rectangle backButtonRect = new Rectangle(730, 645, 73, 40);
+                Rectangle upArrowRect = new Rectangle(727, 280, 20, 17);
+                Rectangle downArrowRect = new Rectangle(727, 300, 20, 17);
+                Rectangle buyOneRect = new Rectangle(490, 455, 77, 40);
+                Rectangle buyTwoRect = new Rectangle(490, 345, 77, 40);
+                Rectangle buyThreeRect = new Rectangle(490, 580, 77, 40);
+                Rectangle hireButRect = new Rectangle(695, 435, 81, 40);
 
-                Rectangle repairShipButtonRect = new Rectangle(500, 640, 138, 40);
-                Rectangle backButtonRect = new Rectangle(710, 160, 138, 40);
-                Rectangle itemOneRect = new Rectangle(210, 300, 51, 50);
-                Rectangle itemTwoRect = new Rectangle(210, 420, 51, 50);
-                Rectangle itemThreeRect = new Rectangle(210, 540, 51, 50);
-
-
-                if (mouseClickRect.Intersects(repairShipButtonRect)) //player clicked start button
+                if (returnError == true)
                 {
-                    currentState = gameState.overWorld;
-                    overworld_init();
+                    Rectangle closeErrorRect = new Rectangle(500, 440, 73, 40);
+
+                    if (mouseClickRect.Intersects(closeErrorRect))
+                    {
+                        IsMouseVisible = false;
+                        currentState = gameState.inTown;
+                        healthFull = false;
+                        moraleFull = false;
+                    }
+
                 }
-                else if (mouseClickRect.Intersects(backButtonRect))
+                //500, 440
+
+                if (buyOptionOpen == true)
                 {
-                    currentState = gameState.overWorld;
-                    overworld_init();
-                }
-                else if (mouseClickRect.Intersects(itemOneRect))
-                {
-                    currentState = gameState.overWorld;
-                    overworld_init();
+
+                    Rectangle noButtonSmallerRect = new Rectangle(340, 430, 126, 73);
+                    Rectangle yesButtonSmallerRect = new Rectangle(580, 430, 125, 71);
+
+                    if (mouseClickRect.Intersects(yesButtonSmallerRect))
+                    {
+                        IsMouseVisible = false;
+                        currentState = gameState.inTown;
+
+                        if (itemSelected == 1 && ((int)((player.getGold() - firstItemCost)) >= 0))
+                        {
+                            player.setGold(player.getGold() - firstItemCost);
+                            notEnoughGold = false;
+                            player.setAttack(player.getAttack() + attackUpgrade);
+                        }
+                        else if (itemSelected == 1 && ((int)((player.getGold() - firstItemCost)) < 0))
+                            notEnoughGold = true;
+
+                        if (itemSelected == 2 && ((int)((player.getGold() - secondItemCost)) >= 0))
+                        {
+                            player.setGold(player.getGold() - secondItemCost);
+                            notEnoughGold = false;
+                            player.setDefense(player.getAttack() + attackUpgrade);
+                            player.set_bSpeed(player.get_bSpeed() + speedUpgrade);
+                            player.set_bAcceleration(player.get_bAcceleration() + accelerationUpgrade);
+                        }
+                        else if (itemSelected == 2 && ((int)((player.getGold() - secondItemCost)) < 0))
+                            notEnoughGold = true;
+
+
+
+                        if (itemSelected == 3 && player.getMorale() < 100 && ((int)((player.getGold() - thirdItemCost)) >= 0))
+                        {
+                            player.setGold(player.getGold() - thirdItemCost);
+                            notEnoughGold = false;
+                            player.setMorale(100);
+                        }
+                        else if (itemSelected == 3 && player.getMorale() < 100 && ((int)((player.getGold() - thirdItemCost)) < 0))
+                            notEnoughGold = true;
+                        else if (itemSelected == 3 && player.getMorale() >= 100)
+                            moraleFull = true;
+
+                        if (itemSelected == 4 && ((int)((player.getGold() - crewCost)) >= 0))
+                        {
+                            player.setGold(player.getGold() - crewCost);
+                            player.setCrew(player.getCrew() + crewAdding);
+                            notEnoughGold = false;
+                        }
+                        else if (itemSelected == 4 && ((int)((player.getGold() - crewCost)) < 0))
+                            notEnoughGold = true;
+
+                        if (itemSelected == 5 && player.getHealth() < 100 && (((int)(player.getGold() - repairCost)) >= 0))
+                        {
+                            player.setGold(player.getGold() - repairCost);
+                            notEnoughGold = false;
+                        }
+                        else if (itemSelected == 5 && player.getHealth() < 100 && ((int)((player.getGold() - repairCost)) < 0))
+                            notEnoughGold = true;
+                        else if (itemSelected == 5 && player.getHealth() >= 100)
+                            healthFull = true;
+
+                        buyOptionOpen = false;
+                    }
+
+
+                    if (mouseClickRect.Intersects(noButtonSmallerRect))
+                    {
+                        IsMouseVisible = false;
+                        currentState = gameState.inTown;
+                        buyOptionOpen = false;
+                        notEnoughGold = false;
+                    }
                 }
 
-                else if (mouseClickRect.Intersects(itemTwoRect))
+                if (mouseClickRect.Intersects(repairShipButtonRect)) //player clicked repair button
                 {
-                    currentState = gameState.overWorld;
-                    overworld_init();
+                    buyOptionOpen = true;
+                    itemSelected = 5;
+                    //currentState = gameState.overWorld;
+                    //pop up to confirm w/ gold price proportional to damage
                 }
-
-                else if (mouseClickRect.Intersects(itemThreeRect))
+                else if (mouseClickRect.Intersects(backButtonRect)) // click back, sends to overworld
                 {
                     currentState = gameState.overWorld;
-                    overworld_init();
+                }
+                else if (mouseClickRect.Intersects(upArrowRect)) //Stops working after one click
+                {
+                    crewAdding++;
+                }
+                else if (mouseClickRect.Intersects(downArrowRect)) //stops working after one click
+                {
+                    if (crewAdding > 0)
+                    {
+                        crewAdding--;
+                    }
+                }
+                else if (mouseClickRect.Intersects(buyOneRect)) // click back, sends to overworld
+                {
+                    buyOptionOpen = true;
+                    itemSelected = 1;
+                    //currentState = gameState.overWorld;
+                }
+                else if (mouseClickRect.Intersects(buyTwoRect)) // click back, sends to overworld
+                {
+                    buyOptionOpen = true;
+                    itemSelected = 2;
+                    // currentState = gameState.overWorld;
+                }
+                else if (mouseClickRect.Intersects(buyThreeRect)) // click back, sends to overworld
+                {
+                    buyOptionOpen = true;
+                    itemSelected = 3;
+                    //currentState = gameState.overWorld;
+                }
+                else if (mouseClickRect.Intersects(hireButRect)) // click back, sends to overworld
+                {
+                    buyOptionOpen = true;
+                    itemSelected = 4;
+                    //currentState = gameState.overWorld;
                 }
                 else
                 {
                     currentState = gameState.inTown;
                 }
+                // }
+            }
+
+            if (currentState == gameState.credits)
+            {
+
+
+                Rectangle goBacktoMainRect = new Rectangle(480, 560, 73, 40);
+
+                if (mouseClickRect.Intersects(goBacktoMainRect)) // click back, sends to overworld
+                {
+                    currentState = gameState.mainMenu;
+                }
+                else
+                {
+                    currentState = gameState.credits;
+                }
+
             }
 
             //check the startmenu
@@ -1299,11 +1738,12 @@ namespace PirateGame
                                       (int)instructionsButtonPosition.Y, 157, 40);
                 Rectangle exitButtonRect = new Rectangle((int)exitButtonPosition.X,
                                       (int)exitButtonPosition.Y, 83, 40);
+                Rectangle creditsButtonRect = new Rectangle(920, 10, 108, 39);
 
                 if (mouseClickRect.Intersects(startButtonRect)) //player clicked start button
                 {
                     currentState = gameState.overWorld;
-                    MediaPlayer.Play(OverworldSong);
+                    //MediaPlayer.Play(OverworldSong);
                     MediaPlayer.IsRepeating = true;
                     MediaPlayer.Volume = 1.0f;
                     overworld_init();
@@ -1317,18 +1757,24 @@ namespace PirateGame
                 {
                     currentState = gameState.mainMenu;
                     instructionsOpen = true;
-
                 }
 
                 else if (mouseClickRect.Intersects(exitButtonRect)) //player clicked exit button
                 {
                     Exit();
                 }
+
+                else if (mouseClickRect.Intersects(creditsButtonRect)) //player clicked credits button
+                {
+                    currentState = gameState.credits;
+                    //Exit(); // Change to brings up credits page
+                }
+
             }
 
-            if (currentState == gameState.savefiles) // not working right
+            if (currentState == gameState.savefiles)
             {
-                Rectangle gobackRect = new Rectangle(490, 605, 138, 40);
+                Rectangle gobackRect = new Rectangle(490, 605, 73, 40);
 
                 if (mouseClickRect.Intersects(gobackRect))
                 {
