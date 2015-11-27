@@ -954,7 +954,7 @@ namespace PirateGame
                     secondItemCost = defenseUpgrade * 20;
                     thirdItemCost = player.getCrew() * 5;
 
-                    repairCost = 20 * (100 - (int)player.getHealth());
+                    repairCost = 2 * (100 - (int)player.getHealth());
 
                     if (previousMouseState.LeftButton == ButtonState.Pressed &&
                     mouseState.LeftButton == ButtonState.Released)
@@ -1670,6 +1670,7 @@ namespace PirateGame
                         if (itemSelected == 5 && player.getHealth() < 100 && (((int)(player.getGold() - repairCost)) >= 0))
                         {
                             player.setGold(player.getGold() - repairCost);
+                            player.setHealth(100);
                             notEnoughGold = false;
                         }
                         else if (itemSelected == 5 && player.getHealth() < 100 && ((int)((player.getGold() - repairCost)) < 0))
