@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
 using System;
 
 namespace PirateGame
@@ -8,6 +9,7 @@ namespace PirateGame
     {
         private Texture2D image;
         private Texture2D battleImage;
+        
         private int gold;
         private int crew;
         private float speed;
@@ -16,7 +18,9 @@ namespace PirateGame
         private float health;
         private float attack;
         private float PowerLevel;
-        
+
+        public static SoundEffect cannonFire;
+
         #region Getters
         public Texture2D getImage()
         {

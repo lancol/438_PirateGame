@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<<<<<<< HEAD
   <SourceFile>C:/Users/Nohely/Documents/GitHub/438_PirateGame/PirateGame/PirateGame/Content/font.spritefont</SourceFile>
   <SourceTime>2015-11-18T16:08:11.2357934-05:00</SourceTime>
   <DestFile>C:/Users/Nohely/Documents/GitHub/438_PirateGame/PirateGame/PirateGame/Content/bin/Windows/font.xnb</DestFile>
   <DestTime>2015-11-18T16:08:51.6072363-05:00</DestTime>
+=======
+  <SourceFile>D:/My Docs/SchoolWork/SMCM/Fall2015/COSC438_GameDev/PirateGame/438_PirateGame/PirateGame/PirateGame/Content/font.spritefont</SourceFile>
+  <SourceTime>2015-11-25T21:06:54.1014074-05:00</SourceTime>
+  <DestFile>D:/My Docs/SchoolWork/SMCM/Fall2015/COSC438_GameDev/PirateGame/438_PirateGame/PirateGame/PirateGame/Content/bin/Windows/font.xnb</DestFile>
+  <DestTime>2015-11-25T21:25:31.4696315-05:00</DestTime>
+>>>>>>> refs/remotes/origin/master
   <Importer>FontDescriptionImporter</Importer>
   <ImporterTime>2015-04-29T13:14:44-04:00</ImporterTime>
   <Processor>FontDescriptionProcessor</Processor>

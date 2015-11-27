@@ -17,6 +17,8 @@ namespace PirateGame
         float xAccl;
         float yAccl;
         float rotateSpeed;
+        public int Count;
+        public static GameTime GT;
 
         public ParticleEngine(Texture2D Image, float Timelimit, float XSpeed, float YSpeed, float X_Accl, float Y_Accl)
         {
@@ -28,6 +30,8 @@ namespace PirateGame
             xAccl = X_Accl;
             yAccl = Y_Accl;
             rotateSpeed = 0;
+            Count = 0;
+            GT = new GameTime();
             particles = new List<Particle>();
         }
 
@@ -36,15 +40,33 @@ namespace PirateGame
             if (active)
             {
                 //add particles
-                particles.Add(new Particle(img, new Vector2(getX(), getY()), (int)timelimit, xSpeed, ySpeed, xAccl, yAccl, rotateSpeed));
+                try {
+                    if ((img.Name == "poof1" || img.Name == "poof2") && Count < 1)
+                    {
+                        particles.Add(new Particle(img, new Vector2(getX(), getY()), (int)timelimit, xSpeed, ySpeed, xAccl, yAccl, rotateSpeed, GT));
+                        Count++;
+                    }
+                    else
+                    {
+                        if (img.Name != "poof1" && img.Name != "poof2")
+                        {
+                            particles.Add(new Particle(img, new Vector2(getX(), getY()), (int)timelimit, xSpeed, ySpeed, xAccl, yAccl, rotateSpeed, GT));
+                            Count++;
+                        }
+                    }
+                }
+                catch
+                {
 
+                }
                 for (int p = 0; p < particles.Count; p++)
                 {
                     particles[p].Update(DT);
                     if (particles[p].TTL <= 0)
                     {
                         particles.RemoveAt(p);
-                        p--;
+                        p--; //why and how was this here.
+                        Count--;
                     }
                 }
             }
@@ -66,8 +88,9 @@ namespace PirateGame
         {
             for (int p = 0; p < particles.Count; p++)
             {
-                    particles.RemoveAt(p);
-                    p--;
+                particles.RemoveAt(p);
+                p--;
+                Count--;
             }
         }
 

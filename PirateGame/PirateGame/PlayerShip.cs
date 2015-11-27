@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
-using System.Diagnostics;
+using Microsoft.Xna.Framework.Audio;
 
 namespace PirateGame
 {
@@ -14,21 +14,29 @@ namespace PirateGame
         private float b_speed;
         private float max_speed;
         private float fireDistance;
+        public bool canFire;
+        public float lastFire;
+
         Texture2D cBall_image;
-        ParticleEngine PE;
+        //ParticleEngine PE;
         List<Cannonball> cannonballs = new List<Cannonball>();
+
+        Random rand;
 
         public PlayerShip(float X, float Y, float Rotate)
         {
             setX(X);
             setY(Y);
             setRotate(Rotate);
-            fireDistance = 300;
+            fireDistance = 150;
 
             setAttack(1);
             setDefense(1);
             setHealth(10);
             setGold(100);
+
+            lastFire = 0;
+            rand = new Random();
         }
 
         public float getMorale()
@@ -90,7 +98,7 @@ namespace PirateGame
         {
             if (b_speed + (b_speed * (b_acceleration * DT)) < max_speed) //if speed is not going over the max speed.
             {
-                if (b_speed == 0.0) //if not moving (unlikely)
+                if (b_speed < 3) //if not moving (unlikely)
                 {
                     b_speed = 3f; //Starting speed of 3, which is quite slow
                 }
@@ -127,31 +135,64 @@ namespace PirateGame
             setRotate(getRotate() - (15 * DT));
         }
 
-        public void fireCannon(NPCShip enemyShip, float DT)
+        public bool fireCannon(NPCShip enemyShip, float DT)
         {
-            if (getX() < enemyShip.getX()) //This is temporary
+            canFire = false;
+            SoundEffectInstance sound;
+            sound = cannonFire.CreateInstance();
+            float rayXr = getX(); //init start position
+            float rayYr = getY();
+            float rayXl = getX();
+            float rayYl = getY();
+
+            float minL = 1000;
+            float minR = 1000;
+            float lDist = 1000;
+            float rDist = 1000;
+
+            for (int k = 0; k < 10; k++)
             {
-                //float xSpeed = ((b_speed + 50) * (float)Math.Cos(MathHelper.ToRadians(getRotate())))*DT;
-                //float ySpeed = ((b_speed + 50) * (float)Math.Sin(MathHelper.ToRadians(getRotate())))*DT;
+                rayXr = getX() + ((k * 10) * (float)Math.Cos(MathHelper.ToRadians(getRotate() + 90))); //right side
+                rayYr = getY() + ((k * 10) * (float)Math.Sin(MathHelper.ToRadians(getRotate() + 90))); //right side
+                rayXl = getX() + ((k * 10) * (float)Math.Cos(MathHelper.ToRadians(getRotate() - 90))); //left side
+                rayYl = getY() + ((k * 10) * (float)Math.Sin(MathHelper.ToRadians(getRotate() - 90))); //left side
+
+                lDist = Vector2.Distance(new Vector2(rayXl, rayYl), enemyShip.getPos());
+                rDist = Vector2.Distance(new Vector2(rayXr, rayYr), enemyShip.getPos());
+
+                if (rDist < minR)
+                {
+                    minR = rDist;
+                }
+                if (lDist < minL)
+                {
+                    minL = lDist;
+                }
+            }
+
+            if (rDist < lDist) //This is temporary
+            {
                 if (cannonballs.Count < 3)
                 {
-                    
+                    sound.Pitch = rand.Next(-1, 1);
+                    sound.Play();
                     cannonballs.Add(new Cannonball((int)getX(), (int)getY(), true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() + 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() + 90)))); //0 == good, 1 == bad; FireDistance, xSpeed, ySpeed
                     cannonballs.Add(new Cannonball((int)getX() + 10, (int)getY() + 10, true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() + 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() + 90))));
                     cannonballs.Add(new Cannonball((int)getX() - 10, (int)getY() - 10, true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() + 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() + 90))));
-
                 }
+                return true;
             }
             else //left
             {
-                //float xSpeed = ((b_speed + 50) * (float)Math.Cos(MathHelper.ToRadians(getRotate())))*DT;
-                //float ySpeed = ((b_speed + 50) * (float)Math.Sin(MathHelper.ToRadians(getRotate())))*DT;
                 if (cannonballs.Count < 3)
                 {
+                    sound.Pitch = rand.Next(-1,1);
+                    sound.Play();
                     cannonballs.Add(new Cannonball((int)getX(), (int)getY(), true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() - 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() - 90)))); //0 == good, 1 == bad; FireDistance, xSpeed, ySpeed
                     cannonballs.Add(new Cannonball((int)getX() + 10, (int)getY() + 10, true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() - 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() - 90))));
                     cannonballs.Add(new Cannonball((int)getX() - 10, (int)getY() - 10, true, fireDistance, 175 * (float)Math.Cos(MathHelper.ToRadians(getRotate() - 90)), 175 * (float)Math.Sin(MathHelper.ToRadians(getRotate() - 90))));
                 }
+                return false;
             }
         }
 
@@ -172,6 +213,10 @@ namespace PirateGame
                 if (cannonballs[i].TTL <= 0)
                 {
                     cannonballs.RemoveAt(i);
+                    if (cannonballs.Count < 1) //this needs to change to the timer
+                    {
+                        canFire = true;
+                    }
                 }
             }
         }

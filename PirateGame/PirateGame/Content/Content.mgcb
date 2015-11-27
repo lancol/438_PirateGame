@@ -19,6 +19,15 @@
 /processorParam:Quality=Best
 /build:Piratev2.mp3
 
+<<<<<<< HEAD
+=======
+#begin CannonFire.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:CannonFire.wav
+
+>>>>>>> refs/remotes/origin/master
 #begin font.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor

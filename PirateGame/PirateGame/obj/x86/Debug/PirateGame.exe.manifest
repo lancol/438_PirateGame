@@ -55,14 +55,22 @@
     </dependentAssembly>
   </dependency>
   <dependency>
+<<<<<<< HEAD
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="196544">
+=======
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="202688">
+>>>>>>> refs/remotes/origin/master
       <assemblyIdentity name="PirateGame" version="3.4.0.456" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+<<<<<<< HEAD
         <dsig:DigestValue>XXu4weuIvSny4QDgTeVdV87uyuA=</dsig:DigestValue>
+=======
+        <dsig:DigestValue>KKoU69I3lrV2wQLFCj71D3F0rKY=</dsig:DigestValue>
+>>>>>>> refs/remotes/origin/master
       </hash>
     </dependentAssembly>
   </dependency>
@@ -273,6 +281,27 @@
       <dsig:DigestValue>YHliCAilAFyXawFxAdAw1PDAb6w=</dsig:DigestValue>
     </hash>
   </file>
+<<<<<<< HEAD
+=======
+  <file name="Content\CannonFire.wav" size="87220">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>S+jiqvdqkTL7097+MLmgTEbATHU=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\CannonFire.xnb" size="83049">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>hdrO13S0uuBcoSt6rBKXzuYcrTw=</dsig:DigestValue>
+    </hash>
+  </file>
+>>>>>>> refs/remotes/origin/master
   <file name="Content\Cape Coast Label.png" size="6021">
     <hash>
       <dsig:Transforms>
@@ -640,6 +669,24 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>E0TRsqxegrafFzYqIGjdxNgZ5kw=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\pirate128v2.png" size="4145">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>c2RhVsOaLb4l8zZlWs3u7yNcIlk=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\pirateHealth.png" size="198">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>Vqfe4Zx2o3DcbMC5P9yEj2r1qdU=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\Piratev2.mp3" size="9180543">
