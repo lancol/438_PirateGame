@@ -34,6 +34,9 @@ namespace PirateGame
         bool healthFull;
         bool moraleFull;
         bool returnError;
+        int successes;
+        int wins;
+        int losses;
         #endregion
 
         #region Particle Engine
@@ -802,6 +805,8 @@ namespace PirateGame
                         player.setGold((int)(player.getGold()*.75f));
                         if (player.getMorale() >= 10)
                             player.setMorale(player.getMorale() - 10f);
+                        losses++;
+                        successes--;
                     }
                     //check if enemy is dead
                     if (EnemyShip.getHealth() <= 0)
@@ -812,7 +817,8 @@ namespace PirateGame
                         player.setGold(player.getGold() + EnemyShip.getGold());
                         if (player.getMorale() < 100)
                             player.setMorale(player.getMorale() + 10f);
-
+                        wins++;
+                        successes++;
                         EnemyShip.setPos(2000, 5000);
                     }
 
@@ -1352,17 +1358,27 @@ namespace PirateGame
 
                     //draw buttons
                     spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 730, camera.position.Y + 645), Color.White);
-                    spriteBatch.Draw(shop_repair_button, new Vector2(camera.position.X + 667, camera.position.Y + 540), Color.White);
+                    if (player.getHealth() != 100)
+                    {
+                        spriteBatch.Draw(shop_repair_button, new Vector2(camera.position.X + 667, camera.position.Y + 540), Color.White);
+                    }
 
                     //draw item background boxes
                     spriteBatch.Draw(shop_item_image, new Vector2(camera.position.X + 210, camera.position.Y + 300), Color.White);
                     spriteBatch.Draw(shop_item_image, new Vector2(camera.position.X + 210, camera.position.Y + 420), Color.White);
-                    spriteBatch.Draw(shop_item_image, new Vector2(camera.position.X + 210, camera.position.Y + 540), Color.White);
 
+                    if (player.getMorale() != 100)
+                    {
+                        spriteBatch.Draw(shop_item_image, new Vector2(camera.position.X + 210, camera.position.Y + 540), Color.White);
+                    }
                     //draw items for purchase icons
                     spriteBatch.Draw(shopShip, new Vector2(camera.position.X + 213, camera.position.Y + 427), Color.White);
                     spriteBatch.Draw(shopCannon, new Vector2(camera.position.X + 213, camera.position.Y + 302), Color.White);
-                    spriteBatch.Draw(beerIcon, new Vector2(camera.position.X + 214, camera.position.Y + 544), Color.White);
+
+                    if (player.getMorale() != 100)
+                    {
+                        spriteBatch.Draw(beerIcon, new Vector2(camera.position.X + 214, camera.position.Y + 544), Color.White);
+                    }
 
                     //draw crew number
                     spriteBatch.DrawString(ourfont, Convert.ToString(crewAdding), new Vector2(camera.position.X + 705, camera.position.Y + 298), Color.Black);
@@ -1374,40 +1390,51 @@ namespace PirateGame
                     //draw stat labels
                     spriteBatch.Draw(shipStats, new Vector2(camera.position.X + 300, camera.position.Y + 415), Color.White);
                     spriteBatch.Draw(cannonStats, new Vector2(camera.position.X + 300, camera.position.Y + 315), Color.White);
-                    spriteBatch.Draw(beerStats, new Vector2(camera.position.X + 300, camera.position.Y + 555), Color.White);
+                    if (player.getMorale() != 100)
+                    {
+                        spriteBatch.Draw(beerStats, new Vector2(camera.position.X + 300, camera.position.Y + 555), Color.White);
+                    }
                     spriteBatch.Draw(crewStats, new Vector2(camera.position.X + 660, camera.position.Y + 335), Color.White);
 
                     //draw purchase buttons
                     spriteBatch.Draw(hireButton, new Vector2(camera.position.X + 695, camera.position.Y + 435), Color.White);
                     spriteBatch.Draw(buyButton, new Vector2(camera.position.X + 490, camera.position.Y + 345), Color.White);
                     spriteBatch.Draw(buyButton, new Vector2(camera.position.X + 490, camera.position.Y + 455), Color.White);
-                    spriteBatch.Draw(buyButton, new Vector2(camera.position.X + 490, camera.position.Y + 580), Color.White);
-
+                    if (player.getMorale() != 100)
+                    {
+                        spriteBatch.Draw(buyButton, new Vector2(camera.position.X + 490, camera.position.Y + 580), Color.White);
+                    }
                     //draw gold icons
                     spriteBatch.Draw(GoldIcon, new Vector2(camera.position.X + 735, camera.position.Y + 390), Color.White);
                     spriteBatch.Draw(GoldIcon, new Vector2(camera.position.X + 540, camera.position.Y + 410), Color.White);
                     spriteBatch.Draw(GoldIcon, new Vector2(camera.position.X + 540, camera.position.Y + 298), Color.White);
-                    spriteBatch.Draw(GoldIcon, new Vector2(camera.position.X + 540, camera.position.Y + 535), Color.White);
 
+                    if (player.getMorale() != 100)
+                    {
+                        spriteBatch.Draw(GoldIcon, new Vector2(camera.position.X + 540, camera.position.Y + 535), Color.White);
+                    }
                     // draw line divider
                     spriteBatch.Draw(line, new Vector2(camera.position.X + 600, camera.position.Y + 290), Color.Brown);
 
                     spriteBatch.DrawString(ourfont, Convert.ToString(firstItemCost), new Vector2(camera.position.X + 510, camera.position.Y + 310), Color.Black);
                     spriteBatch.DrawString(ourfont, Convert.ToString(secondItemCost), new Vector2(camera.position.X + 510, camera.position.Y + 420), Color.Black);
-                    spriteBatch.DrawString(ourfont, Convert.ToString(thirdItemCost), new Vector2(camera.position.X + 510, camera.position.Y + 550), Color.Black);
+                    if (player.getMorale() != 100)
+                    {
+                        spriteBatch.DrawString(ourfont, Convert.ToString(thirdItemCost), new Vector2(camera.position.X + 510, camera.position.Y + 550), Color.Black);
+                    }
                     spriteBatch.DrawString(ourfont, Convert.ToString(crewCost), new Vector2(camera.position.X + 705, camera.position.Y + 405), Color.Black);
-
 
                     spriteBatch.DrawString(ourfont, Convert.ToString(attackUpgrade), new Vector2(camera.position.X + 375, camera.position.Y + 317), Color.Black);
                     spriteBatch.DrawString(ourfont, Convert.ToString(defenseUpgrade), new Vector2(camera.position.X + 375, camera.position.Y + 420), Color.Black);
                     spriteBatch.DrawString(ourfont, Convert.ToString(speedUpgrade), new Vector2(camera.position.X + 360, camera.position.Y + 445), Color.Black);
                     spriteBatch.DrawString(ourfont, Convert.ToString(maxAccelerationUpgrade), new Vector2(camera.position.X + 450, camera.position.Y + 470), Color.Black);
-                    spriteBatch.DrawString(ourfont, Convert.ToString(moraleUpgrade), new Vector2(camera.position.X + 370, camera.position.Y + 557), Color.Black);
+                    if (player.getMorale() != 100)
+                    {
+                        spriteBatch.DrawString(ourfont, Convert.ToString(moraleUpgrade), new Vector2(camera.position.X + 370, camera.position.Y + 557), Color.Black);
+                    }
                     spriteBatch.DrawString(ourfont, Convert.ToString(reloadSpeedUpgrade), new Vector2(camera.position.X + 780, camera.position.Y + 340), Color.Black);
                     spriteBatch.DrawString(ourfont, Convert.ToString(accelerationUpgrade), new Vector2(camera.position.X + 780, camera.position.Y + 365), Color.Black);
 
-
-                    // Write algorithm to calculate, proportional to current gold ammount
 
                     if (buyOptionOpen == true)
                     {
@@ -1473,7 +1500,10 @@ namespace PirateGame
                                     break;
 
                                 case 3:
-                                    spriteBatch.DrawString(ourfont, (Convert.ToString(thirdItemCost)), new Vector2(camera.position.X + 520, camera.position.Y + 390), Color.Black);
+                                    if (player.getMorale() != 100)
+                                    {
+                                        spriteBatch.DrawString(ourfont, (Convert.ToString(thirdItemCost)), new Vector2(camera.position.X + 520, camera.position.Y + 390), Color.Black);
+                                    }
                                     break;
 
                                 case 4:
@@ -1693,9 +1723,11 @@ namespace PirateGame
 
                 if (mouseClickRect.Intersects(repairShipButtonRect)) //player clicked repair button
                 {
-                    buyOptionOpen = true;
-                    itemSelected = 5;
-                    //currentState = gameState.overWorld;
+                    if (player.getHealth() != 100)
+                    {
+                        buyOptionOpen = true;
+                        itemSelected = 5;
+                    }
                     //pop up to confirm w/ gold price proportional to damage
                 }
                 else if (mouseClickRect.Intersects(backButtonRect)) // click back, sends to overworld
@@ -1727,8 +1759,11 @@ namespace PirateGame
                 }
                 else if (mouseClickRect.Intersects(buyThreeRect)) // click back, sends to overworld
                 {
-                    buyOptionOpen = true;
-                    itemSelected = 3;
+                    if (player.getMorale() != 100)
+                    {
+                        buyOptionOpen = true;
+                        itemSelected = 3;
+                    }
                     //currentState = gameState.overWorld;
                 }
                 else if (mouseClickRect.Intersects(hireButRect)) // click back, sends to overworld
