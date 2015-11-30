@@ -668,6 +668,11 @@ namespace PirateGame
                 case gameState.overWorld: //overworld
                     #region Overworld
 
+                    if (successes < 0 && (100- player.getMorale() >= 0))
+                    {
+                        player.setMorale(player.getMorale() - (successes * 2));
+                    }
+
                     buyOptionOpen = false;
                     crewAdding = 0;
 
@@ -805,7 +810,7 @@ namespace PirateGame
                         player.setGold((int)(player.getGold()*.75f));
                         if (player.getMorale() >= 10)
                             player.setMorale(player.getMorale() - 10f);
-                        losses++;
+                        losses++; //not used yet--REMEMBER TO FIX, NOHELY
                         successes--;
                     }
                     //check if enemy is dead
@@ -817,7 +822,7 @@ namespace PirateGame
                         player.setGold(player.getGold() + EnemyShip.getGold());
                         if (player.getMorale() < 100)
                             player.setMorale(player.getMorale() + 10f);
-                        wins++;
+                        wins++; // not used yet, REMEMBER TO FIX, NOHELY
                         successes++;
                         EnemyShip.setPos(2000, 5000);
                     }
@@ -945,7 +950,12 @@ namespace PirateGame
                     //wait for mouseclick
                     mouseState = Mouse.GetState();
 
-                    /*
+                    if (successes < 0 && (100- player.getMorale() >= 0))
+                    {
+                        player.setMorale(player.getMorale() - (successes * 2));
+                    }
+
+                    /* // to randomize improvement of stats in shop, implement later
                     Random rnd = new Random();
                     int month = rnd.Next(1, 13); // creates a number between 1 and 12
                     int dice = rnd.Next(1, 7);   // creates a number between 1 and 6
@@ -960,7 +970,7 @@ namespace PirateGame
                     secondItemCost = defenseUpgrade * 20;
                     thirdItemCost = player.getCrew() * 5;
 
-                    repairCost = 2 * (100 - (int)player.getHealth());
+                    repairCost = 2 * (100 - (int)player.getHealth());                      
 
                     if (previousMouseState.LeftButton == ButtonState.Pressed &&
                     mouseState.LeftButton == ButtonState.Released)
