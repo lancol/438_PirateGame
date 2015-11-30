@@ -525,547 +525,557 @@ namespace PirateGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            #region Variables
-            bool rightdown;
-            bool updown;
-            bool leftdown;
-            bool downdown;
-            bool spacedown;
 
-            bool Collision;
+                #region Variables
+                bool rightdown;
+                bool updown;
+                bool leftdown;
+                bool downdown;
+                bool spacedown;
 
-            int xStep;
-            int yStep;
+                bool Collision;
 
-            int nextPosX;
-            int nextPosY;
+                int xStep;
+                int yStep;
 
-            Random rand = new Random();
+                int nextPosX;
+                int nextPosY;
 
-            moving = false;
+                Random rand = new Random();
 
-            mapOpen = false;
+                moving = false;
 
-            instructionsOpen = false;
+                mapOpen = false;
 
-            xStep = 0;
-            yStep = 0;
+                instructionsOpen = false;
 
-            nextPosX = (int)player.getX();
-            nextPosY = (int)player.getY();
+                xStep = 0;
+                yStep = 0;
 
-            Collision = false;
+                nextPosX = (int)player.getX();
+                nextPosY = (int)player.getY();
 
-            DT = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            t += DT;//gameTime.TotalGameTime.Seconds;
+                Collision = false;
 
-            effectT += (float)(Math.PI / 2) * DT;
+                DT = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                t += DT;//gameTime.TotalGameTime.Seconds;
 
-            if (effectT > 9999999) //unneccesary, but not broken. So not touching.
-                effectT = 0;
+                effectT += (float)(Math.PI / 2) * DT;
 
-            step = (int)(10 * t) % 5;
+                if (effectT > 9999999) //unneccesary, but not broken. So not touching.
+                    effectT = 0;
 
-            rightdown = false;
-            updown = false;
-            leftdown = false;
-            downdown = false;
-            spacedown = false;
-            #endregion
+                step = (int)(10 * t) % 5;
 
-            #region Input
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                String[] saveinfo = System.IO.File.ReadAllLines("save.txt");
-                for (int i = 0; i < saveinfo.Length; i++)
+                rightdown = false;
+                updown = false;
+                leftdown = false;
+                downdown = false;
+                spacedown = false;
+                #endregion
+
+                #region Input
+                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 {
-                    if (saveinfo[i] == getSavekey())
-                    {   //TODO: SAVE POSITION OF SHIP
-                        Object[] newsaveinfo =
-                                { getSavekey(), player.getMorale(), player.getAlignment(), player.getHealth(),
+                    String[] saveinfo = System.IO.File.ReadAllLines("save.txt");
+                    for (int i = 0; i < saveinfo.Length; i++)
+                    {
+                        if (saveinfo[i] == getSavekey())
+                        {   //TODO: SAVE POSITION OF SHIP
+                            Object[] newsaveinfo =
+                                    { getSavekey(), player.getMorale(), player.getAlignment(), player.getHealth(),
                                     player.getAttack(), player.getDefense(), player.get_bAcceleration(),
                                     player.get_bSpeed(), player.getGold(), player.getCrew(),
                                     (float)gameTime.ElapsedGameTime.TotalSeconds };
-                        for (int j = 1; j < 11; j++)
-                        {
-                            saveinfo[i + j] = newsaveinfo[j].ToString();
+                            for (int j = 1; j < 11; j++)
+                            {
+                                saveinfo[i + j] = newsaveinfo[j].ToString();
+                            }
+
                         }
 
                     }
-
+                    //Console.Write(saveinfo.ToString());
+                    System.IO.File.WriteAllLines("save.txt", saveinfo); //write new info to the text file
+                    Exit();
                 }
-                //Console.Write(saveinfo.ToString());
-                System.IO.File.WriteAllLines("save.txt", saveinfo); //write new info to the text file
-                Exit();
-            }
-            
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
-            {
-                updown = true;
-                yStep = -60;
-                moving = true;
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
-            {
-                downdown = true;
-                yStep = 60;
-                moving = true;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Left))
-            {
-                leftdown = true;
-                facingRight = false;
-                moving = true;
-                xStep = -60;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
-            {
-                rightdown = true;
-                facingRight = true;
-                moving = true;
-                xStep = 60;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
-            {
-                spacedown = true;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.M))
-            {
-                mapOpen = true;
-            }
-            else
-            {
-                mapOpen = false;
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.I))
-            {
-                instructionsOpen = true;
-                currentState = gameState.instructions;
-            }
-            else
-            {
-                instructionsOpen = false;
-            }
 
 
-            if (Keyboard.GetState().IsKeyDown(Keys.P))
-            {
-                pauseOpen = true;
-                //currentState = gameState.instructions;
-            }
+                if (Keyboard.GetState().IsKeyDown(Keys.Up))
+                {
+                    updown = true;
+                    yStep = -60;
+                    moving = true;
+                }
+
+                if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                {
+                    downdown = true;
+                    yStep = 60;
+                    moving = true;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                {
+                    leftdown = true;
+                    facingRight = false;
+                    moving = true;
+                    xStep = -60;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                {
+                    rightdown = true;
+                    facingRight = true;
+                    moving = true;
+                    xStep = 60;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                {
+                    spacedown = true;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.M))
+                {
+                    mapOpen = true;
+                }
+                else
+                {
+                    mapOpen = false;
+                }
+
+                if (Keyboard.GetState().IsKeyDown(Keys.I))
+                {
+                    instructionsOpen = true;
+                    currentState = gameState.instructions;
+                }
+                else
+                {
+                    instructionsOpen = false;
+                }
 
 
-            #endregion
+                if (Keyboard.GetState().IsKeyDown(Keys.P))
+                {
+                    pauseOpen = true;
+                }
 
-            switch (currentState) //this gameState is for loading
-            {
-                case gameState.mainMenu: //Main Menu
-                    #region Main Menu
 
-                    crewAdding = 0;
-                    buyOptionOpen = false;
+                #endregion
 
-                    IsMouseVisible = true; //enables mouse pointer
-                                           
-                    //wait for mouseclick
-                    mouseState = Mouse.GetState();
+                switch (currentState) //this gameState is for loading
+                {
+                    case gameState.mainMenu: //Main Menu
+                        #region Main Menu
 
-                    if (previousMouseState.LeftButton == ButtonState.Pressed &&
-                    mouseState.LeftButton == ButtonState.Released)
+                        crewAdding = 0;
+                        buyOptionOpen = false;
+
+                        IsMouseVisible = true; //enables mouse pointer
+
+                        //wait for mouseclick
+                        mouseState = Mouse.GetState();
+
+                        if (previousMouseState.LeftButton == ButtonState.Pressed &&
+                        mouseState.LeftButton == ButtonState.Released)
+                        {
+                            MouseClicked(mouseState.X, mouseState.Y);
+                        }
+
+                        previousMouseState = mouseState;
+
+                        previousStateInstructions = 0;
+                        #endregion
+                        break;
+                    case gameState.overWorld: //overworld
+                        #region Overworld
+                    /*
+                        if (successes < 0 && (100 - player.getMorale() >= 0))
+                        {
+                            player.setMorale(player.getMorale() - (successes * 2));
+                        } */
+
+                        buyOptionOpen = false;
+                        crewAdding = 0;
+
+                        IsMouseVisible = false;
+
+                        //wait for mouseclick
+                        mouseState = Mouse.GetState();
+
+ 
+                        if (previousMouseState.LeftButton == ButtonState.Pressed &&
+                        mouseState.LeftButton == ButtonState.Released)
+                        {
+                            MouseClicked(mouseState.X, mouseState.Y);
+                        }
+
+                        previousMouseState = mouseState;
+
+                    if (pauseOpen == false) //ADDED
                     {
-                        MouseClicked(mouseState.X, mouseState.Y);
+
+                        //Update enemy positions
+                        for (int i = 0; i < OtherShip.Length; i++)
+                            OtherShip[i].runOverworldAI(player, DT);
                     }
-
-                    previousMouseState = mouseState;
-
-                    previousStateInstructions = 0;
-                    #endregion
-                    break;
-                case gameState.overWorld: //overworld
-                    #region Overworld
-
-                    if (successes < 0 && (100- player.getMorale() >= 0))
-                    {
-                        player.setMorale(player.getMorale() - (successes * 2));
-                    }
-
-                    buyOptionOpen = false;
-                    crewAdding = 0;
-
-                    IsMouseVisible = false;
-
-                    //wait for mouseclick
-                    mouseState = Mouse.GetState();
-
-                    if (previousMouseState.LeftButton == ButtonState.Pressed &&
-                    mouseState.LeftButton == ButtonState.Released)
-                    {
-                        MouseClicked(mouseState.X, mouseState.Y);
-                    }
-
-                    previousMouseState = mouseState;
-
-                    //Update enemy positions
-                    for (int i = 0; i < OtherShip.Length; i++)
-                        OtherShip[i].runOverworldAI(player, DT);
-
-                    previousStateInstructions = 1;
+                        previousStateInstructions = 1;
 
                     //Check for collisions
                     #region Collision Checks
-                    #region Get Next Position
-                    if (updown)
-                    {
-                        nextPosY = (int)(player.getY() + (yStep * DT) + 1);
-                    }
-                    if (rightdown)
-                    {
-                        nextPosX = (int)(player.getX() + (xStep * DT) + 1);
-                    }
-                    if (downdown)
-                    {
-                        nextPosY = (int)(player.getY() + (yStep * DT) + 1);
-                    }
-                    if (leftdown)
-                    {
-                        nextPosX = (int)(player.getX() + (xStep * DT) + 1);
-                    }
-                    #endregion
+                    #region Get Next Position 
 
-                    //If next step is the edge of the world, stop
-                    if ((nextPosY < 0) || (nextPosY > world_H) || (nextPosX < 0) || (nextPosX > world_W))
-                        Collision = true;
-
-                    //  if next step is an island, stop
-                    #region nextStep an island?
-
-                    for (int i = 0; i < island.Length; i++) //must improve collision box on final islands.
+                    if (pauseOpen == false) //ADDED
                     {
-                        if (nextPosX < (isl_x[i] + island[i].Width) && nextPosX > isl_x[i])
+
+                        if (updown)
                         {
-                            if (nextPosY < (isl_y[i] + island[i].Height) && nextPosY > isl_y[i])
+                            nextPosY = (int)(player.getY() + (yStep * DT) + 1);
+                        }
+                        if (rightdown)
+                        {
+                            nextPosX = (int)(player.getX() + (xStep * DT) + 1);
+                        }
+                        if (downdown)
+                        {
+                            nextPosY = (int)(player.getY() + (yStep * DT) + 1);
+                        }
+                        if (leftdown)
+                        {
+                            nextPosX = (int)(player.getX() + (xStep * DT) + 1);
+                        }
+                        #endregion
+
+                        //If next step is the edge of the world, stop
+                        if ((nextPosY < 0) || (nextPosY > world_H) || (nextPosX < 0) || (nextPosX > world_W))
+                            Collision = true;
+
+                        //  if next step is an island, stop
+                        #region nextStep an island?
+
+                        for (int i = 0; i < island.Length; i++) //must improve collision box on final islands.
+                        {
+                            if (nextPosX < (isl_x[i] + island[i].Width) && nextPosX > isl_x[i])
                             {
-                                Collision = true;
-                                drawSign = true;
+                                if (nextPosY < (isl_y[i] + island[i].Height) && nextPosY > isl_y[i])
+                                {
+                                    Collision = true;
+                                    drawSign = true;
+                                }
                             }
                         }
-                    }
-                    #endregion
+                        #endregion
 
-                    //  if next step is a collision with other ship, go into battle with them
-                    #region nextStep another ship?
-                    for (int i = 0; i < OtherShip.Length; i++)
-                    {
-                        float distance = 0;
-                        float Px = player.getX() + player.getImage().Width / 2;
-                        float Py = player.getY() + player.getImage().Height / 2;
-                        float Ex = OtherShip[i].getX() + OtherShip[i].getImage().Width / 2;
-                        float Ey = OtherShip[i].getY() + OtherShip[i].getImage().Height / 2;
-
-                        distance = Vector2.Distance(new Vector2(Px, Py), new Vector2(Ex, Ey));
-                        if (distance < 45) //optimize this distance
+                        //  if next step is a collision with other ship, go into battle with them
+                        #region nextStep another ship?
+                        for (int i = 0; i < OtherShip.Length; i++)
                         {
-                            //change gamestate and set enemy ship to othership[i]
-                            currentState = gameState.battle;
-                            last_Coord = new Vector2(player.getX(), player.getY());
-                            battle_init(OtherShip[i]);
+                            float distance = 0;
+                            float Px = player.getX() + player.getImage().Width / 2;
+                            float Py = player.getY() + player.getImage().Height / 2;
+                            float Ex = OtherShip[i].getX() + OtherShip[i].getImage().Width / 2;
+                            float Ey = OtherShip[i].getY() + OtherShip[i].getImage().Height / 2;
+
+                            distance = Vector2.Distance(new Vector2(Px, Py), new Vector2(Ex, Ey));
+                            if (distance < 45) //optimize this distance
+                            {
+                                //change gamestate and set enemy ship to othership[i]
+                                currentState = gameState.battle;
+                                last_Coord = new Vector2(player.getX(), player.getY());
+                                battle_init(OtherShip[i]);
+                            }
                         }
-                    }
-                    #endregion
-                    //  if next step is a collision with a town, go into town or open town menu
-                    if (Collision == false && drawSign == false)
-                    {
-                        player.setPos(player.getX() + (xStep * DT), player.getY() + (yStep * DT));
-                        ow_Player_CollBox.X = (int)player.getX();
-                        ow_Player_CollBox.Y = (int)player.getY();
-                    }
-                    #endregion
+                        #endregion
+                        //  if next step is a collision with a town, go into town or open town menu
+                        if (Collision == false && drawSign == false)
+                        {
+                            player.setPos(player.getX() + (xStep * DT), player.getY() + (yStep * DT));
+                            ow_Player_CollBox.X = (int)player.getX();
+                            ow_Player_CollBox.Y = (int)player.getY();
+                        }
 
-                    //Adjust player sprite
-                    //  draw wake, use sin function to update wake. step 5 degrees*dt, then every ~3 seconds it'll be 15 degrees, then reverse
-                    player.setRotate((float)(5 * Math.Sin(t)));
+                    }
+                        #endregion
 
-                    //Particle Effects
-                    #region Particle Crap
+                        //Adjust player sprite
+                        //  draw wake, use sin function to update wake. step 5 degrees*dt, then every ~3 seconds it'll be 15 degrees, then reverse
+                        player.setRotate((float)(5 * Math.Sin(t)));
+
+                        //Particle Effects
+                        #region Particle Crap
                         ow_sailSpray.setX((facingRight) ? player.getX() + 18 : player.getX() - 18);
                         ow_sailSpray.setY(player.getY());
                         ow_sailSpray.setXSpeed((facingRight) ? -.1f : .1f);
                         ow_sailSpray.setXAccl((facingRight) ? -2 : 2);
-                        ow_sailSpray.setYSpeed((-.3f) + yStep*DT);
+                        ow_sailSpray.setYSpeed((-.3f) + yStep * DT);
                         ow_sailSpray.setYAccl(.1f * rand.Next(4, 8));// .5f);
                         ow_sailSpray.setTimeLimit(rand.Next(10, 20));
 
-                    if ((updown || downdown) && !(leftdown || rightdown))
-                    {
-                        ow_sailSpray.setXSpeed(ow_sailSpray.getXSpeed() + ((facingRight) ? -60*DT : 60 * DT));
-                    }
-
-                    ow_sailSpray.Update(DT);
-                    #endregion
-
-                    //update camera
-                    camera.position = new Vector2(player.getX() - (screen_W / 2), player.getY() - (screen_H / 2));
-
-                    #endregion
-                    break;
-                case gameState.battle: //In battle
-                    #region In Battle
-
-                    buyOptionOpen = false;
-                    crewAdding = 0;
-
-                    //check for pause
-
-                    //check if player is dead
-                    if (player.getHealth() <= 0)
-                    {
-                        currentState = gameState.overWorld;
-                        overworld_init();
-                        player.setHealth(50);
-                        player.setPos(1000, 2300);
-                        player.setGold((int)(player.getGold()*.75f));
-                        if (player.getMorale() >= 10)
-                            player.setMorale(player.getMorale() - 10f);
-                        losses++; //not used yet--REMEMBER TO FIX, NOHELY
-                        successes--;
-                    }
-                    //check if enemy is dead
-                    if (EnemyShip.getHealth() <= 0)
-                    {
-                        //ship is inactive
-                        currentState = gameState.overWorld;
-                        overworld_init();
-                        player.setGold(player.getGold() + EnemyShip.getGold());
-                        if (player.getMorale() < 100)
-                            player.setMorale(player.getMorale() + 10f);
-                        wins++; // not used yet, REMEMBER TO FIX, NOHELY
-                        successes++;
-                        EnemyShip.setPos(2000, 5000);
-                    }
-
-                    //Move Player
-                    if (updown)
-                    {
-                        player.raise_Sails(DT);
-                    }
-                    if (downdown)
-                    {
-                        player.lower_Sails(DT);
-                    }
-                    if (rightdown)
-                    {
-                        player.rotate_Cwise(DT);
-                    }
-                    if (leftdown)
-                    {
-                        player.rotate_CCwise(DT);
-                    }
-
-                    player.setX(player.getX() + (player.get_bSpeed() * DT) * (float)Math.Cos(MathHelper.ToRadians(player.getRotate()))); //update positions
-                    player.setY(player.getY() + (player.get_bSpeed() * DT) * (float)Math.Sin(MathHelper.ToRadians(player.getRotate())));
-
-                    player.updateCannonBalls(DT, EnemyShip);
-
-                    #region sailing particles
-                    //Update ParticleEnginePosition
-                    b_SailStream.setX(player.getX() + (-46.1f * (float)Math.Cos(MathHelper.ToRadians(player.getRotate()) + .61f))); //PlayerX + ([angle length of Hypotenuse] * Cos([playerRotate] + [angle between desired position and origin])
-                    b_SailStream.setY(player.getY() + (-46.1f * (float)Math.Sin(MathHelper.ToRadians(player.getRotate()) + .61f)));
-                    b_SailStream.setActive(true);
-                    b_SailStream.setTimeLimit(player.get_bSpeed() / 2);
-                    b_SailStream2.setX(player.getX() + (-46.1f * (float)Math.Cos(MathHelper.ToRadians(player.getRotate()) - .61f)));
-                    b_SailStream2.setY(player.getY() + (-46.1f * (float)Math.Sin(MathHelper.ToRadians(player.getRotate()) - .61f)));
-                    b_SailStream2.setActive(true);
-                    b_SailStream2.setTimeLimit(player.get_bSpeed() / 2);
-                    //b_SailStream2.setTimeLimit(rand.Next(0, ((int)player.get_bSpeed() * 2))); //Semi-good idea, maybe revisit this.
-
-                    //Set spawn position relative to ship rotation
-                    b_SailStream.setXSpeed(2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() + 180)));
-                    b_SailStream.setYSpeed(2 * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() + 180)));
-
-                    b_SailStream2.setXSpeed(2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() + 180)));
-                    b_SailStream2.setYSpeed(2 * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() + 180)));
-
-                    //Set x/y speeds relative to ship rotation
-                    b_SailStream.Update(DT);
-                    b_SailStream2.Update(DT);
-                    #endregion
-
-                    //Player Cannon Fire
-                    float reloadSpeed;
-
-                    //morale % 50 =
-
-                    reloadSpeed = 100 / player.getCrew();
-                    reloadSpeed *= 1/(player.getMorale()/50);
-
-                    if (reloadSpeed > 10)
-                        reloadSpeed = 10;
-                    
-                    if (spacedown && PE.Count < 1 && PE2.Count < 1 && player.canFire && (gameTime.TotalGameTime.TotalSeconds - player.lastFire) > reloadSpeed)
-                    {
-                        bool fireRight = player.fireCannon(EnemyShip, DT);
-                        player.lastFire = (float)gameTime.TotalGameTime.TotalSeconds;
-                        if (fireRight)
+                        if ((updown || downdown) && !(leftdown || rightdown))
                         {
-                            PE = new ParticleEngine(smoke[rand.Next(0, 1)], 50, 2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() + 90)), 1.25f * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() + 90)), -2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() + 90)), -2 * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() + 90)));
-                            PE2 = new ParticleEngine(smoke[rand.Next(0, 1)], 50, 2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() + 90)), 1.25f * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() + 90)), -2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() + 90)), -2 * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() + 90)));
+                            ow_sailSpray.setXSpeed(ow_sailSpray.getXSpeed() + ((facingRight) ? -60 * DT : 60 * DT));
+                        }
 
+                        ow_sailSpray.Update(DT);
+                        #endregion
+
+                        //update camera
+                        camera.position = new Vector2(player.getX() - (screen_W / 2), player.getY() - (screen_H / 2));
+
+                        #endregion
+                        break;
+                    case gameState.battle: //In battle
+                        #region In Battle
+
+                        buyOptionOpen = false;
+                        crewAdding = 0;
+
+                        //check for pause
+
+                        //check if player is dead
+                        if (player.getHealth() <= 0)
+                        {
+                            currentState = gameState.overWorld;
+                            overworld_init();
+                            player.setHealth(50);
+                            player.setPos(1000, 2300);
+                            player.setGold((int)(player.getGold() * .75f));
+                            if (player.getMorale() >= 10)
+                                player.setMorale(player.getMorale() - 10f);
+                            losses++; //not used yet--REMEMBER TO FIX, NOHELY
+                            successes--;
+                        }
+                        //check if enemy is dead
+                        if (EnemyShip.getHealth() <= 0)
+                        {
+                            //ship is inactive
+                            currentState = gameState.overWorld;
+                            overworld_init();
+                            player.setGold(player.getGold() + EnemyShip.getGold());
+                            if (player.getMorale() < 100)
+                                player.setMorale(player.getMorale() + 10f);
+                            wins++; // not used yet, REMEMBER TO FIX, NOHELY
+                            successes++;
+                            EnemyShip.setPos(2000, 5000);
+                        }
+
+                        //Move Player
+                        if (updown)
+                        {
+                            player.raise_Sails(DT);
+                        }
+                        if (downdown)
+                        {
+                            player.lower_Sails(DT);
+                        }
+                        if (rightdown)
+                        {
+                            player.rotate_Cwise(DT);
+                        }
+                        if (leftdown)
+                        {
+                            player.rotate_CCwise(DT);
+                        }
+
+                        player.setX(player.getX() + (player.get_bSpeed() * DT) * (float)Math.Cos(MathHelper.ToRadians(player.getRotate()))); //update positions
+                        player.setY(player.getY() + (player.get_bSpeed() * DT) * (float)Math.Sin(MathHelper.ToRadians(player.getRotate())));
+
+                        player.updateCannonBalls(DT, EnemyShip);
+
+                        #region sailing particles
+                        //Update ParticleEnginePosition
+                        b_SailStream.setX(player.getX() + (-46.1f * (float)Math.Cos(MathHelper.ToRadians(player.getRotate()) + .61f))); //PlayerX + ([angle length of Hypotenuse] * Cos([playerRotate] + [angle between desired position and origin])
+                        b_SailStream.setY(player.getY() + (-46.1f * (float)Math.Sin(MathHelper.ToRadians(player.getRotate()) + .61f)));
+                        b_SailStream.setActive(true);
+                        b_SailStream.setTimeLimit(player.get_bSpeed() / 2);
+                        b_SailStream2.setX(player.getX() + (-46.1f * (float)Math.Cos(MathHelper.ToRadians(player.getRotate()) - .61f)));
+                        b_SailStream2.setY(player.getY() + (-46.1f * (float)Math.Sin(MathHelper.ToRadians(player.getRotate()) - .61f)));
+                        b_SailStream2.setActive(true);
+                        b_SailStream2.setTimeLimit(player.get_bSpeed() / 2);
+                        //b_SailStream2.setTimeLimit(rand.Next(0, ((int)player.get_bSpeed() * 2))); //Semi-good idea, maybe revisit this.
+
+                        //Set spawn position relative to ship rotation
+                        b_SailStream.setXSpeed(2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() + 180)));
+                        b_SailStream.setYSpeed(2 * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() + 180)));
+
+                        b_SailStream2.setXSpeed(2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() + 180)));
+                        b_SailStream2.setYSpeed(2 * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() + 180)));
+
+                        //Set x/y speeds relative to ship rotation
+                        b_SailStream.Update(DT);
+                        b_SailStream2.Update(DT);
+                        #endregion
+
+                        //Player Cannon Fire
+                        float reloadSpeed;
+
+                        //morale % 50 =
+
+                        reloadSpeed = 100 / player.getCrew();
+                        reloadSpeed *= 1 / (player.getMorale() / 50);
+
+                        if (reloadSpeed > 10)
+                            reloadSpeed = 10;
+
+                        if (spacedown && PE.Count < 1 && PE2.Count < 1 && player.canFire && (gameTime.TotalGameTime.TotalSeconds - player.lastFire) > reloadSpeed)
+                        {
+                            bool fireRight = player.fireCannon(EnemyShip, DT);
+                            player.lastFire = (float)gameTime.TotalGameTime.TotalSeconds;
+                            if (fireRight)
+                            {
+                                PE = new ParticleEngine(smoke[rand.Next(0, 1)], 50, 2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() + 90)), 1.25f * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() + 90)), -2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() + 90)), -2 * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() + 90)));
+                                PE2 = new ParticleEngine(smoke[rand.Next(0, 1)], 50, 2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() + 90)), 1.25f * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() + 90)), -2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() + 90)), -2 * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() + 90)));
+
+                            }
+                            else
+                            {
+                                PE = new ParticleEngine(smoke[rand.Next(0, 1)], 50, 2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() - 90)), 1.25f * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() - 90)), -2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() - 90)), -2 * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() - 90)));
+                                PE2 = new ParticleEngine(smoke[rand.Next(0, 1)], 50, 2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() - 90)), 1.25f * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() - 90)), -2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() - 90)), -2 * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() - 90)));
+
+                            }
+                            //PE = new ParticleEngine(smoke[rand.Next(0, 1)], 50, 1, 1, -2, -2); //doesn't work
+
+
+                            PE.setX(player.getX());
+                            PE.setY(player.getY() + 10);
+                            PE.setRotateSpeed(60);
+                            PE.EmitterLocation = player.getPos();
+                            PE.setActive(true);
+
+                            PE2.setX(player.getX());
+                            PE2.setY(player.getY() - 10);
+                            PE2.setRotateSpeed(60);
+                            PE2.EmitterLocation = player.getPos();
+                            cannonfired = true;
+                            PE2.setActive(true);
+                        }
+                        if (PE.Count < 0)
+                        {
+                            PE.removeAll();
+                            PE.setActive(false);
                         }
                         else
                         {
-                            PE = new ParticleEngine(smoke[rand.Next(0, 1)], 50, 2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() - 90)), 1.25f * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() - 90)), -2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() - 90)), -2 * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() - 90))); 
-                            PE2 = new ParticleEngine(smoke[rand.Next(0, 1)], 50, 2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() - 90)), 1.25f * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() - 90)), -2 * (float)Math.Cos(MathHelper.ToRadians(player.getRotate() - 90)), -2 * (float)Math.Sin(MathHelper.ToRadians(player.getRotate() - 90))); 
-
+                            PE.Update(DT);
                         }
-                        //PE = new ParticleEngine(smoke[rand.Next(0, 1)], 50, 1, 1, -2, -2); //doesn't work
+                        if (PE2.Count < 0)
+                        {
+                            PE2.removeAll();
+                            PE2.setActive(false);
+                        }
+                        else
+                        {
+                            PE2.Update(DT);
+                        }
 
+                        //EnemyShip
+                        EnemyShip.runStandardBattleAI(player, DT);
+                        EnemyShip.updateCannonBalls(DT, player);
 
-                        PE.setX(player.getX());
-                        PE.setY(player.getY()+10);
-                        PE.setRotateSpeed(60);
-                        PE.EmitterLocation = player.getPos();
-                        PE.setActive(true);
+                        previousStateInstructions = 2;
+                        #endregion
+                        break;
+                    case gameState.inTown: //inTown  
+                        #region In Town
+                        IsMouseVisible = true; //enables mouse pointer
 
-                        PE2.setX(player.getX());
-                        PE2.setY(player.getY()-10);
-                        PE2.setRotateSpeed(60);
-                        PE2.EmitterLocation = player.getPos();
-                        cannonfired = true;
-                        PE2.setActive(true);
-                    }
-                    if (PE.Count < 0)
-                    {
-                        PE.removeAll();
-                        PE.setActive(false);
-                    }
-                    else
-                    {
-                        PE.Update(DT);
-                    }
-                    if (PE2.Count < 0)
-                    {
-                        PE2.removeAll();
-                        PE2.setActive(false);
-                    }
-                    else
-                    {
-                        PE2.Update(DT);
-                    }
+                        //wait for mouseclick
+                        mouseState = Mouse.GetState();
 
-                    //EnemyShip
-                    EnemyShip.runStandardBattleAI(player, DT);
-                    EnemyShip.updateCannonBalls(DT, player);
+                        if (successes < 0 && (100 - player.getMorale() >= 0))
+                        {
+                            player.setMorale(player.getMorale() - (successes * 2));
+                        }
 
-                    previousStateInstructions = 2;
-                    #endregion
-                    break;
-                case gameState.inTown: //inTown  
-                    #region In Town
-                    IsMouseVisible = true; //enables mouse pointer
+                        crewCost = (int)((.5) * (double)player.getGold() * (double)crewAdding); // determines cost of crew members
+                        reloadSpeedUpgrade = (int)(1.2 * (double)crewAdding);
+                        accelerationUpgrade = (int)((1.5 * (double)player.get_bAcceleration()) * (double)crewAdding);
 
-                    //wait for mouseclick
-                    mouseState = Mouse.GetState();
+                        firstItemCost = attackUpgrade * 20;
+                        secondItemCost = defenseUpgrade * 20;
+                        thirdItemCost = player.getCrew() * 5;
 
-                    if (successes < 0 && (100- player.getMorale() >= 0))
-                    {
-                        player.setMorale(player.getMorale() - (successes * 2));
-                    }
+                        repairCost = 2 * (100 - (int)player.getHealth());
 
-                    crewCost = (int)((.5) * (double)player.getGold() * (double)crewAdding); // determines cost of crew members
-                    reloadSpeedUpgrade = (int)(1.2 * (double)crewAdding);
-                    accelerationUpgrade = (int)((1.5 * (double)player.get_bAcceleration()) * (double)crewAdding);
+                        if (previousMouseState.LeftButton == ButtonState.Pressed &&
+                        mouseState.LeftButton == ButtonState.Released)
+                        {
+                            MouseClicked(mouseState.X, mouseState.Y);
+                        }
 
-                    firstItemCost = attackUpgrade * 20;
-                    secondItemCost = defenseUpgrade * 20;
-                    thirdItemCost = player.getCrew() * 5;
+                        previousMouseState = mouseState;
 
-                    repairCost = 2 * (100 - (int)player.getHealth());                      
+                        previousStateInstructions = 3;
 
-                    if (previousMouseState.LeftButton == ButtonState.Pressed &&
-                    mouseState.LeftButton == ButtonState.Released)
-                    {
-                        MouseClicked(mouseState.X, mouseState.Y);
-                    }
+                        drawSign = false;
+                        #endregion
+                        break;
+                    case gameState.instructions: //Instructions pulled up 
+                        #region Instructions
 
-                    previousMouseState = mouseState;
+                        buyOptionOpen = false;
+                        IsMouseVisible = true; //enables mouse pointer
 
-                    previousStateInstructions = 3;
+                        //wait for mouseclick
+                        mouseState = Mouse.GetState();
 
-                    drawSign = false;
-                    #endregion
-                    break;
-                case gameState.instructions: //Instructions pulled up 
-                    #region Instructions
+                        if (previousMouseState.LeftButton == ButtonState.Pressed &&
+                        mouseState.LeftButton == ButtonState.Released)
+                        {
+                            MouseClicked(mouseState.X, mouseState.Y);
+                        }
 
-                    buyOptionOpen = false;
-                    IsMouseVisible = true; //enables mouse pointer
+                        previousMouseState = mouseState;
 
-                    //wait for mouseclick
-                    mouseState = Mouse.GetState();
+                        if (previousStateInstructions != 0 && previousStateInstructions != 1 && previousStateInstructions != 2 && previousStateInstructions != 3 && previousStateInstructions != 4)
+                            previousStateInstructions = 5;
 
-                    if (previousMouseState.LeftButton == ButtonState.Pressed &&
-                    mouseState.LeftButton == ButtonState.Released)
-                    {
-                        MouseClicked(mouseState.X, mouseState.Y);
-                    }
+                        #endregion
+                        break;
+                    case gameState.savefiles:
+                        #region Save Files
+                        buyOptionOpen = false;
 
-                    previousMouseState = mouseState;
+                        IsMouseVisible = true; //enables mouse pointer
 
-                    if (previousStateInstructions != 0 && previousStateInstructions != 1 && previousStateInstructions != 2 && previousStateInstructions != 3 && previousStateInstructions != 4)
-                        previousStateInstructions = 5;
+                        //wait for mouseclick
+                        mouseState = Mouse.GetState();
 
-                    #endregion
-                    break;
-                case gameState.savefiles:
-                    #region Save Files
-                    buyOptionOpen = false;
+                        if (previousMouseState.LeftButton == ButtonState.Pressed &&
+                        mouseState.LeftButton == ButtonState.Released)
+                        {
+                            MouseClicked(mouseState.X, mouseState.Y);
+                        }
 
-                    IsMouseVisible = true; //enables mouse pointer
+                        previousMouseState = mouseState;
 
-                    //wait for mouseclick
-                    mouseState = Mouse.GetState();
+                        previousStateInstructions = 4;
+                        #endregion
+                        break;
+                    case gameState.credits:
+                        buyOptionOpen = false;
 
-                    if (previousMouseState.LeftButton == ButtonState.Pressed &&
-                    mouseState.LeftButton == ButtonState.Released)
-                    {
-                        MouseClicked(mouseState.X, mouseState.Y);
-                    }
+                        IsMouseVisible = true; //enables mouse pointer
 
-                    previousMouseState = mouseState;
+                        //wait for mouseclick
+                        mouseState = Mouse.GetState();
 
-                    previousStateInstructions = 4;
-                    #endregion
-                    break;
-                case gameState.credits:
-                    buyOptionOpen = false;
+                        if (previousMouseState.LeftButton == ButtonState.Pressed &&
+                        mouseState.LeftButton == ButtonState.Released)
+                        {
+                            MouseClicked(mouseState.X, mouseState.Y);
+                        }
 
-                    IsMouseVisible = true; //enables mouse pointer
+                        previousMouseState = mouseState;
 
-                    //wait for mouseclick
-                    mouseState = Mouse.GetState();
+                        previousStateInstructions = 6;
 
-                    if (previousMouseState.LeftButton == ButtonState.Pressed &&
-                    mouseState.LeftButton == ButtonState.Released)
-                    {
-                        MouseClicked(mouseState.X, mouseState.Y);
-                    }
-
-                    previousMouseState = mouseState;
-
-                    previousStateInstructions = 6;
-
-                    break;
-                default:
-                    Exit();
-                    break;
+                        break;
+                    default:
+                        Exit();
+                        break;
+                }
+                //Debug.WriteLine(1/(float)gameTime.ElapsedGameTime.TotalSeconds); //FPS
+                base.Update(gameTime);
             }
-            //Debug.WriteLine(1/(float)gameTime.ElapsedGameTime.TotalSeconds); //FPS
-            base.Update(gameTime);
-        }
-
+        
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -1637,8 +1647,7 @@ namespace PirateGame
                 {
                     currentState = gameState.overWorld;
                     pauseOpen = false;
-                    IsMouseVisible = false;
-                    overworld_init();
+                    IsMouseVisible = false;                  
                 }
 
                 if (mouseClickRect.Intersects(instructRect))
