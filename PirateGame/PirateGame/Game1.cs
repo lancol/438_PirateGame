@@ -839,8 +839,8 @@ namespace PirateGame
                             player.setGold((int)(player.getGold() * .75f));
                             if (player.getMorale() >= 10)
                                 player.setMorale(player.getMorale() - 10f);
-                            losses++; //not used yet--REMEMBER TO FIX, NOHELY
-                            successes--;
+                          //  losses++; //not used yet--REMEMBER TO FIX, NOHELY
+                          //  successes--;
                         }
                         //check if enemy is dead
                         if (EnemyShip.getHealth() <= 0)
@@ -851,8 +851,8 @@ namespace PirateGame
                             player.setGold(player.getGold() + EnemyShip.getGold());
                             if (player.getMorale() < 100)
                                 player.setMorale(player.getMorale() + 10f);
-                            wins++; // not used yet, REMEMBER TO FIX, NOHELY
-                            successes++;
+                          //  wins++; // not used yet, REMEMBER TO FIX, NOHELY
+                         //   successes++;
                             EnemyShip.setPos(2000, 5000);
                         }
 
@@ -979,10 +979,11 @@ namespace PirateGame
                         //wait for mouseclick
                         mouseState = Mouse.GetState();
 
+                    /*
                         if (successes < 0 && (100 - player.getMorale() >= 0))
                         {
                             player.setMorale(player.getMorale() - (successes * 2));
-                        }
+                        } */
 
                         crewCost = (int)((.5) * (double)player.getGold() * (double)crewAdding); // determines cost of crew members
                         reloadSpeedUpgrade = (int)(1.2 * (double)crewAdding);
