@@ -228,3 +228,7 @@ C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\obj\x86\De
 C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\obj\x86\Debug\PirateGame.application
 C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\obj\x86\Debug\PirateGame.exe
 C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\obj\x86\Debug\PirateGame.pdb
+C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Pause Window.png
+C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Return to Game.png
+C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Save Exit Button.png
+C:\Users\Nohely\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Pause Window Label.png

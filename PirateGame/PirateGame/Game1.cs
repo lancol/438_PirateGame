@@ -17,7 +17,7 @@ namespace PirateGame
     {
         #region Class Variables
         [Flags]
-        enum gameState{mainMenu,overWorld,battle,inTown, instructions, savefiles, credits}
+        enum gameState{mainMenu,overWorld,battle,inTown,instructions,savefiles,credits}
 
         #region System/Game Control
         GraphicsDeviceManager graphics;
@@ -91,6 +91,11 @@ namespace PirateGame
         bool instructionsOpen;
         int previousStateInstructions;
         bool drawSign;
+        bool pauseOpen; //added
+        Texture2D pauseWindow;
+        Texture2D saveExitButton;
+        Texture2D returnToGameButton;
+        Texture2D pauseWindowLabel;
 
         #endregion
 
@@ -451,6 +456,12 @@ namespace PirateGame
 
                 beerIcon = Content.Load<Texture2D>("beer");
 
+                //pause window items load
+                pauseWindow = Content.Load<Texture2D>("Pause Window");
+                returnToGameButton = Content.Load<Texture2D>("Return to Game");
+                saveExitButton = Content.Load<Texture2D>("Save Exit Button");
+                pauseWindowLabel = Content.Load<Texture2D>("Pause Window Label");
+
                 shipStats = Content.Load<Texture2D>("Ship Stats Label");
                 crewStats = Content.Load<Texture2D>("Crew Stats Label");
                 costLabel = Content.Load<Texture2D>("Cost Label");
@@ -620,7 +631,7 @@ namespace PirateGame
             {
                 spacedown = true;
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.M)) //Temporary until overworld enemy ship collisions
+            if (Keyboard.GetState().IsKeyDown(Keys.M))
             {
                 mapOpen = true;
             }
@@ -638,6 +649,14 @@ namespace PirateGame
             {
                 instructionsOpen = false;
             }
+
+
+            if (Keyboard.GetState().IsKeyDown(Keys.P))
+            {
+                pauseOpen = true;
+                //currentState = gameState.instructions;
+            }
+
 
             #endregion
 
@@ -955,13 +974,6 @@ namespace PirateGame
                         player.setMorale(player.getMorale() - (successes * 2));
                     }
 
-                    /* // to randomize improvement of stats in shop, implement later
-                    Random rnd = new Random();
-                    int month = rnd.Next(1, 13); // creates a number between 1 and 12
-                    int dice = rnd.Next(1, 7);   // creates a number between 1 and 6
-                    int card = rnd.Next(52);     // creates a number between 0 and 51
-                    */
-
                     crewCost = (int)((.5) * (double)player.getGold() * (double)crewAdding); // determines cost of crew members
                     reloadSpeedUpgrade = (int)(1.2 * (double)crewAdding);
                     accelerationUpgrade = (int)((1.5 * (double)player.get_bAcceleration()) * (double)crewAdding);
@@ -1233,6 +1245,17 @@ namespace PirateGame
                         IsMouseVisible = true;
                     }
                     #endregion
+                    //if pause menu opened
+                    if (pauseOpen == true)
+                    {
+                        spriteBatch.Draw(pauseWindow, new Vector2(camera.position.X + 350, camera.position.Y + 190), Color.White);
+                        spriteBatch.Draw(pauseWindowLabel, new Vector2(camera.position.X + 440, camera.position.Y + 250), Color.White);
+                        spriteBatch.Draw(returnToGameButton, new Vector2(camera.position.X + 430, camera.position.Y + 320), Color.White);
+                        spriteBatch.Draw(instructionsButton, new Vector2(camera.position.X + 450, camera.position.Y + 400), Color.White);
+                        spriteBatch.Draw(saveExitButton, new Vector2(camera.position.X + 455, camera.position.Y + 480), Color.White);
+
+                        IsMouseVisible = true;
+                    }
 
                     #region Tells to Change Gamestate for Drawing Instructions
                     if (instructionsOpen)
@@ -1603,6 +1626,57 @@ namespace PirateGame
                     overworld_init();
                 }
             }
+
+            if (currentState == gameState.overWorld && pauseOpen == true)
+            {
+                Rectangle returnToGameRect = new Rectangle(430, 320, 198, 40);
+                Rectangle instructRect = new Rectangle(450, 400, 157, 40);
+                Rectangle saveAndExitRect = new Rectangle(455, 480, 150, 40);
+             
+                if (mouseClickRect.Intersects(returnToGameRect)) 
+                {
+                    currentState = gameState.overWorld;
+                    pauseOpen = false;
+                    IsMouseVisible = false;
+                    overworld_init();
+                }
+
+                if (mouseClickRect.Intersects(instructRect))
+                {
+                    currentState = gameState.instructions;
+                    IsMouseVisible = true;
+                    pauseOpen = false;
+                }
+
+                if (mouseClickRect.Intersects(saveAndExitRect))
+                {
+                    //save information to the appropriate text file
+                    String[] saveinfo = System.IO.File.ReadAllLines("save.txt");
+                    for (int i = 0; i < saveinfo.Length; i++)
+                    {
+                        if (saveinfo[i] == getSavekey())
+                        {
+                            for (int j = 1; j < 11; j++)
+                            { //SAVE POSITION OF SHIP TOO
+                                Object[] newsaveinfo =
+                                    {   getSavekey(), player.getMorale(), player.getAlignment(), player.getHealth(),
+                                        player.getAttack(), player.getDefense(), player.get_bAcceleration(),
+                                        player.get_bSpeed(), player.getGold(), player.getCrew() };
+
+                                saveinfo[i + j] = newsaveinfo[j].ToString();
+                            }
+
+                        }
+
+                    }
+                    //write new info to the text file
+                    Console.Write(saveinfo.ToString());
+                    System.IO.File.WriteAllLines("save.txt", saveinfo);
+
+                    Exit();
+                }
+            }
+
             if (currentState == gameState.instructions) //wonky
             {
                 Rectangle instructionBackRect = new Rectangle(480, 620, 73, 40);
@@ -1652,7 +1726,7 @@ namespace PirateGame
                     }
 
                 }
-                //500, 440
+                
 
                 if (buyOptionOpen == true)
                 {

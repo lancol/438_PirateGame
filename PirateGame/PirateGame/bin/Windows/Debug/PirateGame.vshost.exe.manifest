@@ -55,14 +55,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="203200">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="204736">
       <assemblyIdentity name="PirateGame" version="3.4.0.456" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>YNo3DKaliwGF1y5SzX0u0h3zmiY=</dsig:DigestValue>
+        <dsig:DigestValue>4OkNGCadwiYVQnr7EQR9zJqq9Aw=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -660,6 +660,24 @@
       <dsig:DigestValue>E0TRsqxegrafFzYqIGjdxNgZ5kw=</dsig:DigestValue>
     </hash>
   </file>
+  <file name="Content\Pause Window Label.png" size="3319">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>Zw8L2Pl3mqxjWZ06LABpb4jBXEM=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Pause Window.png" size="125519">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>9aSHfWDm3Y1F2r1NmvXHwtOR6k8=</dsig:DigestValue>
+    </hash>
+  </file>
   <file name="Content\pirate128v2.png" size="4145">
     <hash>
       <dsig:Transforms>
@@ -757,6 +775,24 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>A5J1pT9tJypT6KaUtr2GX4Jir3U=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Return to Game.png" size="4510">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>01XvroW2O5UrFTc1XHIiiz9foj8=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Save Exit Button.png" size="4194">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>TpW9RLRpCRFdkFPHklAP0jZ78vk=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\Saved Games Label.png" size="5698">
