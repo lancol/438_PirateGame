@@ -231,3 +231,4 @@ C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\
 C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\font.spritefont
 C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\CannonFire.xnb
 C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\font.xnb
+C:\Users\Rose\Documents\GitHub\438_PirateGame\PirateGame\PirateGame\bin\Windows\Debug\Content\Overwrite.png

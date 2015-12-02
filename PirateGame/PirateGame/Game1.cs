@@ -1517,17 +1517,26 @@ namespace PirateGame
                     spriteBatch.Draw(file2Label, new Vector2(camera.position.X + 220, camera.position.Y + 350), Color.White);
                     spriteBatch.Draw(file3Label, new Vector2(camera.position.X + 220, camera.position.Y + 500), Color.White);
                     spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 490, camera.position.Y + 605), Color.White);
+
+                    String[] saveinfo = System.IO.File.ReadAllLines("save.txt"); //display player stats next to save file options
+                    spriteBatch.DrawString(ourfont, ("Gold: " + saveinfo[8] + "             Crew: " + saveinfo[9]), new Vector2(camera.position.X + 385, camera.position.Y + 210), Color.Black);
+                    spriteBatch.DrawString(ourfont, ("Health: " + saveinfo[3] + "         Atk: " + saveinfo[4] + "             Def: " + saveinfo[5]), new Vector2(camera.position.X + 385, camera.position.Y + 235), Color.Black);
+                    spriteBatch.DrawString(ourfont, ("Gold: " + saveinfo[19] + "            Crew: " + saveinfo[20]), new Vector2(camera.position.X + 385, camera.position.Y + 350), Color.Black);
+                    spriteBatch.DrawString(ourfont, ("Health: " + saveinfo[14] + "         Atk: " + saveinfo[15] + "             Def: " + saveinfo[16]), new Vector2(camera.position.X + 385, camera.position.Y + 375), Color.Black);
+                    spriteBatch.DrawString(ourfont, ("Gold: " + saveinfo[30] + "            Crew: " + saveinfo[31]), new Vector2(camera.position.X + 385, camera.position.Y + 510), Color.Black);
+                    spriteBatch.DrawString(ourfont, ("Health: " + saveinfo[25] + "         Atk: " + saveinfo[26] + "             Def: " + saveinfo[27]), new Vector2(camera.position.X + 385, camera.position.Y + 535), Color.Black);
                     if (!noSaveFiles()) //if there are empty save files available for the user to start a new game from:
                     {
                         spriteBatch.Draw(continueButton, new Vector2(camera.position.X + 675, camera.position.Y + 215), Color.White);
                         spriteBatch.Draw(continueButton, new Vector2(camera.position.X + 675, camera.position.Y + 365), Color.White);
                         spriteBatch.Draw(continueButton, new Vector2(camera.position.X + 675, camera.position.Y + 515), Color.White);
-                    } else
+                    }
+                    else //otherwise, let the player decide which file to overwrite on
                     {
                         spriteBatch.DrawString(ourfont, "Select a file to overwrite:", new Vector2(camera.position.X + 450, camera.position.Y + 175), Color.Black);
-                        spriteBatch.Draw(overwriteButton, new Vector2(camera.position.X + 675, camera.position.Y + 215), Color.White);
-                        //spriteBatch.Draw(overwriteButton, new Vector2(camera.position.X + 675, camera.position.Y + 365), Color.Red);
-                        //spriteBatch.Draw(overwriteButton, new Vector2(camera.position.X + 675, camera.position.Y + 515), Color.Red);
+                        spriteBatch.Draw(overwriteButton, new Vector2(camera.position.X + 675, camera.position.Y + 215), Color.GreenYellow);
+                        spriteBatch.Draw(overwriteButton, new Vector2(camera.position.X + 675, camera.position.Y + 365), Color.GreenYellow);
+                        spriteBatch.Draw(overwriteButton, new Vector2(camera.position.X + 675, camera.position.Y + 515), Color.GreenYellow);
                     }
                     #endregion
                     break;
@@ -1540,16 +1549,16 @@ namespace PirateGame
                     break;
                 default:
                     //change gameTime 
-                    String[] saveinfo = System.IO.File.ReadAllLines("save.txt");
-                    for (int i = 0; i < saveinfo.Length; i++)
+                    String[] savedinfo = System.IO.File.ReadAllLines("save.txt");
+                    for (int i = 0; i < savedinfo.Length; i++)
                     {
-                        if (saveinfo[i] == getSavekey())
+                        if (savedinfo[i] == getSavekey())
                         {
-                            saveinfo[i + 10] = gameTime.ToString();
+                            savedinfo[i + 10] = gameTime.ToString();
                         }
                     }
                     //write new info to the text file
-                    System.IO.File.WriteAllLines("save.txt", saveinfo);
+                    System.IO.File.WriteAllLines("save.txt", savedinfo);
                     Exit();
                     break;
             }
@@ -1827,7 +1836,7 @@ namespace PirateGame
                             }
                             setNoSaveFiles(false);
                             saveinfo[saveinfo.Length - 1] = sb.ToString();
-                            System.IO.File.WriteAllLines("save.txt", saveinfo);
+                            File.WriteAllLines("save.txt", saveinfo);
                             setSavekey("SF" + ((savefileno + 1).ToString()));
                             newPlayerShip(player);
                             currentState = gameState.overWorld;
@@ -1903,9 +1912,9 @@ namespace PirateGame
 
                 if (noSaveFiles()) //if there are no free save files, choose a file to overwrite
                 {
-                    
 
-                    if (mouseClickRect.Intersects(gobackRect)) //the back button is not working correctly..
+
+                    if (mouseClickRect.Intersects(gobackRect)) //the back button is not working correctly, shows cornflower blue background instead of main menu
                     {
                         currentState = gameState.mainMenu;
                     }
