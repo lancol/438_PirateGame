@@ -28,9 +28,8 @@ namespace PirateGame
             setX(X);
             setY(Y);
             setRotate(Rotate);
-<<<<<<< HEAD
             fireDistance = 300;
-=======
+
             fireDistance = 150;
 
             setAttack(1);
@@ -40,7 +39,7 @@ namespace PirateGame
 
             lastFire = 0;
             rand = new Random();
->>>>>>> refs/remotes/origin/master
+
         }
 
         public float getMorale()
