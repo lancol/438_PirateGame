@@ -72,6 +72,7 @@ namespace PirateGame
         Texture2D startButton;
         Texture2D exitButton;
         Texture2D instructionsButton;
+        Texture2D overwriteButton;
         Texture2D menuBackground;
         Texture2D logo;
 
@@ -229,9 +230,9 @@ namespace PirateGame
             return noEmptySaveFileCheck;
         }
 
-        private void setNoSaveFiles(bool v)
+        private void setNoSaveFiles(bool b)
         {
-            noEmptySaveFileCheck = v;
+            noEmptySaveFileCheck = b;
         }
 
         public Game1()
@@ -376,6 +377,7 @@ namespace PirateGame
 
                 //load the buttonimages into the content pipeline
                 continueButton = Content.Load<Texture2D>("Continue");
+                overwriteButton = Content.Load<Texture2D>("Overwrite");
                 startButton = Content.Load<Texture2D>("NewGame");
                 instructionsButton = Content.Load<Texture2D>("Instructions");
                 exitButton = Content.Load<Texture2D>("Quit");
@@ -1515,9 +1517,18 @@ namespace PirateGame
                     spriteBatch.Draw(file2Label, new Vector2(camera.position.X + 220, camera.position.Y + 350), Color.White);
                     spriteBatch.Draw(file3Label, new Vector2(camera.position.X + 220, camera.position.Y + 500), Color.White);
                     spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 490, camera.position.Y + 605), Color.White);
-                    spriteBatch.Draw(continueButton, new Vector2(camera.position.X + 675, camera.position.Y + 215), Color.White);
-                    spriteBatch.Draw(continueButton, new Vector2(camera.position.X + 675, camera.position.Y + 365), Color.White);
-                    spriteBatch.Draw(continueButton, new Vector2(camera.position.X + 675, camera.position.Y + 515), Color.White);
+                    if (!noSaveFiles()) //if there are empty save files available for the user to start a new game from:
+                    {
+                        spriteBatch.Draw(continueButton, new Vector2(camera.position.X + 675, camera.position.Y + 215), Color.White);
+                        spriteBatch.Draw(continueButton, new Vector2(camera.position.X + 675, camera.position.Y + 365), Color.White);
+                        spriteBatch.Draw(continueButton, new Vector2(camera.position.X + 675, camera.position.Y + 515), Color.White);
+                    } else
+                    {
+                        spriteBatch.DrawString(ourfont, "Select a file to overwrite:", new Vector2(camera.position.X + 450, camera.position.Y + 175), Color.Black);
+                        spriteBatch.Draw(overwriteButton, new Vector2(camera.position.X + 675, camera.position.Y + 215), Color.White);
+                        //spriteBatch.Draw(overwriteButton, new Vector2(camera.position.X + 675, camera.position.Y + 365), Color.Red);
+                        //spriteBatch.Draw(overwriteButton, new Vector2(camera.position.X + 675, camera.position.Y + 515), Color.Red);
+                    }
                     #endregion
                     break;
                 case gameState.credits:
@@ -1892,7 +1903,7 @@ namespace PirateGame
 
                 if (noSaveFiles()) //if there are no free save files, choose a file to overwrite
                 {
-                    //spriteBatch.DrawString(ourfont, "Select a file to overwrite:", new Vector2(camera.position.X + 405, camera.position.Y + 175), Color.Black);
+                    
 
                     if (mouseClickRect.Intersects(gobackRect)) //the back button is not working correctly..
                     {

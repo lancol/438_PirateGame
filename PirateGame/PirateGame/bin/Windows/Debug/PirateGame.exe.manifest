@@ -62,7 +62,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>VLohj5/TZVmITmOZRwhWIvz/M4I=</dsig:DigestValue>
+        <dsig:DigestValue>4sqxTiO14kGL8S8dL3h1T03J3So=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -658,6 +658,15 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>E0TRsqxegrafFzYqIGjdxNgZ5kw=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Overwrite.png" size="3291">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>3Cm8Ouod3XrpxUtPcNHCxttQd8g=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\pirate128v2.png" size="4145">
