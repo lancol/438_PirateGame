@@ -1570,7 +1570,7 @@ namespace PirateGame
                     spriteBatch.Draw(menuBackground, new Vector2(camera.position.X, camera.position.Y), Color.White);
                     spriteBatch.Draw(shop_window_background, new Vector2(camera.position.X + 160, camera.position.Y + 60), Color.White);
                     spriteBatch.Draw(InstructionsLabel, new Vector2(camera.position.X + 380, camera.position.Y + 110), Color.White);
-                    spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 480, camera.position.Y + 620), Color.White);
+                    spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 690, camera.position.Y + 610), Color.White);
                     spriteBatch.Draw(objectiveMessage, new Vector2(camera.position.X + 290, camera.position.Y + 170), Color.White); //breaks here
                     spriteBatch.Draw(instructionTips, new Vector2(camera.position.X + 280, camera.position.Y + 400), Color.White);
                     spriteBatch.Draw(hotkeys, new Vector2(camera.position.X + 430, camera.position.Y + 260), Color.White);
@@ -1689,8 +1689,7 @@ namespace PirateGame
 
             if (currentState == gameState.instructions) //wonky
             {
-                Rectangle instructionBackRect = new Rectangle(480, 620, 73, 40);
-
+                Rectangle instructionBackRect = new Rectangle(690, 610, 73, 40);
 
                 if (mouseClickRect.Intersects(instructionBackRect))
                 {
@@ -1875,8 +1874,6 @@ namespace PirateGame
 
             if (currentState == gameState.credits)
             {
-
-
                 Rectangle goBacktoMainRect = new Rectangle(480, 560, 73, 40);
 
                 if (mouseClickRect.Intersects(goBacktoMainRect)) // click back, sends to overworld
