@@ -2025,9 +2025,9 @@ namespace PirateGame
 
         protected void overworld_init()
         {
-            //MediaPlayer.Play(OverworldSong);
-            //MediaPlayer.Volume = 1.0f;
-            //MediaPlayer.IsRepeating = true;
+            MediaPlayer.Play(OverworldSong);
+           MediaPlayer.Volume = 1.0f;
+            MediaPlayer.IsRepeating = true;
             player.setPos(last_Coord.X,last_Coord.Y);
             player.setRotate(0);
             camera.position = new Vector2(player.getX() - (screen_W / 2), player.getY() - (screen_H / 2));
