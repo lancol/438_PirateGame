@@ -70,6 +70,7 @@ namespace PirateGame
         #region Menu Related
         // menu
         Texture2D continueButton;
+        Texture2D overwriteButton;
         Texture2D startButton;
         Texture2D exitButton;
         Texture2D instructionsButton;
@@ -136,17 +137,8 @@ namespace PirateGame
         Texture2D file2Label;
         Texture2D file3Label;
         String savekey;
+        bool noEmptySaveFileCheck = false;
         #endregion
-
-        public void setSavekey(String key)
-        {
-            savekey = key;
-        }
-
-        public string getSavekey()
-        {
-            return savekey;
-        }
 
         //error messages
         Texture2D moraleFullMessage;
@@ -227,6 +219,28 @@ namespace PirateGame
         Texture2D shopCannon;
         Texture2D beerIcon;
         #endregion
+
+
+        public void setSavekey(String key)
+        {
+            savekey = key;
+        }
+
+        public string getSavekey()
+        {
+            return savekey;
+        }
+
+        private bool noSaveFiles()
+        {
+            return noEmptySaveFileCheck;
+        }
+
+        private void setNoSaveFiles(bool b)
+        {
+            noEmptySaveFileCheck = b;
+        }
+
 
         public Game1()
         {
@@ -374,6 +388,7 @@ namespace PirateGame
                 
                 //load the buttonimages into the content pipeline
                 continueButton = Content.Load<Texture2D>("Continue");
+                overwriteButton = Content.Load<Texture2D>("Overwrite");
                 startButton = Content.Load<Texture2D>("NewGame");
                 instructionsButton = Content.Load<Texture2D>("Instructions");
                 exitButton = Content.Load<Texture2D>("Quit");
@@ -572,36 +587,33 @@ namespace PirateGame
                 leftdown = false;
                 downdown = false;
                 spacedown = false;
-                #endregion
+            #endregion
 
-                #region Input
-                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            #region Input
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                String[] saveinfo = System.IO.File.ReadAllLines("save.txt");
+                for (int i = 0; i < saveinfo.Length; i++)
                 {
-                    String[] saveinfo = System.IO.File.ReadAllLines("save.txt");
-                    for (int i = 0; i < saveinfo.Length; i++)
+                    if (saveinfo[i] == getSavekey())
                     {
-                        if (saveinfo[i] == getSavekey())
-                        {   //TODO: SAVE POSITION OF SHIP
-                            Object[] newsaveinfo =
-                                    { getSavekey(), player.getMorale(), player.getAlignment(), player.getHealth(),
+                        Object[] newsaveinfo =
+                                { getSavekey(), player.getMorale(), player.getAlignment(), player.getHealth(),
                                     player.getAttack(), player.getDefense(), player.get_bAcceleration(),
                                     player.get_bSpeed(), player.getGold(), player.getCrew(),
                                     (float)gameTime.ElapsedGameTime.TotalSeconds };
-                            for (int j = 1; j < 11; j++)
-                            {
-                                saveinfo[i + j] = newsaveinfo[j].ToString();
-                            }
-
+                        for (int j = 1; j < 11; j++)
+                        {
+                            saveinfo[i + j] = newsaveinfo[j].ToString();
                         }
-
                     }
-                    //Console.Write(saveinfo.ToString());
-                    System.IO.File.WriteAllLines("save.txt", saveinfo); //write new info to the text file
-                    Exit();
                 }
+                System.IO.File.WriteAllLines("save.txt", saveinfo); //write new info to the text file
+                Exit();
+            }
 
 
-                if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            if (Keyboard.GetState().IsKeyDown(Keys.Up))
                 {
                     updown = true;
                     yStep = -60;
@@ -1586,9 +1598,27 @@ namespace PirateGame
                     spriteBatch.Draw(file2Label, new Vector2(camera.position.X + 220, camera.position.Y + 350), Color.White);
                     spriteBatch.Draw(file3Label, new Vector2(camera.position.X + 220, camera.position.Y + 500), Color.White);
                     spriteBatch.Draw(shop_back_button, new Vector2(camera.position.X + 490, camera.position.Y + 605), Color.White);
-                    spriteBatch.Draw(continueButton, new Vector2(camera.position.X + 675, camera.position.Y + 215), Color.White);
-                    spriteBatch.Draw(continueButton, new Vector2(camera.position.X + 675, camera.position.Y + 365), Color.White);
-                    spriteBatch.Draw(continueButton, new Vector2(camera.position.X + 675, camera.position.Y + 515), Color.White);
+
+                    String[] saveinfo = System.IO.File.ReadAllLines("save.txt"); //display player stats next to save file options
+                    spriteBatch.DrawString(ourfont, ("Gold: " + saveinfo[8] + "             Crew: " + saveinfo[9]), new Vector2(camera.position.X + 385, camera.position.Y + 210), Color.Black);
+                    spriteBatch.DrawString(ourfont, ("Health: " + saveinfo[3] + "         Atk: " + saveinfo[4] + "             Def: " + saveinfo[5]), new Vector2(camera.position.X + 385, camera.position.Y + 235), Color.Black);
+                    spriteBatch.DrawString(ourfont, ("Gold: " + saveinfo[19] + "            Crew: " + saveinfo[20]), new Vector2(camera.position.X + 385, camera.position.Y + 350), Color.Black);
+                    spriteBatch.DrawString(ourfont, ("Health: " + saveinfo[14] + "         Atk: " + saveinfo[15] + "             Def: " + saveinfo[16]), new Vector2(camera.position.X + 385, camera.position.Y + 375), Color.Black);
+                    spriteBatch.DrawString(ourfont, ("Gold: " + saveinfo[30] + "            Crew: " + saveinfo[31]), new Vector2(camera.position.X + 385, camera.position.Y + 510), Color.Black);
+                    spriteBatch.DrawString(ourfont, ("Health: " + saveinfo[25] + "         Atk: " + saveinfo[26] + "             Def: " + saveinfo[27]), new Vector2(camera.position.X + 385, camera.position.Y + 535), Color.Black);
+                    if (!noSaveFiles()) //if there are empty save files available for the user to start a new game from:
+                    {
+                        spriteBatch.Draw(continueButton, new Vector2(camera.position.X + 675, camera.position.Y + 215), Color.White);
+                        spriteBatch.Draw(continueButton, new Vector2(camera.position.X + 675, camera.position.Y + 365), Color.White);
+                        spriteBatch.Draw(continueButton, new Vector2(camera.position.X + 675, camera.position.Y + 515), Color.White);
+                    }
+                    else //otherwise, let the player decide which file to overwrite on
+                    {
+                        spriteBatch.DrawString(ourfont, "Select a file to overwrite:", new Vector2(camera.position.X + 450, camera.position.Y + 175), Color.Black);
+                        spriteBatch.Draw(overwriteButton, new Vector2(camera.position.X + 675, camera.position.Y + 215), Color.GreenYellow);
+                        spriteBatch.Draw(overwriteButton, new Vector2(camera.position.X + 675, camera.position.Y + 365), Color.GreenYellow);
+                        spriteBatch.Draw(overwriteButton, new Vector2(camera.position.X + 675, camera.position.Y + 515), Color.GreenYellow);
+                    }
                     #endregion
                     break;
                 case gameState.credits:
@@ -1903,7 +1933,49 @@ namespace PirateGame
 
                 if (mouseClickRect.Intersects(startButtonRect)) //player clicked start button
                 {
-                    currentState = gameState.overWorld;
+
+                    String[] saveinfo = System.IO.File.ReadAllLines("save.txt");
+                    try
+                    {
+                        if (saveinfo[saveinfo.Length - 1].Contains("o")) //if there is at least one empty file
+                        {
+                            String lastline = saveinfo[saveinfo.Length - 1]; //checks last line of save.txt
+                            int savefileno = lastline.IndexOf('o'); //finds first empty file, indicated by 'o' and saves to that file
+                            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                            for (int i = 0; i < savefileno; i++)
+                            {
+                                sb.Append(lastline[i]);
+                            }
+                            for (int i = savefileno; i < lastline.Length; i++)
+                            {
+                                if (i == savefileno)
+                                {
+                                    sb.Append('x');
+                                }
+                                else
+                                {
+                                    sb.Append(lastline[i]);
+                                }
+                            }
+                            setNoSaveFiles(false);
+                            saveinfo[saveinfo.Length - 1] = sb.ToString();
+                            File.WriteAllLines("save.txt", saveinfo);
+                            setSavekey("SF" + ((savefileno + 1).ToString()));
+                            newPlayerShip(player);
+                            currentState = gameState.overWorld;
+                        }
+                        else //if there are no empty save files
+                        {
+                            setNoSaveFiles(true);
+                            currentState = gameState.savefiles;
+
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.Write(e);
+                    }
+
                     //MediaPlayer.Play(OverworldSong);
                     MediaPlayer.IsRepeating = true;
                     MediaPlayer.Volume = 1.0f;
@@ -1929,7 +2001,7 @@ namespace PirateGame
                         if (saveinfo[i] == getSavekey())
                         {
                             for (int j = 1; j < 11; j++)
-                            { //SAVE POSITION OF SHIP TOO
+                            {
                                 Object[] newsaveinfo =
                                     {   getSavekey(), player.getMorale(), player.getAlignment(), player.getHealth(),
                                         player.getAttack(), player.getDefense(), player.get_bAcceleration(),
@@ -1942,7 +2014,6 @@ namespace PirateGame
 
                     }
                     //write new info to the text file
-                    Console.Write(saveinfo.ToString());
                     System.IO.File.WriteAllLines("save.txt", saveinfo);
 
                     Exit();
@@ -1962,37 +2033,74 @@ namespace PirateGame
                 Rectangle savefile2Rect = new Rectangle(675, 365, 138, 40);
                 Rectangle savefile3Rect = new Rectangle(675, 515, 138, 40);
 
-
-                if (mouseClickRect.Intersects(gobackRect))
+                if (noSaveFiles()) //if there are no free save files, choose a file to overwrite
                 {
-                    currentState = gameState.mainMenu;
+
+
+                    if (mouseClickRect.Intersects(gobackRect)) //the back button is not working correctly, shows cornflower blue background instead of main menu
+                    {
+                        currentState = gameState.mainMenu;
+                    }
+
+                    if (mouseClickRect.Intersects(savefile1Rect))
+                    {
+                        setSavekey("SF1");
+                        currentState = gameState.overWorld;
+                        newPlayerShip(player);
+                        overworld_init();
+                    }
+
+                    if (mouseClickRect.Intersects(savefile2Rect))
+                    {
+                        setSavekey("SF2");
+                        currentState = gameState.overWorld;
+                        newPlayerShip(player);
+                        overworld_init();
+                    }
+
+                    if (mouseClickRect.Intersects(savefile3Rect))
+                    {
+                        setSavekey("SF3");
+                        currentState = gameState.overWorld;
+                        newPlayerShip(player);
+                        overworld_init();
+                    }
                 }
 
-                if (mouseClickRect.Intersects(savefile1Rect))
+                else if (noSaveFiles() == false) //otherwise, the new game overwrite event wouldn't have triggered; continue game as usual
                 {
-                    setSavekey("SF1");
-                    currentState = gameState.overWorld;
-                    loadPlayerStats(player);
-                    overworld_init();
-                }
+                    if (mouseClickRect.Intersects(gobackRect))
+                    {
+                        currentState = gameState.mainMenu;
+                    }
 
-                if (mouseClickRect.Intersects(savefile2Rect))
-                {
-                    setSavekey("SF2");
-                    currentState = gameState.overWorld;
-                    loadPlayerStats(player);
-                    overworld_init();
-                }
+                    if (mouseClickRect.Intersects(savefile1Rect))
+                    {
+                        setSavekey("SF1");
+                        currentState = gameState.overWorld;
+                        loadPlayerStats(player);
+                        overworld_init();
+                    }
 
-                if (mouseClickRect.Intersects(savefile3Rect))
-                {
-                    setSavekey("SF3");
-                    currentState = gameState.overWorld;
-                    loadPlayerStats(player);
-                    overworld_init();
+                    if (mouseClickRect.Intersects(savefile2Rect))
+                    {
+                        setSavekey("SF2");
+                        currentState = gameState.overWorld;
+                        loadPlayerStats(player);
+                        overworld_init();
+                    }
+
+                    if (mouseClickRect.Intersects(savefile3Rect))
+                    {
+                        setSavekey("SF3");
+                        currentState = gameState.overWorld;
+                        loadPlayerStats(player);
+                        overworld_init();
+                    }
                 }
             }
         }
+
         protected void battle_init(NPCShip Enemy)
         {
             player.setRotate(0);
