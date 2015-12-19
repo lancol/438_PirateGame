@@ -55,14 +55,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="206784">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="207296">
       <assemblyIdentity name="PirateGame" version="3.4.0.456" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>S3d/Iq5ocm0/b2vTSNyFsWggHfk=</dsig:DigestValue>
+        <dsig:DigestValue>hSb5TSIMlabdfMwv5wq1T6aIzLc=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -174,6 +174,15 @@
       </hash>
     </dependentAssembly>
   </dependency>
+  <file name="Content\Accept Button.png" size="75006">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>Dc5ozn3Z/cDQrV/yq5in0RKJp60=</dsig:DigestValue>
+    </hash>
+  </file>
   <file name="Content\Alignment_Status_Bar_Resized.png" size="1768">
     <hash>
       <dsig:Transforms>
@@ -964,6 +973,15 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>aNad2PAYYWzjpzxprEICwDWFnBE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Win Notification.png" size="5015">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>Cpic6NsvQedH4nhSPZzW26Nyt8U=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\Yes Smaller.png" size="17110">

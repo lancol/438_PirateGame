@@ -34,9 +34,9 @@ namespace PirateGame
         bool healthFull;
         bool moraleFull;
         bool returnError;
-        int successes;
-        int wins;
-        int losses;
+        //int successes;
+       // int wins;
+       // int losses;
         #endregion
 
         #region Particle Engine
@@ -129,6 +129,12 @@ namespace PirateGame
         Texture2D objectiveMessage;
         Texture2D instructionTips;
         Texture2D hotkeys;
+        #endregion
+
+        #region Win notification elements
+        Texture2D winMessage;
+        Texture2D ayeayeButton;
+        bool won;
         #endregion
 
         #region Save File elements
@@ -497,6 +503,10 @@ namespace PirateGame
                 file2Label = Content.Load<Texture2D>("File 2 Label");
                 file3Label = Content.Load<Texture2D>("File 3 Label");
 
+                //loads win message buttons
+                ayeayeButton = Content.Load<Texture2D>("Accept Button");
+                winMessage = Content.Load<Texture2D>("Win Notification");
+
                 //loads instructions label;
                 InstructionsLabel = Content.Load<Texture2D>("Instructions Label");
                 objectiveMessage = Content.Load<Texture2D>("Objective");
@@ -563,6 +573,8 @@ namespace PirateGame
                 mapOpen = false;
 
                 instructionsOpen = false;
+
+                won = false;
 
                 xStep = 0;
                 yStep = 0;
@@ -664,7 +676,18 @@ namespace PirateGame
                 }
 
 
-                if (Keyboard.GetState().IsKeyDown(Keys.P))
+            if (Keyboard.GetState().IsKeyDown(Keys.W)) // TESTING ONLY
+            {
+                
+                won = true;
+            }
+            else
+            {
+                won = false;
+            }
+
+
+            if (Keyboard.GetState().IsKeyDown(Keys.P))
                 {
                     pauseOpen = true;
                 }
@@ -863,8 +886,9 @@ namespace PirateGame
                             player.setGold(player.getGold() + EnemyShip.getGold());
                             if (player.getMorale() < 100)
                                 player.setMorale(player.getMorale() + 10f);
-                          //  wins++; // not used yet, REMEMBER TO FIX, NOHELY
-                         //   successes++;
+                        //  wins++; // not used yet, REMEMBER TO FIX, NOHELY
+                        //   successes++;
+                            won = true;
                             EnemyShip.setPos(2000, 5000);
                         }
 
@@ -1245,6 +1269,16 @@ namespace PirateGame
                         spriteBatch.Draw(whiteblock, mapPos + player.getPos()*.226f, Color.LawnGreen);
                     }
                     #endregion
+
+                    if (won == true)
+                    {
+                        spriteBatch.Draw(popUpBackground, new Vector2(camera.position.X + 350, camera.position.Y + 190), Color.White);
+                        spriteBatch.Draw(winMessage, new Vector2(camera.position.X + 350, camera.position.Y + 190), Color.White);
+                        spriteBatch.Draw(ayeayeButton, new Vector2(camera.position.X + 350, camera.position.Y + 190), Color.White);
+                        spriteBatch.Draw(GoldIcon, new Vector2(camera.position.X + 350, camera.position.Y + 190), Color.White);
+                        // texture for gold won ammount
+                        spriteBatch.Draw(winMessage, new Vector2(camera.position.X + 350, camera.position.Y + 190), Color.White);
+                    }
 
                     if (instructionsOpen == true)
                     {
@@ -1976,10 +2010,8 @@ namespace PirateGame
                         Console.Write(e);
                     }
 
-                    //MediaPlayer.Play(OverworldSong);
-                    MediaPlayer.IsRepeating = true;
-                    MediaPlayer.Volume = 1.0f;
                     overworld_init();
+
                 }
                 else if (mouseClickRect.Intersects(continueButtonRect))
                 {
@@ -2133,9 +2165,14 @@ namespace PirateGame
 
         protected void overworld_init()
         {
-            MediaPlayer.Play(OverworldSong);
-           MediaPlayer.Volume = 1.0f;
-            MediaPlayer.IsRepeating = true;
+
+            if (currentState == gameState.overWorld) //plays music during gameplay, not on main menu
+            {
+                MediaPlayer.Play(OverworldSong); // commented out originally; why?
+                MediaPlayer.IsRepeating = true;
+                MediaPlayer.Volume = 1.0f;
+            }
+
             player.setPos(last_Coord.X,last_Coord.Y);
             player.setRotate(0);
             camera.position = new Vector2(player.getX() - (screen_W / 2), player.getY() - (screen_H / 2));
