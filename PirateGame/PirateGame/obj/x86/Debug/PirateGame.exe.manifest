@@ -55,14 +55,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="207296">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="207808">
       <assemblyIdentity name="PirateGame" version="3.4.0.456" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>LFoSpKkqkecnFntHPuuL/xEBVXI=</dsig:DigestValue>
+        <dsig:DigestValue>T1EWN2CFEA8LPP3++MYU61j6FVY=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -946,6 +946,15 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>XRjxLDC9xhX6XN19oxk7CLh2xp8=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Toggle Music button.png" size="4484">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>XqJznl5EDZeCXTe0qP1Ch4OzLNg=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\Top_Menu_Bar_Cropped.png" size="32844">

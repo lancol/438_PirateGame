@@ -138,6 +138,8 @@ namespace PirateGame
         Texture2D winBackground;
         #endregion
 
+        Texture2D toggleMusicButton;
+
         #region Save File elements
         Texture2D saveFilesLabel;
         Texture2D file1Label;
@@ -451,6 +453,8 @@ namespace PirateGame
                 noButtonSmaller = Content.Load<Texture2D>("No Smaller");
                 insufficientFundsMessage = Content.Load<Texture2D>("Error Message");
                 errorBackButton = Content.Load<Texture2D>("Error_Back_Button");
+
+                toggleMusicButton = Content.Load<Texture2D>("Toggle Music Button");
 
                 // load island labels
                 butterflyLabel = Content.Load<Texture2D>("Butterfly Label");
@@ -1311,9 +1315,10 @@ namespace PirateGame
                     {
                         spriteBatch.Draw(pauseWindow, new Vector2(camera.position.X + 350, camera.position.Y + 190), Color.White);
                         spriteBatch.Draw(pauseWindowLabel, new Vector2(camera.position.X + 440, camera.position.Y + 250), Color.White);
-                        spriteBatch.Draw(returnToGameButton, new Vector2(camera.position.X + 430, camera.position.Y + 320), Color.White);
-                        spriteBatch.Draw(instructionsButton, new Vector2(camera.position.X + 450, camera.position.Y + 400), Color.White);
-                        spriteBatch.Draw(saveExitButton, new Vector2(camera.position.X + 455, camera.position.Y + 480), Color.White);
+                        spriteBatch.Draw(returnToGameButton, new Vector2(camera.position.X + 430, camera.position.Y + 310), Color.White);
+                        spriteBatch.Draw(instructionsButton, new Vector2(camera.position.X + 450, camera.position.Y + 375), Color.White);
+                        spriteBatch.Draw(toggleMusicButton, new Vector2(camera.position.X + 445, camera.position.Y + 445), Color.White);
+                        spriteBatch.Draw(saveExitButton, new Vector2(camera.position.X + 455, camera.position.Y + 515), Color.White);
 
                         IsMouseVisible = true;
                     }
@@ -1719,10 +1724,12 @@ namespace PirateGame
 
             if (currentState == gameState.overWorld && pauseOpen == true)
             {
-                Rectangle returnToGameRect = new Rectangle(430, 320, 198, 40);
-                Rectangle instructRect = new Rectangle(450, 400, 157, 40);
-                Rectangle saveAndExitRect = new Rectangle(455, 480, 150, 40);
+                Rectangle returnToGameRect = new Rectangle(430, 310, 198, 40);
+                Rectangle instructRect = new Rectangle(450, 375, 157, 40);
+                Rectangle saveAndExitRect = new Rectangle(455, 515, 150, 40);
+                Rectangle toggleMusicRect = new Rectangle(445, 445, 170, 40);
 
+             
                 if (mouseClickRect.Intersects(returnToGameRect))
                 {
                     currentState = gameState.overWorld;
@@ -1735,6 +1742,20 @@ namespace PirateGame
                     currentState = gameState.instructions;
                     IsMouseVisible = true;
                     pauseOpen = false;
+                }
+
+                if (mouseClickRect.Intersects(toggleMusicRect))
+                {
+                    IsMouseVisible = true;
+                    pauseOpen = true;
+
+                    //turn off music
+                    { 
+                    if (MediaPlayer.Volume == 0.0f)
+                        MediaPlayer.Volume = 1.0f;
+                    else if (MediaPlayer.Volume == 1.0f)
+                        MediaPlayer.Volume = 0.0f;
+                     }
                 }
 
                 if (mouseClickRect.Intersects(saveAndExitRect))
