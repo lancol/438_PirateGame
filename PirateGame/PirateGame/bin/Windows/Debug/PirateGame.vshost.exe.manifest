@@ -55,14 +55,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="207808">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PirateGame.exe" size="208320">
       <assemblyIdentity name="PirateGame" version="3.4.0.456" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>OqUMFJOosMS4smTjlVXvS4DBEwg=</dsig:DigestValue>
+        <dsig:DigestValue>QGubz/5LQYnhGq5PtRdbAYcTQWE=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -577,6 +577,15 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>xc16XzfEx3IN40cBmXgYCmgOh+M=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\Loss Notification.png" size="14370">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>oTlDPCUjchUiji7S4aROcwXyx/A=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\Map678.png" size="126909">

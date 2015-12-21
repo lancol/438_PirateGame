@@ -131,11 +131,14 @@ namespace PirateGame
         Texture2D hotkeys;
         #endregion
 
-        #region Win notification elements
+        #region Win and Lose notification elements
         Texture2D winMessage;
         Texture2D ayeayeButton;
         bool wonOpen;
         Texture2D winBackground;
+        Texture2D loseMessage;
+        bool lossOpen;
+        int goldLost;
         #endregion
 
         Texture2D toggleMusicButton;
@@ -513,6 +516,7 @@ namespace PirateGame
                 ayeayeButton = Content.Load<Texture2D>("Accept Button");
                 winMessage = Content.Load<Texture2D>("Win Notification");
                 winBackground = Content.Load<Texture2D>("popup background");
+                loseMessage = Content.Load<Texture2D>("Loss Notification");
 
                 //loads instructions label;
                 InstructionsLabel = Content.Load<Texture2D>("Instructions Label");
@@ -737,7 +741,7 @@ namespace PirateGame
 
                     previousMouseState = mouseState;
 
-                    if (pauseOpen == false && wonOpen == false) // makes sure pauses game when notifications up
+                    if (pauseOpen == false && wonOpen == false && lossOpen == false) // makes sure pauses game when notifications up
                     {
 
                         //Update enemy positions
@@ -750,7 +754,7 @@ namespace PirateGame
                     #region Collision Checks
                     #region Get Next Position 
 
-                    if (pauseOpen == false && wonOpen == false)  // makes sure pauses game when notifications up
+                    if (pauseOpen == false && wonOpen == false && lossOpen == false)  // makes sure pauses game when notifications up
                     {
 
                         if (updown)
@@ -858,15 +862,20 @@ namespace PirateGame
                     //check if player is dead
                     if (player.getHealth() <= 0) // if you lose battle
                     {
+                        
+
                         currentState = gameState.overWorld;
                       //  overworld_init();
                         player.setHealth(50);
                         player.setPos(1000, 2300);
+                        goldLost = player.getGold() - (int)(player.getGold() * .75f); // WRONG
                         player.setGold((int)(player.getGold() * .75f));
                         if (player.getMorale() >= 10)
                             player.setMorale(player.getMorale() - 10f);
-                        //  losses++; //not used yet--REMEMBER TO FIX, NOHELY
-                        //  successes--;
+
+
+                        lossOpen = true;
+
                     }
                     //check if enemy is dead
                     if (EnemyShip.getHealth() <= 0) // if you win battle
@@ -880,8 +889,6 @@ namespace PirateGame
 
                         wonOpen = true;
 
-                        //  wins++; // not used yet, REMEMBER TO FIX, NOHELY
-                        //   successes++;
 
                         // respawn another ship that is harder
 
@@ -1299,7 +1306,19 @@ namespace PirateGame
                         spriteBatch.Draw(ayeayeButton, new Vector2(camera.position.X + 400, camera.position.Y + 535), Color.White);
                         spriteBatch.Draw(GoldIcon, new Vector2(camera.position.X + 470, camera.position.Y + 450), Color.White);
                         spriteBatch.Draw(GoldIcon, new Vector2(camera.position.X + 570, camera.position.Y + 450), Color.White);
-                        spriteBatch.DrawString(ourfont, Convert.ToString(EnemyShip.getGold()), new Vector2(camera.position.X + 520, camera.position.Y + 460), Color.Black); // change to reflect gold won
+                        spriteBatch.DrawString(ourfont, Convert.ToString(EnemyShip.getGold()), new Vector2(camera.position.X + 520, camera.position.Y + 460), Color.Black); 
+
+
+                        IsMouseVisible = true;
+                    }
+
+                    if (lossOpen == true)
+                    {
+                        spriteBatch.Draw(winBackground, new Vector2(camera.position.X + 280, camera.position.Y + 130), Color.White);
+                        spriteBatch.Draw(loseMessage, new Vector2(camera.position.X + 364, camera.position.Y + 210), Color.White);
+                        spriteBatch.Draw(ayeayeButton, new Vector2(camera.position.X + 380, camera.position.Y + 535), Color.White);
+                        spriteBatch.Draw(GoldIcon, new Vector2(camera.position.X + 570, camera.position.Y + 450), Color.White);
+                        spriteBatch.DrawString(ourfont, Convert.ToString(goldLost), new Vector2(camera.position.X + 540, camera.position.Y + 460), Color.Black); // change to reflect gold lost
 
 
                         IsMouseVisible = true;
@@ -1706,13 +1725,27 @@ namespace PirateGame
 
             if (currentState == gameState.overWorld && wonOpen == true)
             {
-                Rectangle acceptRect = new Rectangle(420, 555, 275, 91);
+                Rectangle acceptRect = new Rectangle(400, 535, 275, 91);
 
                 if (mouseClickRect.Intersects(acceptRect)) // click yes
                 {
                     currentState = gameState.overWorld;
                     IsMouseVisible = false;
                     wonOpen = false;
+                }
+
+            }
+
+            if (currentState == gameState.overWorld && lossOpen == true)
+            {
+
+                Rectangle acceptRect = new Rectangle(380, 535, 275, 91);
+
+                if (mouseClickRect.Intersects(acceptRect)) // click yes
+                {
+                    currentState = gameState.overWorld;
+                    IsMouseVisible = false;
+                    lossOpen = false;
                 }
 
             }
