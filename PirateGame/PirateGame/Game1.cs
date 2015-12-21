@@ -1017,7 +1017,9 @@ namespace PirateGame
                             player.setMorale(player.getMorale() - (successes * 2));
                         } */
 
-                    crewCost = (int)((.5) * (double)player.getGold() * (double)crewAdding); // determines cost of crew members
+                    // determines cost of crew members, increases exponentially with number of crew
+                    crewCost = (int)(((.15) * (Math.Pow(player.getCrew(), 2.5)) * (double)crewAdding));
+                    //crewCost = (int)((.5) * (double)player.getGold() * (double)crewAdding); 
                     reloadSpeedUpgrade = (int)(1.2 * (double)crewAdding);
                     accelerationUpgrade = (int)((1.5 * (double)player.get_bAcceleration()) * (double)crewAdding);
 
