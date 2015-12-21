@@ -680,20 +680,11 @@ namespace PirateGame
                 instructionsOpen = false;
             }
 
-
-            if (Keyboard.GetState().IsKeyDown(Keys.W)) // TESTING ONLY
-            {
-
-                wonOpen = true;
-            }
-
-
-
             if (Keyboard.GetState().IsKeyDown(Keys.P))
             {
                 pauseOpen = true;
             }
-
+         
 
             #endregion
 
@@ -891,6 +882,8 @@ namespace PirateGame
 
                         //  wins++; // not used yet, REMEMBER TO FIX, NOHELY
                         //   successes++;
+
+                        // respawn another ship that is harder
 
                         EnemyShip.setPos(2000, 5000);
                     }
@@ -1886,6 +1879,7 @@ namespace PirateGame
                             player.setGold(player.getGold() - crewCost);
                             player.setCrew(player.getCrew() + crewAdding);
                             notEnoughGold = false;
+                            crewAdding = 0; 
                         }
                         else if (itemSelected == 4 && ((int)((player.getGold() - crewCost)) < 0))
                             notEnoughGold = true;
@@ -1942,13 +1936,11 @@ namespace PirateGame
                 {
                     buyOptionOpen = true;
                     itemSelected = 1;
-                    //currentState = gameState.overWorld;
                 }
                 else if (mouseClickRect.Intersects(buyTwoRect)) // click back, sends to overworld
                 {
                     buyOptionOpen = true;
                     itemSelected = 2;
-                    // currentState = gameState.overWorld;
                 }
                 else if (mouseClickRect.Intersects(buyThreeRect)) // click back, sends to overworld
                 {
@@ -1957,13 +1949,13 @@ namespace PirateGame
                         buyOptionOpen = true;
                         itemSelected = 3;
                     }
-                    //currentState = gameState.overWorld;
+
                 }
                 else if (mouseClickRect.Intersects(hireButRect)) // click back, sends to overworld
                 {
                     buyOptionOpen = true;
                     itemSelected = 4;
-                    //currentState = gameState.overWorld;
+                   // crewAdding = 0;
                 }
                 else
                 {
@@ -2104,11 +2096,14 @@ namespace PirateGame
                 if (noSaveFiles()) //if there are no free save files, choose a file to overwrite
                 {
 
-
                     if (mouseClickRect.Intersects(gobackRect)) //the back button is not working correctly, shows cornflower blue background instead of main menu
-                    {
-                        currentState = gameState.mainMenu; // works if set to overworld. Why not working???
-                    }
+                        {
+                            currentState = gameState.mainMenu; // works if set to overworld. Why not working???
+                        }
+                    else
+                        {
+                            currentState = gameState.savefiles;
+                         } 
 
                     if (mouseClickRect.Intersects(savefile1Rect))
                     {
@@ -2137,6 +2132,7 @@ namespace PirateGame
 
                 else if (noSaveFiles() == false) //otherwise, the new game overwrite event wouldn't have triggered; continue game as usual
                 {
+
                     if (mouseClickRect.Intersects(gobackRect))
                     {
                         currentState = gameState.mainMenu;
